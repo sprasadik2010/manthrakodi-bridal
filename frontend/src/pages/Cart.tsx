@@ -1,5 +1,5 @@
 // src/pages/Cart.tsx
-import React from 'react';
+// import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaShoppingBag } from 'react-icons/fa';
 import useCartStore  from '../store/cartStore';

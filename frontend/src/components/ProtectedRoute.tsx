@@ -1,6 +1,6 @@
 // src/components/ProtectedRoute.tsx
 import { ReactNode, useEffect, useState } from 'react';
-import { Navigate } from 'react-router-dom';
+// import { Navigate } from 'react-router-dom';
 import AdminLogin from '../pages/AdminLogin';
 
 interface ProtectedRouteProps {

@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { FaShoppingCart, FaHeart, FaShare, FaArrowLeft } from 'react-icons/fa';
-import { motion } from 'framer-motion';
+// import { motion } from 'framer-motion';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Thumbs, FreeMode } from 'swiper/modules';
 import toast from 'react-hot-toast';

@@ -2,7 +2,7 @@
 import { FaBox, FaShoppingCart, FaRupeeSign, FaUsers } from 'react-icons/fa';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, /*BarChart, Bar,*/ XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 const DashboardHome = () => {
   const { data: stats, isLoading } = useQuery({

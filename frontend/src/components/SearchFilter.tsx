@@ -21,7 +21,7 @@ const SearchFilter: React.FC<{
 
   const categories = ['saree', 'ornament', 'bridal-set'];
   const materials = ['Silk', 'Cotton', 'Georgette', 'Chiffon', 'Gold', 'Silver', 'Pearl'];
-  const occasions = ['Wedding', 'Reception', 'Engagement', 'Festival', 'Casual'];
+  // const occasions = ['Wedding', 'Reception', 'Engagement', 'Festival', 'Casual'];
 
   const handleFilterChange = (newFilters: Partial<FilterOptions>) => {
     const updated = { ...filters, ...newFilters };

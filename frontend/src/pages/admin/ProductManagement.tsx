@@ -1,5 +1,5 @@
 // src/pages/admin/ProductManagement.tsx
-import { useState, useEffect } from 'react';
+import { useState/*, useEffect*/ } from 'react';
 import { FaEdit, FaTrash, FaUpload, FaPlus, FaSearch } from 'react-icons/fa';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';

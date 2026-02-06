@@ -12,7 +12,8 @@
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
     "moduleDetection": "force",
-    "noEmit": true,
+    "noEmit": true,  // Change from false to true (recommended for Vite config files)
+    "composite": true,
 
     /* Linting */
     "strict": true,

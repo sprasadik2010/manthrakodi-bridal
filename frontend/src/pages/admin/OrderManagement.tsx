@@ -4,10 +4,20 @@ import { FaEye, FaPrint, FaCheck, FaTruck, FaBoxOpen } from 'react-icons/fa';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
+// Define Order type
+interface Order {
+  id: string;
+  customer_name: string;
+  customer_phone: string;
+  created_at: string;
+  total_amount: number;
+  status: 'pending' | 'confirmed' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
+}
+
 const OrderManagement = () => {
-  const [filter, setFilter] = useState('all');
+  const [filter, setFilter] = useState<'all' | 'pending' | 'confirmed' | 'processing' | 'shipped' | 'delivered' | 'cancelled'>('all');
   
-  const { data: orders, isLoading } = useQuery({
+  const { data: orders, isLoading } = useQuery<Order[]>({
     queryKey: ['admin-orders'],
     queryFn: async () => {
       const response = await axios.get('/api/orders');
@@ -15,7 +25,7 @@ const OrderManagement = () => {
     },
   });
 
-  const filteredOrders = orders?.filter(order => 
+  const filteredOrders = orders?.filter((order: Order) => 
     filter === 'all' || order.status === filter
   ) || [];
 
@@ -31,7 +41,8 @@ const OrderManagement = () => {
   const updateOrderStatus = async (orderId: string, status: string) => {
     try {
       await axios.put(`/api/orders/${orderId}/status`, { status });
-      // Refetch orders
+      // Refetch orders - you might want to invalidate queries here
+      // queryClient.invalidateQueries({ queryKey: ['admin-orders'] });
     } catch (error) {
       console.error('Error updating order status:', error);
     }
@@ -96,6 +107,16 @@ const OrderManagement = () => {
           >
             Delivered
           </button>
+          <button
+            onClick={() => setFilter('cancelled')}
+            className={`px-4 py-2 rounded-lg ${
+              filter === 'cancelled' 
+                ? 'bg-red-500 text-white' 
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            }`}
+          >
+            Cancelled
+          </button>
         </div>
       </div>
 
@@ -133,7 +154,7 @@ const OrderManagement = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
-                  {filteredOrders.map((order: any) => (
+                  {filteredOrders.map((order: Order) => (
                     <tr key={order.id} className="hover:bg-gray-50">
                       <td className="py-4 px-6 font-medium">#{order.id.slice(0, 8)}</td>
                       <td className="py-4 px-6">
@@ -149,7 +170,7 @@ const OrderManagement = () => {
                         ₹{order.total_amount.toLocaleString()}
                       </td>
                       <td className="py-4 px-6">
-                        <span className={`px-3 py-1 rounded-full text-sm font-medium ${statusColors[order.status as keyof typeof statusColors]}`}>
+                        <span className={`px-3 py-1 rounded-full text-sm font-medium ${statusColors[order.status]}`}>
                           {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
                         </span>
                       </td>
@@ -211,25 +232,25 @@ const OrderManagement = () => {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-8">
         <div className="bg-white p-6 rounded-xl shadow">
           <div className="text-3xl font-bold text-bridal-maroon mb-2">
-            {orders?.filter((o: any) => o.status === 'pending').length || 0}
+            {orders?.filter((o: Order) => o.status === 'pending').length || 0}
           </div>
           <div className="text-gray-600">Pending Orders</div>
         </div>
         <div className="bg-white p-6 rounded-xl shadow">
           <div className="text-3xl font-bold text-blue-600 mb-2">
-            {orders?.filter((o: any) => o.status === 'processing').length || 0}
+            {orders?.filter((o: Order) => o.status === 'processing').length || 0}
           </div>
           <div className="text-gray-600">Processing</div>
         </div>
         <div className="bg-white p-6 rounded-xl shadow">
           <div className="text-3xl font-bold text-purple-600 mb-2">
-            {orders?.filter((o: any) => o.status === 'shipped').length || 0}
+            {orders?.filter((o: Order) => o.status === 'shipped').length || 0}
           </div>
           <div className="text-gray-600">Shipped</div>
         </div>
         <div className="bg-white p-6 rounded-xl shadow">
           <div className="text-3xl font-bold text-green-600 mb-2">
-            {orders?.filter((o: any) => o.status === 'delivered').length || 0}
+            {orders?.filter((o: Order) => o.status === 'delivered').length || 0}
           </div>
           <div className="text-gray-600">Delivered</div>
         </div>
