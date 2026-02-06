@@ -11,13 +11,13 @@ interface SEOProps {
 }
 
 const SEO: React.FC<SEOProps> = ({
-  title = 'Manthrakodi Bridals - Premium Bridal Wear & Ornaments',
+  title = 'Manthrakodi Bridal - Premium Bridal Wear & Ornaments',
   description = 'Discover exquisite bridal sarees, ornaments, and bridal sets. Traditional and contemporary designs for your special day.',
   image = '/images/og-image.jpg',
   url = window.location.href,
   type = 'website'
 }) => {
-  const siteTitle = 'Manthrakodi Bridals';
+  const siteTitle = 'Manthrakodi Bridal';
   const fullTitle = title === siteTitle ? title : `${title} | ${siteTitle}`;
 
   return (
@@ -43,7 +43,7 @@ const SEO: React.FC<SEOProps> = ({
       
       {/* Additional SEO */}
       <meta name="keywords" content="bridal sarees, wedding ornaments, bridal sets, traditional wear, designer sarees" />
-      <meta name="author" content="Manthrakodi Bridals" />
+      <meta name="author" content="Manthrakodi Bridal" />
       <link rel="canonical" href={url} />
       
       {/* Structured Data */}
@@ -51,7 +51,7 @@ const SEO: React.FC<SEOProps> = ({
         {JSON.stringify({
           "@context": "https://schema.org",
           "@type": "BridalStore",
-          "name": "Manthrakodi Bridals",
+          "name": "Manthrakodi Bridal",
           "description": description,
           "url": window.location.origin,
           "logo": `${window.location.origin}/logo.png`,

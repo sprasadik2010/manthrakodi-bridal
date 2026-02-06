@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { FaShoppingCart, FaUser, FaBars, FaTimes, FaSearch } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
-import  useCartStore  from '../store/cartStore';
+import useCartStore from '../store/cartStore';
 import SearchModal from './SearchModal';
 
 const Navbar = () => {
@@ -23,24 +23,24 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="sticky top-0 z-50 bg-white shadow-lg">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <nav className="sticky top-0 z-50 w-full bg-white shadow-lg">
+        <div className="w-full px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
             {/* Logo */}
-            <Link to="/" className="flex items-center">
+            <Link to="/" className="flex items-center shrink-0">
               <div className="text-3xl font-playfair font-bold text-bridal-maroon">
                 Manthrakodi
               </div>
-              <span className="ml-2 text-sm text-gray-500">Bridals</span>
+              <span className="ml-2 text-sm text-gray-500">Bridal</span>
             </Link>
 
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-8">
+            {/* Desktop Navigation - Hidden on mobile */}
+            <div className="hidden md:flex items-center gap-6 lg:gap-8 mx-auto px-4">
               {navLinks.map((link) => (
                 <Link
                   key={link.path}
                   to={link.path}
-                  className={`font-medium transition-colors ${
+                  className={`whitespace-nowrap font-medium transition-colors ${
                     location.pathname === link.path.split('?')[0]
                       ? 'text-bridal-maroon border-b-2 border-bridal-maroon'
                       : 'text-gray-700 hover:text-bridal-maroon'
@@ -52,7 +52,7 @@ const Navbar = () => {
             </div>
 
             {/* Action Buttons */}
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center gap-2 sm:gap-4 shrink-0">
               <button
                 onClick={() => setShowSearch(true)}
                 className="p-2 text-gray-600 hover:text-bridal-maroon"
@@ -84,7 +84,7 @@ const Navbar = () => {
               {/* Mobile menu button */}
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="md:hidden p-2 text-gray-600 hover:text-bridal-maroon"
+                className="md:hidden p-2 text-gray-600 hover:text-bridal-maroon ml-2"
                 aria-label="Toggle menu"
               >
                 {isMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
@@ -100,15 +100,15 @@ const Navbar = () => {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              className="md:hidden bg-white border-t"
+              className="md:hidden bg-white border-t w-full overflow-hidden"
             >
-              <div className="px-4 py-3 space-y-3">
+              <div className="px-4 py-3 space-y-2">
                 {navLinks.map((link) => (
                   <Link
                     key={link.path}
                     to={link.path}
                     onClick={() => setIsMenuOpen(false)}
-                    className={`block px-3 py-2 rounded-lg font-medium ${
+                    className={`block w-full px-3 py-2 rounded-lg font-medium whitespace-nowrap ${
                       location.pathname === link.path.split('?')[0]
                         ? 'bg-bridal-maroon text-white'
                         : 'text-gray-700 hover:bg-gray-100'

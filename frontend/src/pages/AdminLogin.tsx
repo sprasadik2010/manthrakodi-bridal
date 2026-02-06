@@ -38,7 +38,7 @@ const AdminLogin = () => {
             Admin Login
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            Access the Manthrakodi Bridals admin panel
+            Access the Manthrakodi Bridal admin panel
           </p>
         </div>
         

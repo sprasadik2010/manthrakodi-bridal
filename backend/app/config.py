@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 class Settings:
-    PROJECT_NAME: str = "Manthrakodi Bridals"
+    PROJECT_NAME: str = "Manthrakodi Bridal"
     PROJECT_VERSION: str = "1.0.0"
     
     # Database configuration
