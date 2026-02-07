@@ -174,7 +174,7 @@ const ProductManagement = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
-                  {filteredProducts.map((product) => (
+                  {filteredProducts&& filteredProducts.map((product) => (
                     <tr key={product.id} className="hover:bg-gray-50">
                       <td className="py-4 px-6">
                         <div className="flex items-center">

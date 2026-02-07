@@ -46,7 +46,7 @@ const Products = () => {
   return (
     <div className="min-h-screen">
       <SearchFilter onFilterChange={handleFilterChange} />
-      
+
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
           <h1 className="text-4xl font-playfair font-bold text-gray-800">
@@ -89,7 +89,7 @@ const Products = () => {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                  {products.map((product: Product) => (
+                  {products && products.map((product: Product) => (
                     <ProductCard key={product.id} product={product} />
                   ))}
                 </div>

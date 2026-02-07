@@ -86,7 +86,7 @@ const SearchModal = ({ isOpen, onClose }: SearchModalProps) => {
                 </div>
               ) : products && products.length > 0 ? (
                 <div className="divide-y">
-                  {products.map((product) => (
+                  {products&&products.map((product) => (
                     <Link
                       key={product.id}
                       to={`/product/${product.id}`}
