@@ -1,17 +1,18 @@
 // src/components/admin/ProductForm.tsx
 import { useState, useEffect } from 'react';
-import { FaTimes } from 'react-icons/fa';
+import { FaTimes, FaFacebook, FaUpload, FaExternalLinkAlt } from 'react-icons/fa';
 import { Product } from '../../types';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
 interface ProductFormProps {
   product?: Product | null;
+  initialImages?: string[];
   onClose: () => void;
   onSuccess: () => void;
 }
 
-const ProductForm = ({ product, onClose, onSuccess }: ProductFormProps) => {
+const ProductForm = ({ product, initialImages, onClose, onSuccess }: ProductFormProps) => {
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -19,7 +20,7 @@ const ProductForm = ({ product, onClose, onSuccess }: ProductFormProps) => {
     originalPrice: '',
     category: 'saree',
     subCategory: '',
-    images: [''],
+    images: initialImages || [''],
     stock: '0',
     featured: false,
     attributes: {
@@ -32,6 +33,7 @@ const ProductForm = ({ product, onClose, onSuccess }: ProductFormProps) => {
   });
 
   const [loading, setLoading] = useState(false);
+  const [imageLoading, setImageLoading] = useState(false);
 
   useEffect(() => {
     if (product) {
@@ -53,8 +55,14 @@ const ProductForm = ({ product, onClose, onSuccess }: ProductFormProps) => {
           occasion: product.attributes?.occasion || [],
         },
       });
+    } else if (initialImages && initialImages.length > 0) {
+      // If we have initial images from external upload, use them
+      setFormData(prev => ({
+        ...prev,
+        images: initialImages,
+      }));
     }
-  }, [product]);
+  }, [product, initialImages]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -106,6 +114,50 @@ const ProductForm = ({ product, onClose, onSuccess }: ProductFormProps) => {
       ...prev,
       images: prev.images.filter((_, i) => i !== index),
     }));
+  };
+
+  const validateImageURL = (url: string): boolean => {
+    const urlPatterns = [
+      // ImgBB
+      /^https:\/\/(i\.)?ibb\.co\/.*/,
+      /^https:\/\/(www\.)?imgbb\.com\/.*/,
+      // PostImage
+      /^https:\/\/(i\.)?postimg\.cc\/.*/,
+      /^https:\/\/(www\.)?postimages\.org\/.*/,
+      // FreeImage.Host
+      /^https:\/\/(www\.)?freeimage\.host\/.*/,
+      // Facebook
+      /^https:\/\/(www\.)?facebook\.com\/.*\/photos\/.*/,
+      /^https:\/\/(www\.)?facebook\.com\/photo\/.*/,
+      // General image URLs
+      /^https?:\/\/.*\.(jpg|jpeg|png|webp|gif)(\?.*)?$/i,
+    ];
+    
+    return urlPatterns.some(pattern => pattern.test(url));
+  };
+
+  const handleImageURL = async (index: number, url: string) => {
+    if (!url.trim()) {
+      updateImage(index, url);
+      return;
+    }
+
+    setImageLoading(true);
+    try {
+      // Validate URL
+      if (!validateImageURL(url)) {
+        toast.error('Please enter a valid image URL (jpg, png, webp, gif)');
+        return;
+      }
+
+      updateImage(index, url);
+      toast.success('Image URL added successfully!');
+    } catch (error) {
+      toast.error('Error processing image URL');
+      console.error(error);
+    } finally {
+      setImageLoading(false);
+    }
   };
 
   const toggleOccasion = (occasion: string) => {
@@ -349,9 +401,14 @@ const ProductForm = ({ product, onClose, onSuccess }: ProductFormProps) => {
           {/* Image URLs */}
           <div className="mt-6">
             <div className="flex justify-between items-center mb-4">
-              <label className="block text-sm font-medium text-gray-700">
-                Image URLs *
-              </label>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Image URLs *
+                </label>
+                <p className="text-sm text-gray-500">
+                  Paste image URLs from Facebook, ImgBB, PostImage, or any hosting service
+                </p>
+              </div>
               <button
                 type="button"
                 onClick={addImageField}
@@ -363,48 +420,81 @@ const ProductForm = ({ product, onClose, onSuccess }: ProductFormProps) => {
             
             <div className="space-y-3">
               {formData.images.map((url, index) => (
-                <div key={index} className="flex gap-2">
-                  <input
-                    type="url"
-                    value={url}
-                    onChange={(e) => updateImage(index, e.target.value)}
-                    placeholder="https://example.com/image.jpg"
-                    className="flex-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-bridal-maroon focus:border-transparent"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => removeImage(index)}
-                    className="px-4 py-2 text-red-600 hover:text-red-800"
-                    disabled={formData.images.length === 1}
-                  >
-                    Remove
-                  </button>
+                <div key={index} className="space-y-2">
+                  <div className="flex gap-2">
+                    <div className="flex-1 relative">
+                      {url.includes('facebook.com') ? (
+                        <FaFacebook className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600" />
+                      ) : (
+                        <FaExternalLinkAlt className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                      )}
+                      <input
+                        type="url"
+                        value={url}
+                        onChange={(e) => updateImage(index, e.target.value)}
+                        placeholder="https://i.ibb.co/... or https://facebook.com/..."
+                        className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-bridal-maroon focus:border-transparent"
+                        onBlur={() => url && handleImageURL(index, url)}
+                      />
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => removeImage(index)}
+                      className="px-4 py-2 text-red-600 hover:text-red-800"
+                      disabled={formData.images.length === 1}
+                    >
+                      Remove
+                    </button>
+                  </div>
+                  
+                  {url && (
+                    <div className="text-xs text-gray-500 bg-gray-50 p-2 rounded">
+                      <strong>Source:</strong>{' '}
+                      {url.includes('imgbb.co') ? 'ImgBB' :
+                       url.includes('postimg.cc') ? 'PostImage' :
+                       url.includes('facebook.com') ? 'Facebook' :
+                       url.includes('i.') ? 'Image Hosting' : 'External URL'}
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
             
-            <p className="text-sm text-gray-500 mt-2">
-              Add image URLs (first image will be the main display image)
-            </p>
+            <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+              <h4 className="font-semibold text-gray-700 mb-2">Supported Services:</h4>
+              <div className="text-sm text-gray-600 grid grid-cols-2 md:grid-cols-4 gap-2">
+                <span className="flex items-center gap-1">
+                  <FaFacebook className="text-blue-600" /> Facebook
+                </span>
+                <span>ImgBB</span>
+                <span>PostImage</span>
+                <span>Any image URL</span>
+              </div>
+            </div>
           </div>
 
           {/* Preview */}
-          {formData.images[0] && (
+          {formData.images.some(url => url.trim() !== '') && (
             <div className="mt-6">
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Preview
+                Image Preview
               </label>
-              <div className="flex gap-4 overflow-x-auto pb-4">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {formData.images.filter(url => url.trim() !== '').map((url, index) => (
-                  <img
-                    key={index}
-                    src={url}
-                    alt={`Preview ${index + 1}`}
-                    className="h-32 w-32 object-cover rounded-lg border"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = 'https://via.placeholder.com/150?text=Image+Error';
-                    }}
-                  />
+                  <div key={index} className="relative group">
+                    <img
+                      src={url}
+                      alt={`Preview ${index + 1}`}
+                      className="w-full h-48 object-cover rounded-lg border"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = 'https://via.placeholder.com/300x300?text=Image+Not+Found';
+                        (e.target as HTMLImageElement).className = 'w-full h-48 object-contain rounded-lg border bg-gray-100 p-4';
+                      }}
+                    />
+                    <div className="absolute bottom-2 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded">
+                      Image {index + 1}
+                    </div>
+                  </div>
                 ))}
               </div>
             </div>
@@ -416,16 +506,19 @@ const ProductForm = ({ product, onClose, onSuccess }: ProductFormProps) => {
               type="button"
               onClick={onClose}
               className="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
-              disabled={loading}
+              disabled={loading || imageLoading}
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-6 py-2 bg-bridal-maroon text-white rounded-lg hover:bg-bridal-maroon/90 disabled:opacity-50"
-              disabled={loading}
+              className="px-6 py-2 bg-bridal-maroon text-white rounded-lg hover:bg-bridal-maroon/90 disabled:opacity-50 flex items-center gap-2"
+              disabled={loading || imageLoading}
             >
               {loading ? 'Saving...' : product ? 'Update Product' : 'Create Product'}
+              {imageLoading && (
+                <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white"></div>
+              )}
             </button>
           </div>
         </form>

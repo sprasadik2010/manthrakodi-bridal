@@ -1,27 +1,32 @@
 # backend/app/schemas.py
-from pydantic import BaseModel, EmailStr, Field, validator
+from pydantic import BaseModel, HttpUrl, validator
 from typing import Optional, List, Dict, Any
 from uuid import UUID
 from datetime import datetime
 
-
-# Product Schemas
 class ProductBase(BaseModel):
-    name: str = Field(..., min_length=1, max_length=255)
+    name: str
     description: Optional[str] = None
-    price: float = Field(..., gt=0)
+    price: float
     original_price: Optional[float] = None
-    category: str = Field(..., pattern="^(saree|ornament|bridal-set)$")
+    category: str
     sub_category: Optional[str] = None
-    images: List[str] = Field(..., min_items=1)
-    stock: int = Field(default=0, ge=0)
+    images: List[str]  # Will store Facebook/ImgBB URLs
+    stock: int = 0
     featured: bool = False
     attributes: Optional[Dict[str, Any]] = None
-    
-    @validator('original_price')
-    def validate_original_price(cls, v, values):
-        if v is not None and 'price' in values and v <= values['price']:
-            raise ValueError('original_price must be greater than price if provided')
+
+    @validator('images')
+    def validate_images(cls, v):
+        """Validate image URLs"""
+        if not v:
+            raise ValueError('At least one image is required')
+        
+        # Validate each URL is a proper image URL
+        for url in v:
+            if not url.startswith(('http://', 'https://')):
+                raise ValueError(f'Invalid URL: {url}')
+        
         return v
 
 

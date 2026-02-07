@@ -4,6 +4,8 @@ from sqlalchemy.orm import Session
 from typing import List, Optional
 from .. import crud, schemas
 from ..database import get_db
+import requests
+from urllib.parse import urlparse
 
 router = APIRouter()
 
@@ -74,3 +76,51 @@ def delete_product(product_id: str, db: Session = Depends(get_db)):
     if not success:
         raise HTTPException(status_code=404, detail="Product not found")
     return {"message": "Product deleted successfully"}
+
+def validate_image_url(url: str) -> bool:
+    """Validate if URL points to an actual image"""
+    try:
+        # Parse URL
+        parsed = urlparse(url)
+        if not parsed.scheme in ['http', 'https']:
+            return False
+        
+        # Check if it's a known image hosting service
+        allowed_domains = [
+            'i.ibb.co', 'ibb.co', 'imgbb.com',
+            'postimg.cc', 'postimages.org',
+            'freeimage.host', 'iili.io',
+            'cdn.discordapp.com',
+            'fbcdn.net', 'facebook.com'  # Facebook CDN
+        ]
+        
+        if not any(domain in parsed.netloc for domain in allowed_domains):
+            return False
+        
+        # Check file extension
+        valid_extensions = ['.jpg', '.jpeg', '.png', '.webp', '.gif']
+        if not any(parsed.path.lower().endswith(ext) for ext in valid_extensions):
+            return False
+        
+        return True
+        
+    except:
+        return False
+
+@router.post("/products/validate-images")
+async def validate_images(urls: List[str]):
+    """Validate multiple image URLs"""
+    validated_urls = []
+    invalid_urls = []
+    
+    for url in urls:
+        if validate_image_url(url):
+            validated_urls.append(url)
+        else:
+            invalid_urls.append(url)
+    
+    return {
+        "valid": validated_urls,
+        "invalid": invalid_urls,
+        "message": f"Found {len(validated_urls)} valid and {len(invalid_urls)} invalid URLs"
+    }
