@@ -42,7 +42,7 @@ const Testimonials = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {testimonials.map((testimonial) => (
+          {testimonials&&testimonials.map((testimonial) => (
             <div
               key={testimonial.id}
               className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300"

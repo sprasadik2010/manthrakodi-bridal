@@ -51,7 +51,7 @@ const HeroSlider = () => {
         pagination={{ clickable: true }}
         className="h-full"
       >
-        {slides.map((slide) => (
+        {slides&&slides.map((slide) => (
           <SwiperSlide key={slide.id}>
             <div className="relative h-full">
               <img

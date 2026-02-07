@@ -154,7 +154,7 @@ const OrderManagement = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
-                  {filteredOrders.map((order: Order) => (
+                  {filteredOrders&&filteredOrders.map((order: Order) => (
                     <tr key={order.id} className="hover:bg-gray-50">
                       <td className="py-4 px-6 font-medium">#{order.id.slice(0, 8)}</td>
                       <td className="py-4 px-6">

@@ -77,7 +77,7 @@ const DashboardHome = () => {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {statCards.map((stat, index) => (
+        {statCards&&statCards.map((stat, index) => (
           <div key={index} className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition-shadow">
             <div className="flex justify-between items-start">
               <div>

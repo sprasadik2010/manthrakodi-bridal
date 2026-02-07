@@ -143,7 +143,7 @@ const ImageUpload = ({ onClose, onSuccess }: ImageUploadProps) => {
               </div>
               
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                {files.map((file, index) => (
+                {files&&files.map((file, index) => (
                   <div key={index} className="relative group">
                     <img
                       src={URL.createObjectURL(file)}

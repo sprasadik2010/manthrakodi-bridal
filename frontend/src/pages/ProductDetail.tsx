@@ -116,7 +116,7 @@ const ProductDetail = () => {
               modules={[Navigation, Thumbs]}
               className="rounded-2xl overflow-hidden"
             >
-              {product.images.map((image, index) => (
+              {product&&product.images.map((image, index) => (
                 <SwiperSlide key={index}>
                   <img
                     src={image}
@@ -138,7 +138,7 @@ const ProductDetail = () => {
             modules={[FreeMode, Thumbs]}
             className="thumbnail-swiper"
           >
-            {product.images.map((image, index) => (
+            {product&&product.images.map((image, index) => (
               <SwiperSlide key={index}>
                 <button
                   onClick={() => setSelectedImage(index)}

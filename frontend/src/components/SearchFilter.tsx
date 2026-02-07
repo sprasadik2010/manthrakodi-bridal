@@ -70,7 +70,7 @@ const SearchFilter: React.FC<{
               <div>
                 <h4 className="font-semibold mb-3">Category</h4>
                 <div className="space-y-2">
-                  {categories.map((cat) => (
+                  {categories&&categories.map((cat) => (
                     <label key={cat} className="flex items-center">
                       <input
                         type="checkbox"

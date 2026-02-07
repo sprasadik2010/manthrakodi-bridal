@@ -365,7 +365,7 @@ const ProductForm = ({ product, initialImages, onClose, onSuccess }: ProductForm
                   Suitable Occasions
                 </label>
                 <div className="flex flex-wrap gap-2">
-                  {occasions.map((occasion) => (
+                  {occasions&&occasions.map((occasion) => (
                     <button
                       key={occasion}
                       type="button"

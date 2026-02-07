@@ -118,7 +118,7 @@ Recommended services:
             <div>
               <h4 className="text-lg font-semibold mb-4">Step 1: Choose an Image Hosting Service</h4>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-                {services.map((service, index) => (
+                {services&&services.map((service, index) => (
                   <div
                     key={index}
                     className="border rounded-lg p-4 hover:border-bridal-maroon cursor-pointer transition-colors"
@@ -180,7 +180,7 @@ Recommended services:
                 </div>
 
                 <div className="space-y-4">
-                  {imageUrls.map((url, index) => (
+                  {imageUrls&&imageUrls.map((url, index) => (
                     <div key={index} className="flex gap-2">
                       <input
                         type="url"
@@ -229,11 +229,11 @@ Recommended services:
           )}
 
           {/* Preview */}
-          {imageUrls.some(url => url.trim() !== '') && (
+          {imageUrls&&imageUrls.some(url => url.trim() !== '') && (
             <div className="mt-6">
               <h5 className="font-semibold mb-4">Preview:</h5>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                {imageUrls.filter(url => url.trim() !== '').map((url, index) => (
+                {imageUrls&&imageUrls.filter(url => url.trim() !== '').map((url, index) => (
                   <div key={index} className="relative">
                     <img
                       src={url}

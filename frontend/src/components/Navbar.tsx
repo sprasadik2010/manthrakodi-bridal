@@ -38,7 +38,7 @@ const Navbar = () => {
 
             {/* Desktop Navigation - Hidden on mobile */}
             <div className="hidden md:flex items-center gap-6 lg:gap-8 mx-auto px-4">
-              {navLinks.map((link) => (
+              {navLinks&&navLinks.map((link) => (
                 <Link
                   key={link.path}
                   to={link.path}
@@ -105,7 +105,7 @@ const Navbar = () => {
               className="md:hidden bg-white border-t w-full overflow-hidden"
             >
               <div className="px-3 sm:px-4 py-3 space-y-2">
-                {navLinks.map((link) => (
+                {navLinks&&navLinks.map((link) => (
                   <Link
                     key={link.path}
                     to={link.path}

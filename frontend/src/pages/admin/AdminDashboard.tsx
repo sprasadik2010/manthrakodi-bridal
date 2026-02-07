@@ -51,7 +51,7 @@ const AdminDashboard = () => {
         </div>
         
         <nav className="flex-1 px-4">
-          {menuItems.map((item) => (
+          {menuItems&&menuItems.map((item) => (
             <Link
               key={item.path}
               to={item.path}
