@@ -1,6 +1,6 @@
 // src/components/admin/ExternalImageUpload.tsx
-import { useState, useCallback } from 'react';
-import { FaUpload, FaTimes, FaExternalLinkAlt, FaCopy, FaCheck } from 'react-icons/fa';
+import { useState/*, useCallback*/ } from 'react';
+import { /*FaUpload, */FaTimes, FaExternalLinkAlt, FaCopy, FaCheck } from 'react-icons/fa';
 import toast from 'react-hot-toast';
 
 interface ExternalImageUploadProps {

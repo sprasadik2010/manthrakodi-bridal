@@ -1,6 +1,6 @@
 // src/components/admin/ProductForm.tsx
 import { useState, useEffect } from 'react';
-import { FaTimes, FaFacebook, FaUpload, FaExternalLinkAlt } from 'react-icons/fa';
+import { FaTimes, FaFacebook, /*FaUpload,*/ FaExternalLinkAlt } from 'react-icons/fa';
 import { Product } from '../../types';
 import axios from 'axios';
 import toast from 'react-hot-toast';
