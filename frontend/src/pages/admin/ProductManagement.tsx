@@ -23,7 +23,7 @@ const ProductManagement = () => {
     queryKey: ['admin-products'],
     queryFn: async () => {
       try {
-        const response = await axios.get('/api/products');
+        const response = await axios.get('/api/products/?skip=0&limit=100');
         console.log('API Response:', response.data); // Debug log
         return response.data;
       } catch (error) {
