@@ -1,5 +1,5 @@
 // src/pages/admin/ProductManagement.tsx
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FaEdit, FaTrash, FaUpload, FaPlus, FaSearch, FaExternalLinkAlt } from 'react-icons/fa';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
@@ -19,19 +19,32 @@ const ProductManagement = () => {
     [key: string]: any;
   } | null>(null);
 
-  const { data: products, isLoading, refetch } = useQuery({
+  const { data: productsData, isLoading, refetch } = useQuery({
     queryKey: ['admin-products'],
     queryFn: async () => {
-      const response = await axios.get('/api/products');
-      return response.data as Product[];
+      try {
+        const response = await axios.get('/api/products');
+        console.log('API Response:', response.data); // Debug log
+        return response.data;
+      } catch (error) {
+        console.error('Error fetching products:', error);
+        return { products: [] }; // Return a safe default
+      }
     },
   });
 
-  const filteredProducts = products?.filter(product =>
-    product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    product.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    product.category.toLowerCase().includes(searchTerm.toLowerCase())
-  ) || [];
+  // Safely extract products array from response
+  const products = productsData?.products || productsData || [];
+  
+  // Ensure products is an array before filtering
+  const filteredProducts = Array.isArray(products) 
+    ? products.filter(product =>
+        product?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product?.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product?.category?.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    : [];
+
 
   const handleDelete = async (id: string) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
@@ -50,6 +63,12 @@ const ProductManagement = () => {
     setShowExternalUpload(false);
     setShowForm(true);
   };
+
+  useEffect(() => {
+  console.log('Products data structure:', productsData);
+  console.log('Products array:', products);
+  console.log('Is array?', Array.isArray(products));
+}, [productsData, products]);
 
   return (
     <div>
@@ -296,32 +315,32 @@ const ProductManagement = () => {
       </div>
 
       {/* Stats Summary */}
-      {products && products.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-6">
-          <div className="bg-white p-4 rounded-xl shadow">
-            <div className="text-2xl font-bold text-bridal-maroon">{products.length}</div>
-            <div className="text-gray-600">Total Products</div>
-          </div>
-          <div className="bg-white p-4 rounded-xl shadow">
-            <div className="text-2xl font-bold text-green-600">
-              {products.filter(p => p.stock > 0).length}
-            </div>
-            <div className="text-gray-600">In Stock</div>
-          </div>
-          <div className="bg-white p-4 rounded-xl shadow">
-            <div className="text-2xl font-bold text-blue-600">
-              {products.filter(p => p.featured).length}
-            </div>
-            <div className="text-gray-600">Featured</div>
-          </div>
-          <div className="bg-white p-4 rounded-xl shadow">
-            <div className="text-2xl font-bold text-purple-600">
-              {Array.from(new Set(products.map(p => p.category))).length}
-            </div>
-            <div className="text-gray-600">Categories</div>
-          </div>
-        </div>
-      )}
+{products && products.length > 0 && (
+  <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-6">
+    <div className="bg-white p-4 rounded-xl shadow">
+      <div className="text-2xl font-bold text-bridal-maroon">{products.length}</div>
+      <div className="text-gray-600">Total Products</div>
+    </div>
+    <div className="bg-white p-4 rounded-xl shadow">
+      <div className="text-2xl font-bold text-green-600">
+        {products.filter((p: Product) => p.stock > 0).length}
+      </div>
+      <div className="text-gray-600">In Stock</div>
+    </div>
+    <div className="bg-white p-4 rounded-xl shadow">
+      <div className="text-2xl font-bold text-blue-600">
+        {products.filter((p: Product) => p.featured).length}
+      </div>
+      <div className="text-gray-600">Featured</div>
+    </div>
+    <div className="bg-white p-4 rounded-xl shadow">
+      <div className="text-2xl font-bold text-purple-600">
+        {Array.from(new Set(products.map((p: Product) => p.category))).length}
+      </div>
+      <div className="text-gray-600">Categories</div>
+    </div>
+  </div>
+)}
 
       {/* Modals */}
       {showForm && (
