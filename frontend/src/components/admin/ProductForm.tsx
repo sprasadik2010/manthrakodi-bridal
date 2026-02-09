@@ -78,7 +78,7 @@ const ProductForm = ({ product, initialImages, onClose, onSuccess }: ProductForm
       };
 
       if (product) {
-        await axios.put(`/api/products/${product.id}`, productData);
+        await axios.put(`${API_URL}/products/${product.id}`, productData);
         toast.success('Product updated successfully!');
       } else {
         await axios.post(`${API_URL}/products`, productData);
