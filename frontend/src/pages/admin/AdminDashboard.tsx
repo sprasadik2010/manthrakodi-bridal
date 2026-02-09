@@ -36,9 +36,9 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex min-h-screen bg-purple-500">
       {/* Sidebar */}
-      <div className={`${sidebarOpen ? 'w-64' : 'w-20'} bg-[#8B0000] text-white transition-all duration-300 fixed h-full flex flex-col z-10`}>
+      <div className={`${sidebarOpen ? 'w-64' : 'w-20'} bg-purple-400 text-white transition-all duration-300 fixed h-full flex flex-col z-10`}>
         <div className="p-6 flex justify-between items-center border-b border-white/20">
           {sidebarOpen && (
             <h1 className="font-bold text-xl">
@@ -61,7 +61,7 @@ const AdminDashboard = () => {
               to={item.path}
               className={`flex items-center px-3 py-3 rounded-lg mb-1 transition-colors ${
                 location.pathname === item.path 
-                  ? 'bg-white text-[#8B0000]'  // Active state
+                  ? 'bg-white text-lime-900'  // Active state
                   : 'hover:bg-white/20 text-white'
               }`}
             >
