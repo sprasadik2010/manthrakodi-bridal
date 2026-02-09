@@ -4,11 +4,13 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { LineChart, Line, /*BarChart, Bar,*/ XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
+const API_URL = import.meta.env.VITE_API_URL || '/api';
+
 const DashboardHome = () => {
   const { data: stats, isLoading } = useQuery({
     queryKey: ['dashboard-stats'],
     queryFn: async () => {
-      const response = await axios.get('/api/analytics/dashboard-stats');
+      const response = await axios.get(`${API_URL}/analytics/dashboard-stats`);
       return response.data;
     },
   });
@@ -16,7 +18,7 @@ const DashboardHome = () => {
   const { data: salesData } = useQuery({
     queryKey: ['sales-analytics'],
     queryFn: async () => {
-      const response = await axios.get('/api/analytics/sales-analytics?period=week');
+      const response = await axios.get(`${API_URL}/analytics/sales-analytics?period=week`);
       return response.data;
     },
   });

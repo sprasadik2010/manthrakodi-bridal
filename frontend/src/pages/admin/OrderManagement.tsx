@@ -4,6 +4,8 @@ import { FaEye, FaPrint, FaCheck, FaTruck, FaBoxOpen } from 'react-icons/fa';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
+const API_URL = import.meta.env.VITE_API_URL || '/api';
+
 // Define Order type
 interface Order {
   id: string;
@@ -20,7 +22,7 @@ const OrderManagement = () => {
   const { data: orders, isLoading } = useQuery<Order[]>({
     queryKey: ['admin-orders'],
     queryFn: async () => {
-      const response = await axios.get('/api/orders');
+      const response = await axios.get(`${API_URL}/orders`);
       return response.data;
     },
   });
@@ -40,7 +42,7 @@ const OrderManagement = () => {
 
   const updateOrderStatus = async (orderId: string, status: string) => {
     try {
-      await axios.put(`/api/orders/${orderId}/status`, { status });
+      await axios.put(`${API_URL}/orders/${orderId}/status`, { status });
       // Refetch orders - you might want to invalidate queries here
       // queryClient.invalidateQueries({ queryKey: ['admin-orders'] });
     } catch (error) {

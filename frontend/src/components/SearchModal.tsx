@@ -15,12 +15,12 @@ interface SearchModalProps {
 const SearchModal = ({ isOpen, onClose }: SearchModalProps) => {
   const [query, setQuery] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
-
+const API_URL = import.meta.env.VITE_API_URL || '/api';
   const { data: products, isLoading } = useQuery({
     queryKey: ['search', query],
     queryFn: async () => {
       if (!query.trim()) return [];
-      const response = await axios.get(`/api/products/search?q=${query}`);
+      const response = await axios.get(`${API_URL}/products/search?q=${query}`);
       return response.data as Product[];
     },
     enabled: query.length > 1,

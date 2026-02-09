@@ -19,11 +19,13 @@ const ProductManagement = () => {
     [key: string]: any;
   } | null>(null);
 
+  const API_URL = import.meta.env.VITE_API_URL || '/api';
+
   const { data: productsData, isLoading, refetch } = useQuery({
     queryKey: ['admin-products'],
     queryFn: async () => {
       try {
-        const response = await axios.get('/api/products/?skip=0&limit=100');
+        const response = await axios.get(`${API_URL}/products/?skip=0&limit=100`);
         console.log('API Response:', response.data); // Debug log
         return response.data;
       } catch (error) {
@@ -49,7 +51,7 @@ const ProductManagement = () => {
   const handleDelete = async (id: string) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
       try {
-        await axios.delete(`/api/products/${id}`);
+        await axios.delete(`${API_URL}/products/${id}`);
         refetch();
       } catch (error) {
         console.error('Error deleting product:', error);
