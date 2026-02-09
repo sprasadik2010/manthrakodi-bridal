@@ -65,30 +65,26 @@ const ProductCard = ({ product }: ProductCardProps) => {
           )}
         </div>
 
-        {/* Quick Actions Overlay */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: isHovered ? 1 : 0, y: isHovered ? 0 : 20 }}
-          className="absolute inset-0 bg-black/40 flex items-center justify-center gap-4"
-        >
+        {/* Quick Actions Overlay - Always visible on mobile */}
+        <div className="absolute inset-0 bg-black/40 flex items-center justify-center gap-4 transition-opacity duration-300 md:opacity-0 md:group-hover:opacity-100 opacity-100 md:opacity-0">
           <button
             onClick={handleAddToCart}
             disabled={product.stock === 0}
-            className="bg-white text-bridal-maroon p-3 rounded-full hover:bg-bridal-maroon hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="bg-white text-bridal-maroon p-3 rounded-full hover:bg-bridal-maroon hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
             aria-label="Add to cart"
           >
             <FaShoppingCart size={20} />
           </button>
           <Link
             to={`/product/${product.id}`}
-            className="bg-white text-bridal-maroon p-3 rounded-full hover:bg-bridal-maroon hover:text-white transition-colors"
+            className="bg-white text-bridal-maroon p-3 rounded-full hover:bg-bridal-maroon hover:text-white transition-colors shadow-lg"
             aria-label="View details"
           >
             <FaEye size={20} />
           </Link>
           <button
             onClick={handleWishlistToggle}
-            className={`p-3 rounded-full transition-colors ${
+            className={`p-3 rounded-full transition-colors shadow-lg ${
               isWishlisted
                 ? 'bg-red-500 text-white'
                 : 'bg-white text-bridal-maroon hover:bg-bridal-maroon hover:text-white'
@@ -97,7 +93,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
           >
             <FaHeart size={20} />
           </button>
-        </motion.div>
+        </div>
       </div>
 
       {/* Content */}

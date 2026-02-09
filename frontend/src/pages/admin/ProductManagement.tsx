@@ -1,6 +1,6 @@
 // src/pages/admin/ProductManagement.tsx
 import { useState, useEffect } from 'react';
-import { FaEdit, FaTrash, FaUpload, FaPlus, FaSearch, FaExternalLinkAlt } from 'react-icons/fa';
+import { FaEdit, FaTrash, FaUpload, FaPlus, FaSearch, FaExternalLinkAlt, FaEllipsisV, FaTimes, FaBars } from 'react-icons/fa';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { Product } from '../../types';
@@ -18,6 +18,8 @@ const ProductManagement = () => {
     images: string[];
     [key: string]: any;
   } | null>(null);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isActionsOpen, setIsActionsOpen] = useState(false);
 
   const API_URL = import.meta.env.VITE_API_URL || '/api';
 
@@ -47,7 +49,6 @@ const ProductManagement = () => {
       )
     : [];
 
-
   const handleDelete = async (id: string) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
       try {
@@ -67,50 +68,127 @@ const ProductManagement = () => {
   };
 
   useEffect(() => {
-  console.log('Products data structure:', productsData);
-  console.log('Products array:', products);
-  console.log('Is array?', Array.isArray(products));
-}, [productsData, products]);
+    console.log('Products data structure:', productsData);
+    console.log('Products array:', products);
+    console.log('Is array?', Array.isArray(products));
+  }, [productsData, products]);
 
   return (
-    <div>
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+    <div className="p-4 md:p-6">
+      {/* Mobile Header */}
+      <div className="md:hidden mb-6">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h2 className="text-2xl font-bold">Products</h2>
+            <p className="text-gray-600 text-sm">Manage your inventory</p>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setIsSearchOpen(!isSearchOpen)}
+              className="p-2 bg-gray-100 rounded-lg"
+              aria-label="Toggle search"
+            >
+              <FaSearch size={18} />
+            </button>
+            <button
+              onClick={() => setIsActionsOpen(!isActionsOpen)}
+              className="p-2 bg-gray-100 rounded-lg"
+              aria-label="Toggle actions"
+            >
+              <FaEllipsisV size={18} />
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile Search (Collapsible) */}
+        {isSearchOpen && (
+          <div className="mb-4">
+            <div className="relative">
+              <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search products..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-bridal-maroon focus:border-transparent"
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Mobile Action Buttons (Collapsible) */}
+        {isActionsOpen && (
+          <div className="mb-4 grid grid-cols-2 gap-2">
+            <button
+              onClick={() => {
+                setShowUpload(true);
+                setIsActionsOpen(false);
+              }}
+              className="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-lg flex items-center justify-center gap-2 text-sm"
+            >
+              <FaUpload /> Upload
+            </button>
+            <button
+              onClick={() => {
+                setShowExternalUpload(true);
+                setIsActionsOpen(false);
+              }}
+              className="bg-purple-600 hover:bg-purple-700 text-white p-3 rounded-lg flex items-center justify-center gap-2 text-sm"
+            >
+              <FaExternalLinkAlt /> External
+            </button>
+            <button
+              onClick={() => {
+                setFormDataWithImages(null);
+                setShowForm(true);
+                setIsActionsOpen(false);
+              }}
+              className="bg-green-600 hover:bg-green-700 text-white p-3 rounded-lg flex items-center justify-center gap-2 text-sm col-span-2"
+            >
+              <FaPlus /> Add Product
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* Desktop Header */}
+      <div className="hidden md:flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div>
           <h2 className="text-3xl font-bold">Product Management</h2>
           <p className="text-gray-600">Manage your product inventory and listings</p>
         </div>
         
-        <div className="flex flex-wrap gap-4">
-          <div className="relative">
+        <div className="flex flex-col md:flex-row gap-4 w-full md:w-auto">
+          <div className="relative w-full md:w-64">
             <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
             <input
               type="text"
               placeholder="Search products..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-bridal-maroon focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-bridal-maroon focus:border-transparent"
             />
           </div>
           
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             <button
               onClick={() => setShowUpload(true)}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 text-sm md:text-base"
             >
-              <FaUpload /> Server Upload
+              <FaUpload /> <span className="hidden md:inline">Server</span> Upload
             </button>
             <button
               onClick={() => setShowExternalUpload(true)}
-              className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg flex items-center gap-2"
+              className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 text-sm md:text-base"
             >
-              <FaExternalLinkAlt /> External Images
+              <FaExternalLinkAlt /> <span className="hidden md:inline">External</span> Images
             </button>
             <button
               onClick={() => {
                 setFormDataWithImages(null);
                 setShowForm(true);
               }}
-              className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center gap-2"
+              className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 text-sm md:text-base"
             >
               <FaPlus /> Add Product
             </button>
@@ -119,41 +197,41 @@ const ProductManagement = () => {
       </div>
 
       {/* Upload Options Info Card */}
-      <div className="mb-6 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-6 border border-blue-100">
+      <div className="mb-6 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-4 md:p-6 border border-blue-100">
         <h3 className="font-semibold text-lg mb-3 flex items-center gap-2">
           <FaExternalLinkAlt className="text-purple-600" />
-          Image Upload Options
+          <span className="text-sm md:text-lg">Image Upload Options</span>
         </h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bg-white p-4 rounded-lg shadow-sm">
-            <div className="font-semibold text-blue-600 mb-2">Server Upload</div>
-            <p className="text-sm text-gray-600 mb-2">Upload images directly to your server</p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
+          <div className="bg-white p-3 md:p-4 rounded-lg shadow-sm">
+            <div className="font-semibold text-blue-600 text-sm md:text-base mb-2">Server Upload</div>
+            <p className="text-xs md:text-sm text-gray-600 mb-2">Upload images directly to your server</p>
             <button
               onClick={() => setShowUpload(true)}
-              className="text-sm text-blue-600 hover:text-blue-800"
+              className="text-xs md:text-sm text-blue-600 hover:text-blue-800"
             >
               Choose this option →
             </button>
           </div>
-          <div className="bg-white p-4 rounded-lg shadow-sm">
-            <div className="font-semibold text-purple-600 mb-2">External Hosting</div>
-            <p className="text-sm text-gray-600 mb-2">Use free services like ImgBB, PostImage</p>
+          <div className="bg-white p-3 md:p-4 rounded-lg shadow-sm">
+            <div className="font-semibold text-purple-600 text-sm md:text-base mb-2">External Hosting</div>
+            <p className="text-xs md:text-sm text-gray-600 mb-2">Use free services like ImgBB, PostImage</p>
             <button
               onClick={() => setShowExternalUpload(true)}
-              className="text-sm text-purple-600 hover:text-purple-800"
+              className="text-xs md:text-sm text-purple-600 hover:text-purple-800"
             >
               Choose this option →
             </button>
           </div>
-          <div className="bg-white p-4 rounded-lg shadow-sm">
-            <div className="font-semibold text-green-600 mb-2">Facebook/URL</div>
-            <p className="text-sm text-gray-600 mb-2">Paste Facebook or direct image URLs</p>
+          <div className="bg-white p-3 md:p-4 rounded-lg shadow-sm">
+            <div className="font-semibold text-green-600 text-sm md:text-base mb-2">Facebook/URL</div>
+            <p className="text-xs md:text-sm text-gray-600 mb-2">Paste Facebook or direct image URLs</p>
             <button
               onClick={() => {
                 setFormDataWithImages(null);
                 setShowForm(true);
               }}
-              className="text-sm text-green-600 hover:text-green-800"
+              className="text-xs md:text-sm text-green-600 hover:text-green-800"
             >
               Choose this option →
             </button>
@@ -161,7 +239,7 @@ const ProductManagement = () => {
         </div>
       </div>
 
-      {/* Products Table */}
+      {/* Products Table/List */}
       <div className="bg-white rounded-xl shadow overflow-hidden">
         {isLoading ? (
           <div className="p-8 text-center">
@@ -170,7 +248,115 @@ const ProductManagement = () => {
           </div>
         ) : (
           <>
-            <div className="overflow-x-auto">
+            {/* Mobile View - Card List */}
+            <div className="md:hidden">
+              {filteredProducts.length > 0 ? (
+                <div className="divide-y divide-gray-200">
+                  {filteredProducts.map((product) => (
+                    <div key={product.id} className="p-4 hover:bg-gray-50">
+                      <div className="flex items-start gap-3">
+                        <div className="relative flex-shrink-0">
+                          <img
+                            src={product.images[0]}
+                            alt={product.name}
+                            className="h-16 w-16 rounded-lg object-cover"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).src = 'https://via.placeholder.com/64x64?text=Image+Error';
+                            }}
+                          />
+                          <div className="absolute bottom-0 right-0 bg-black/70 text-white text-xs px-1 rounded-tl">
+                            {product.images[0]?.includes('imgbb.co') ? 'ImgBB' : 
+                             product.images[0]?.includes('postimg.cc') ? 'PostImg' :
+                             product.images[0]?.includes('facebook.com') ? 'FB' : 'URL'}
+                          </div>
+                        </div>
+                        
+                        <div className="flex-1 min-w-0">
+                          <div className="flex justify-between items-start">
+                            <h3 className="font-medium text-gray-900 truncate pr-2">
+                              {product.name}
+                            </h3>
+                            <div className="flex gap-1">
+                              <button
+                                onClick={() => {
+                                  setEditingProduct(product);
+                                  setFormDataWithImages(null);
+                                  setShowForm(true);
+                                }}
+                                className="text-blue-600 p-1"
+                                title="Edit"
+                              >
+                                <FaEdit size={16} />
+                              </button>
+                              <button
+                                onClick={() => handleDelete(product.id)}
+                                className="text-red-600 p-1"
+                                title="Delete"
+                              >
+                                <FaTrash size={16} />
+                              </button>
+                            </div>
+                          </div>
+                          
+                          <p className="text-gray-500 text-xs mt-1 line-clamp-2">
+                            {product.description}
+                          </p>
+                          
+                          <div className="flex flex-wrap items-center gap-2 mt-2">
+                            <span className="px-2 py-1 text-xs rounded-full bg-purple-100 text-purple-800 capitalize">
+                              {product.category}
+                            </span>
+                            <div className="text-sm font-bold text-bridal-maroon">
+                              ₹{product.price.toLocaleString()}
+                            </div>
+                            {product.originalPrice && (
+                              <div className="text-xs text-gray-500 line-through">
+                                ₹{product.originalPrice.toLocaleString()}
+                              </div>
+                            )}
+                          </div>
+                          
+                          <div className="flex flex-wrap items-center gap-2 mt-2">
+                            <div className={`px-2 py-1 rounded-full text-xs font-medium ${
+                              product.stock > 10 
+                                ? 'bg-green-100 text-green-800' 
+                                : product.stock > 0 
+                                ? 'bg-yellow-100 text-yellow-800' 
+                                : 'bg-red-100 text-red-800'
+                            }`}>
+                              {product.stock} units
+                            </div>
+                            <span className={`px-2 py-1 rounded-full text-xs ${
+                              product.featured 
+                                ? 'bg-blue-100 text-blue-800' 
+                                : 'bg-gray-100 text-gray-800'
+                            }`}>
+                              {product.featured ? 'Featured' : 'Regular'}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-12">
+                  <p className="text-gray-500">No products found.</p>
+                  <button
+                    onClick={() => {
+                      setFormDataWithImages(null);
+                      setShowForm(true);
+                    }}
+                    className="mt-4 bg-bridal-maroon text-white px-6 py-2 rounded-lg hover:bg-bridal-maroon/90 text-sm"
+                  >
+                    Add Your First Product
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Desktop View - Table */}
+            <div className="hidden md:block overflow-x-auto">
               <table className="min-w-full">
                 <thead className="bg-gray-50">
                   <tr>
@@ -195,7 +381,7 @@ const ProductManagement = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
-                  {filteredProducts&& filteredProducts.map((product) => (
+                  {filteredProducts.map((product) => (
                     <tr key={product.id} className="hover:bg-gray-50">
                       <td className="py-4 px-6">
                         <div className="flex items-center">
@@ -299,7 +485,7 @@ const ProductManagement = () => {
             </div>
 
             {filteredProducts.length === 0 && (
-              <div className="text-center py-12">
+              <div className="text-center py-12 md:block hidden">
                 <p className="text-gray-500">No products found.</p>
                 <button
                   onClick={() => {
@@ -317,32 +503,32 @@ const ProductManagement = () => {
       </div>
 
       {/* Stats Summary */}
-{products && products.length > 0 && (
-  <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-6">
-    <div className="bg-white p-4 rounded-xl shadow">
-      <div className="text-2xl font-bold text-bridal-maroon">{products.length}</div>
-      <div className="text-gray-600">Total Products</div>
-    </div>
-    <div className="bg-white p-4 rounded-xl shadow">
-      <div className="text-2xl font-bold text-green-600">
-        {products.filter((p: Product) => p.stock > 0).length}
-      </div>
-      <div className="text-gray-600">In Stock</div>
-    </div>
-    <div className="bg-white p-4 rounded-xl shadow">
-      <div className="text-2xl font-bold text-blue-600">
-        {products.filter((p: Product) => p.featured).length}
-      </div>
-      <div className="text-gray-600">Featured</div>
-    </div>
-    <div className="bg-white p-4 rounded-xl shadow">
-      <div className="text-2xl font-bold text-purple-600">
-        {Array.from(new Set(products.map((p: Product) => p.category))).length}
-      </div>
-      <div className="text-gray-600">Categories</div>
-    </div>
-  </div>
-)}
+      {products && products.length > 0 && (
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mt-6">
+          <div className="bg-white p-3 md:p-4 rounded-xl shadow">
+            <div className="text-xl md:text-2xl font-bold text-bridal-maroon">{products.length}</div>
+            <div className="text-xs md:text-sm text-gray-600">Total Products</div>
+          </div>
+          <div className="bg-white p-3 md:p-4 rounded-xl shadow">
+            <div className="text-xl md:text-2xl font-bold text-green-600">
+              {products.filter((p: Product) => p.stock > 0).length}
+            </div>
+            <div className="text-xs md:text-sm text-gray-600">In Stock</div>
+          </div>
+          <div className="bg-white p-3 md:p-4 rounded-xl shadow">
+            <div className="text-xl md:text-2xl font-bold text-blue-600">
+              {products.filter((p: Product) => p.featured).length}
+            </div>
+            <div className="text-xs md:text-sm text-gray-600">Featured</div>
+          </div>
+          <div className="bg-white p-3 md:p-4 rounded-xl shadow">
+            <div className="text-xl md:text-2xl font-bold text-purple-600">
+              {Array.from(new Set(products.map((p: Product) => p.category))).length}
+            </div>
+            <div className="text-xs md:text-sm text-gray-600">Categories</div>
+          </div>
+        </div>
+      )}
 
       {/* Modals */}
       {showForm && (

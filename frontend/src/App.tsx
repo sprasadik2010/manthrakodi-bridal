@@ -1,4 +1,4 @@
-// src/App.tsx - UPDATED
+// src/App.tsx
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { HelmetProvider } from 'react-helmet-async';
@@ -32,8 +32,13 @@ function App() {
           <SEO />
           {/* ADD THIS DIV - it fixes overflow issues */}
           <div className="w-full min-h-screen bg-bridal-cream overflow-x-hidden">
-            <Navbar />
-            <main className="w-full max-w-[100vw] overflow-hidden">
+            {/* Fixed Navbar */}
+            <div className="fixed top-0 left-0 right-0 z-50">
+              <Navbar />
+            </div>
+            
+            {/* Add padding-top to main content to account for fixed navbar height */}
+            <main className="w-full max-w-[100vw] overflow-hidden pt-20"> {/* Adjust pt-20 based on your navbar height */}
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/products" element={<Products />} />
