@@ -8,6 +8,7 @@ interface ImageUploadProps {
   onClose: () => void;
   onSuccess: () => void;
 }
+const API_URL = import.meta.env.VITE_API_URL || '/api';
 
 const ImageUpload = ({ onClose, onSuccess }: ImageUploadProps) => {
   const [files, setFiles] = useState<File[]>([]);
@@ -45,7 +46,7 @@ const ImageUpload = ({ onClose, onSuccess }: ImageUploadProps) => {
       });
       formData.append('category', category);
 
-      await axios.post('/api/upload/images', formData, {
+      await axios.post(`${API_URL}/upload/images`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

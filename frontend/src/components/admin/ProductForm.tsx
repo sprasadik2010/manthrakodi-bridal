@@ -11,7 +11,7 @@ interface ProductFormProps {
   onClose: () => void;
   onSuccess: () => void;
 }
-
+const API_URL = import.meta.env.VITE_API_URL || '/api';
 const ProductForm = ({ product, initialImages, onClose, onSuccess }: ProductFormProps) => {
   const [formData, setFormData] = useState({
     name: '',
@@ -81,7 +81,7 @@ const ProductForm = ({ product, initialImages, onClose, onSuccess }: ProductForm
         await axios.put(`/api/products/${product.id}`, productData);
         toast.success('Product updated successfully!');
       } else {
-        await axios.post('/api/products', productData);
+        await axios.post(`${API_URL}/products`, productData);
         toast.success('Product created successfully!');
       }
       
