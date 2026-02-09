@@ -16,7 +16,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const addToCart = useCartStore((state) => state.addToCart);
   const { addToWishlist, isInWishlist, removeFromWishlist } = useWishlistStore();
-
+  console.log(isHovered);
   const handleAddToCart = () => {
     addToCart(product, 1);
     toast.success('Added to cart!');

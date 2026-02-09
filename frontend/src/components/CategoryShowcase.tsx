@@ -5,15 +5,15 @@ import { motion } from 'framer-motion';
 const categories = [
   {
     id: 1,
-    title: 'Bridal Sarees',
-    image: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?auto=format&fit=crop&w=800',
+    title: 'Sarees',
+    image: 'https://i.ibb.co/r2M2BkKN/hq720-1.png&w=800',
     link: '/products?category=saree',
     count: '150+ Designs'
   },
   {
     id: 2,
     title: 'Ornaments',
-    image: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=800',
+    image: 'https://i.ibb.co/fYNfgRC5/Whats-App-Image-2026-02-09-at-12-36-50-PM-1.jpg',
     link: '/products?category=ornament',
     count: '200+ Pieces'
   },

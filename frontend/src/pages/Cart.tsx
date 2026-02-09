@@ -2,7 +2,7 @@
 // import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaShoppingBag } from 'react-icons/fa';
-import useCartStore  from '../store/cartStore';
+import useCartStore from '../store/cartStore';
 
 const Cart = () => {
   const { items, total, removeFromCart, updateQuantity, clearCart } = useCartStore();
@@ -28,11 +28,11 @@ const Cart = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-4xl font-playfair font-bold mb-8 text-center">Shopping Cart</h1>
-      
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Cart Items */}
         <div className="lg:col-span-2 space-y-6">
-          {items&&items.map((item) => (
+          {items && items.map((item) => (
             <div key={item.product.id} className="bg-white rounded-xl shadow-lg p-6">
               <div className="flex flex-col md:flex-row gap-6">
                 <img
@@ -84,7 +84,7 @@ const Cart = () => {
               </div>
             </div>
           ))}
-          
+
           <div className="flex justify-between">
             <Link
               to="/products"
@@ -105,7 +105,7 @@ const Cart = () => {
         <div className="lg:col-span-1">
           <div className="bg-white rounded-xl shadow-lg p-6 sticky top-8">
             <h2 className="text-2xl font-bold mb-6">Order Summary</h2>
-            
+
             <div className="space-y-4 mb-6">
               <div className="flex justify-between">
                 <span className="text-gray-600">Subtotal</span>
@@ -133,7 +133,7 @@ const Cart = () => {
             >
               Proceed to Checkout
             </Link>
-            
+
             <p className="text-sm text-gray-500 text-center">
               Secure checkout · No login required
             </p>

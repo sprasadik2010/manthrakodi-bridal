@@ -14,6 +14,8 @@ import ProtectedRoute from './components/ProtectedRoute';
 import SEO from './components/SEO';
 import './index.css';
 import ErrorBoundary from './components/ErrorBoundary';
+import Checkout from './pages/Checkout';
+import Orders from './pages/Orders';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -44,6 +46,8 @@ function App() {
                 <Route path="/products" element={<Products />} />
                 <Route path="/product/:id" element={<ProductDetail />} />
                 <Route path="/cart" element={<Cart />} />
+                <Route path="/checkout" element={<Checkout />} />
+                <Route path="/orders" element={<Orders />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/admin/*" element={
                   <ErrorBoundary>

@@ -18,6 +18,8 @@ const Navbar = () => {
     { path: '/products?category=saree', label: 'Sarees' },
     { path: '/products?category=ornament', label: 'Ornaments' },
     { path: '/products?category=bridal-set', label: 'Bridal Sets' },
+    { path: '/orders', label: 'My Orders' },
+    { path: '/contact', label: 'Contact' },
     { path: '/contact', label: 'Contact' },
   ];
 
@@ -27,26 +29,35 @@ const Navbar = () => {
         <div className="px-3 sm:px-4 lg:px-8 w-full">
           <div className="flex justify-between items-center h-20 w-full">
             {/* Logo - Made responsive for small screens */}
-            <Link to="/" className="flex items-center shrink-0 min-w-0">
-              <div className="text-2xl xs:text-3xl font-playfair font-bold text-bridal-maroon truncate">
-                Manthrakodi
+            <Link to="/" className="flex items-center gap-2 shrink-0 min-w-0">
+              {/* Logo Image */}
+              <img
+                src="/logo.png"
+                alt="Manthrakodi Logo"
+                className="h-10 w-10 sm:h-12 sm:w-12 object-contain"
+              />
+
+              {/* Brand Text */}
+              <div className="flex flex-col leading-tight">
+                <span className="text-2xl xs:text-3xl font-playfair font-bold text-bridal-maroon truncate">
+                  Manthrakodi
+                </span>
+                <span className="text-xs sm:text-sm text-gray-500">
+                  Bridal
+                </span>
               </div>
-              <span className="ml-1 sm:ml-2 text-xs sm:text-sm text-gray-500 whitespace-nowrap">
-                Bridal
-              </span>
             </Link>
 
             {/* Desktop Navigation - Hidden on mobile */}
             <div className="hidden md:flex items-center gap-6 lg:gap-8 mx-auto px-4">
-              {navLinks&&navLinks.map((link) => (
+              {navLinks && navLinks.map((link) => (
                 <Link
                   key={link.path}
                   to={link.path}
-                  className={`whitespace-nowrap font-medium transition-colors ${
-                    location.pathname === link.path.split('?')[0]
-                      ? 'text-bridal-maroon border-b-2 border-bridal-maroon'
-                      : 'text-gray-700 hover:text-bridal-maroon'
-                  }`}
+                  className={`whitespace-nowrap font-medium transition-colors ${location.pathname === link.path.split('?')[0]
+                    ? 'text-bridal-maroon border-b-2 border-bridal-maroon'
+                    : 'text-gray-700 hover:text-bridal-maroon'
+                    }`}
                 >
                   {link.label}
                 </Link>
@@ -105,16 +116,15 @@ const Navbar = () => {
               className="md:hidden bg-white border-t w-full overflow-hidden"
             >
               <div className="px-3 sm:px-4 py-3 space-y-2">
-                {navLinks&&navLinks.map((link) => (
+                {navLinks && navLinks.map((link) => (
                   <Link
                     key={link.path}
                     to={link.path}
                     onClick={() => setIsMenuOpen(false)}
-                    className={`block w-full px-3 py-2 rounded-lg font-medium whitespace-nowrap ${
-                      location.pathname === link.path.split('?')[0]
-                        ? 'bg-bridal-maroon text-white'
-                        : 'text-gray-700 hover:bg-gray-100'
-                    }`}
+                    className={`block w-full px-3 py-2 rounded-lg font-medium whitespace-nowrap ${location.pathname === link.path.split('?')[0]
+                      ? 'bg-bridal-maroon text-white'
+                      : 'text-gray-700 hover:bg-gray-100'
+                      }`}
                   >
                     {link.label}
                   </Link>

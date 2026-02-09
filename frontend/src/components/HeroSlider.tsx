@@ -11,9 +11,9 @@ import 'swiper/css/pagination';
 const slides = [
   {
     id: 1,
-    image: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=1600',
-    title: 'Exclusive Bridal Collections',
-    subtitle: 'Traditional & Contemporary Designs',
+    image: 'https://i.ibb.co/kVyNrjTC/Whats-App-Image-2026-02-09-at-6-42-56-PM.jpg',
+    title: '',
+    subtitle: '',
     cta: 'Explore Collection',
     link: '/products?category=saree'
   },

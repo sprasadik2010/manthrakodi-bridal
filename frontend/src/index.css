@@ -7,6 +7,15 @@
   --color-bridal-cream: #FFFDD0;
   --color-bridal-pink: #FFC0CB;
   --color-bridal-rose: #FFE4E1;
+
+  /* Add color palette */
+  --color-palette: {
+    bridal-maroon: #800000;
+    bridal-gold: #D4AF37;
+    bridal-cream: #FFFDD0;
+    bridal-pink: #FFC0CB;
+    bridal-rose: #FFE4E1;
+  }
   
   /* Custom font families */
   --font-playfair: 'Playfair Display', serif;
