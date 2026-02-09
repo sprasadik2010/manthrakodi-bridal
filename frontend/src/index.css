@@ -1,1 +1,155 @@
 @import "tailwindcss";
+
+@theme {
+  /* Custom colors */
+  --color-bridal-maroon: #800000;
+  --color-bridal-gold: #D4AF37;
+  --color-bridal-cream: #FFFDD0;
+  --color-bridal-pink: #FFC0CB;
+  --color-bridal-rose: #FFE4E1;
+  
+  /* Custom font families */
+  --font-playfair: 'Playfair Display', serif;
+  --font-montserrat: 'Montserrat', sans-serif;
+  
+  /* Custom animations */
+  --animate-fade-in: fade-in 0.5s ease-out;
+  
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+/* Custom utility classes */
+@layer utilities {
+  /* Line clamping */
+  .line-clamp-1 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+  }
+  
+  .line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+  
+  .line-clamp-3 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+  
+  /* Custom gradients */
+  .bg-gradient-bridal {
+    background: linear-gradient(135deg, var(--color-bridal-maroon) 0%, #660000 100%);
+  }
+  
+  .bg-gradient-gold {
+    background: linear-gradient(135deg, var(--color-bridal-gold) 0%, #B8860B 100%);
+  }
+  
+  /* Custom shadows */
+  .shadow-bridal {
+    box-shadow: 0 10px 25px rgba(128, 0, 0, 0.1);
+  }
+  
+  .shadow-bridal-lg {
+    box-shadow: 0 20px 40px rgba(128, 0, 0, 0.15);
+  }
+  
+  /* Custom borders */
+  .border-bridal {
+    border-color: var(--color-bridal-maroon);
+  }
+  
+  /* Text stroke */
+  .text-stroke-bridal {
+    -webkit-text-stroke: 1px var(--color-bridal-maroon);
+    paint-order: stroke fill;
+  }
+}
+
+/* Custom component classes */
+@layer components {
+  /* Bridal buttons */
+  .btn-bridal {
+    @apply bg-bridal-maroon text-white px-6 py-3 rounded-lg font-medium hover:bg-[#660000] transition-colors duration-300;
+  }
+  
+  .btn-bridal-outline {
+    @apply border-2 border-bridal-maroon text-bridal-maroon px-6 py-3 rounded-lg font-medium hover:bg-bridal-maroon hover:text-white transition-all duration-300;
+  }
+  
+  .btn-bridal-gold {
+    @apply bg-bridal-gold text-white px-6 py-3 rounded-lg font-medium hover:bg-[#B8860B] transition-colors duration-300;
+  }
+  
+  /* Product card */
+  .product-card {
+    @apply bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300;
+  }
+  
+  /* Category badge */
+  .category-badge {
+    @apply px-3 py-1 rounded-full text-xs font-medium capitalize;
+  }
+  
+  .category-saree {
+    @apply bg-red-100 text-red-800;
+  }
+  
+  .category-ornament {
+    @apply bg-yellow-100 text-yellow-800;
+  }
+  
+  .category-bridal-set {
+    @apply bg-purple-100 text-purple-800;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-bridal-maroon);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #660000;
+}
+
+/* Selection color */
+::selection {
+  background-color: var(--color-bridal-maroon);
+  color: white;
+}
+
+/* Focus styles */
+:focus {
+  outline: 2px solid var(--color-bridal-maroon);
+  outline-offset: 2px;
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
