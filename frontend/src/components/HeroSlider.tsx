@@ -11,7 +11,7 @@ import 'swiper/css/pagination';
 const slides = [
   {
     id: 1,
-    image: 'https://i.ibb.co/kVyNrjTC/Whats-App-Image-2026-02-09-at-6-42-56-PM.jpg',
+    image: 'https://i.ibb.co/nq1PK8F6/Whats-App-Image-2026-02-10-at-12-09-16-AM.jpg',
     title: '',
     subtitle: '',
     cta: 'Explore Collection',
@@ -19,20 +19,20 @@ const slides = [
   },
   {
     id: 2,
-    image: 'https://images.unsplash.com/photo-1529390079861-591de354faf5?auto=format&fit=crop&w=1600',
+    image: 'https://i.ibb.co/fJMWdv5/Whats-App-Image-2026-02-09-at-12-36-49-PM.jpg',
     title: 'Handcrafted Ornaments',
     subtitle: 'Timeless Elegance',
     cta: 'View Ornaments',
     link: '/products?category=ornament'
-  },
-  {
-    id: 3,
-    image: 'https://images.unsplash.com/photo-1585487000160-6eb9ce6b5aae?auto=format&fit=crop&w=1600',
-    title: 'Custom Bridal Sets',
-    subtitle: 'Tailored to Perfection',
-    cta: 'Design Yours',
-    link: '/contact'
-  }
+   }//,
+  // {
+  //   id: 3,
+  //   image: 'https://images.unsplash.com/photo-1585487000160-6eb9ce6b5aae?auto=format&fit=crop&w=1600',
+  //   title: 'Custom Bridal Sets',
+  //   subtitle: 'Tailored to Perfection',
+  //   cta: 'Design Yours',
+  //   link: '/contact'
+  // }
 ];
 
 const HeroSlider = () => {
