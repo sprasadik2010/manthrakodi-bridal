@@ -19,20 +19,36 @@ const slides = [
   },
   {
     id: 2,
-    image: 'https://i.ibb.co/fJMWdv5/Whats-App-Image-2026-02-09-at-12-36-49-PM.jpg',
+    image: 'https://i.ibb.co/m5mSxxVL/Whats-App-Image-2026-02-10-at-11-07-51-PM.jpg',
     title: '',
     subtitle: '',
     cta: 'View Ornaments',
     link: '/products?category=ornament'
-   }//,
-  // {
-  //   id: 3,
-  //   image: 'https://images.unsplash.com/photo-1585487000160-6eb9ce6b5aae?auto=format&fit=crop&w=1600',
-  //   title: 'Custom Bridal Sets',
-  //   subtitle: 'Tailored to Perfection',
-  //   cta: 'Design Yours',
-  //   link: '/contact'
-  // }
+   },
+  {
+    id: 3,
+    image: 'https://i.ibb.co/7d2QkrwL/Whats-App-Image-2026-02-11-at-4-15-01-PM.jpg',
+    title: 'Custom Bridal Sets',
+    subtitle: 'Tailored to Perfection',
+    cta: 'Design Yours',
+    link: '/contact'
+  },
+  {
+    id: 4,
+    image: 'https://i.ibb.co/nsYN59Qk/Whats-App-Image-2026-02-11-at-3-56-18-PM.jpg',
+    title: 'Custom Bridal Sets',
+    subtitle: 'Tailored to Perfection',
+    cta: 'Design Yours',
+    link: '/contact'
+  },
+  {
+    id: 5,
+    image: 'https://i.ibb.co/PZ7KWCs2/Whats-App-Image-2026-02-10-at-11-07-52-PM.jpg',
+    title: 'Custom Bridal Sets',
+    subtitle: 'Tailored to Perfection',
+    cta: 'Design Yours',
+    link: '/contact'
+  }
 ];
 
 const HeroSlider = () => {
