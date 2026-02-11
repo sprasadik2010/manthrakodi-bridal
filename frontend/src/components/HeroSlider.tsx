@@ -58,7 +58,8 @@ const HeroSlider = () => {
                 src={slide.image}
                 alt={slide.title}
                 // className="w-full h-full object-cover"
-                className="w-full h-full object-cover md:object-center lg:object-cover"
+                // className="w-100 h-full object-cover md:object-center lg:object-cover"
+                className="w-full h-full object-contain"
                 loading="eager"
               />
               <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent" />

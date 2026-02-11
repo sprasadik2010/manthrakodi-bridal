@@ -1,5 +1,5 @@
 // src/pages/Home.tsx
-import HeroSlider from '../components/HeroSlider';
+// import HeroSlider from '../components/HeroSlider';
 import CategoryShowcase from '../components/CategoryShowcase';
 import FeaturedProducts from '../components/FeaturedProducts';
 import Testimonials from '../components/Testimonials';
@@ -7,7 +7,7 @@ import Testimonials from '../components/Testimonials';
 const Home = () => {
   return (
     <div>
-      <HeroSlider />
+      {/* <HeroSlider /> */}
       <CategoryShowcase />
       <FeaturedProducts />
       <Testimonials />

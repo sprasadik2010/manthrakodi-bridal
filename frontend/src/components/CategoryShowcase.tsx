@@ -8,21 +8,21 @@ const categories = [
     title: 'Sarees',
     image: 'https://i.ibb.co/r2M2BkKN/hq720-1.png&w=800',
     link: '/products?category=saree',
-    count: '150+ Designs'
+    count: ''
   },
   {
     id: 2,
     title: 'Ornaments',
     image: 'https://i.ibb.co/fYNfgRC5/Whats-App-Image-2026-02-09-at-12-36-50-PM-1.jpg',
     link: '/products?category=ornament',
-    count: '200+ Pieces'
+    count: ''
   },
   {
     id: 3,
     title: 'Bridal Sets',
-    image: 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=800',
+    image: 'https://i.ibb.co/Fq68YpCF/Whats-App-Image-2026-02-10-at-11-04-25-PM.jpg',
     link: '/products?category=bridal-set',
-    count: '50+ Sets'
+    count: ''
   }
 ];
 
@@ -53,7 +53,8 @@ const CategoryShowcase = () => {
                   <img
                     src={category.image}
                     alt={category.title}
-                    className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-700"
+                    // className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-700"
+                    className="w-full h-64 object-scale-down group-hover:scale-110 transition-transform duration-700 bg-white"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
                   <div className="absolute bottom-6 left-6 right-6 text-white">
