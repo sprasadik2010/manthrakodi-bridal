@@ -26,7 +26,7 @@ class Settings:
     # CORS settings - ADD THIS
     @property
     def ALLOWED_ORIGINS(self) -> List[str]:
-        origins_str = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000,http://127.0.0.1:3000,https://manthrakodi-bridal.onrender.com, http://localhost:5173")
+        origins_str = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000,http://127.0.0.1:3000,https://mbridal.onrender.com,https://manthrakodi-bridal.onrender.com, http://localhost:5173")
         # Parse the string to list
         origins = [origin.strip().strip('"').strip("'") for origin in origins_str.strip("[]").split(",")]
         return origins
