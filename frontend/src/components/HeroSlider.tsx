@@ -20,8 +20,8 @@ const slides = [
   {
     id: 2,
     image: 'https://i.ibb.co/fJMWdv5/Whats-App-Image-2026-02-09-at-12-36-49-PM.jpg',
-    title: 'Handcrafted Ornaments',
-    subtitle: 'Timeless Elegance',
+    title: '',
+    subtitle: '',
     cta: 'View Ornaments',
     link: '/products?category=ornament'
    }//,
@@ -72,7 +72,7 @@ const HeroSlider = () => {
                     transition={{ duration: 0.8 }}
                     className="max-w-2xl text-white"
                   >
-                    <h1 className="text-5xl md:text-7xl lg:text-8xl font-playfair font-bold mb-6">
+                    {/* <h1 className="text-5xl md:text-7xl lg:text-8xl font-playfair font-bold mb-6">
                       {slide.title}
                     </h1>
                     <p className="text-xl md:text-2xl font-montserrat mb-8 opacity-90">
@@ -86,7 +86,7 @@ const HeroSlider = () => {
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                       </svg>
-                    </Link>
+                    </Link> */}
                   </motion.div>
                 </div>
               </div>
