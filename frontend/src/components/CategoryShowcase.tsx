@@ -13,7 +13,7 @@ const categories = [
   {
     id: 2,
     title: 'Ornaments',
-    image: 'https://i.ibb.co/fYNfgRC5/Whats-App-Image-2026-02-09-at-12-36-50-PM-1.jpg',
+    image: 'https://i.ibb.co/Gf2hw7JB/Whats-App-Image-2026-02-11-at-1-36-42-PM.jpg',
     link: '/products?category=ornament',
     count: ''
   },
