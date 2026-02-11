@@ -24,11 +24,13 @@ const ExternalImageUpload = ({ onImageUrlsGenerated, onClose }: ExternalImageUpl
   const [copied, setCopied] = useState(false);
   const [uploadingAll, setUploadingAll] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const isProcessingRef = useRef(false); // Add this to prevent double processing
 
   // Vite uses import.meta.env
   const IMGBB_API_KEY = import.meta.env.VITE_IMGBB_API_KEY;
   const IMGBB_API_URL = 'https://api.imgbb.com/1/upload';
-
+  console.log(IMGBB_API_KEY)
+  
   const services = [
     {
       name: 'ImgBB',
@@ -88,14 +90,28 @@ const ExternalImageUpload = ({ onImageUrlsGenerated, onClose }: ExternalImageUpl
     return true;
   };
 
-  // Handle file selection
+  // Handle file selection - FIXED
   const handleFileSelect = async (e: ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    // Prevent double processing
+    if (isProcessingRef.current) {
+      return;
+    }
+    
+    isProcessingRef.current = true;
+
     if (uploadMethod === 'direct' && !checkApiKey()) {
+      isProcessingRef.current = false;
       return;
     }
 
     const files = e.target.files;
-    if (!files) return;
+    if (!files || files.length === 0) {
+      isProcessingRef.current = false;
+      return;
+    }
 
     const newImages: UploadedImage[] = [];
     
@@ -119,16 +135,39 @@ const ExternalImageUpload = ({ onImageUrlsGenerated, onClose }: ExternalImageUpl
       });
     });
 
-    setUploadedImages(prev => [...prev, ...newImages]);
-    
-    // Clear file input
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
+    if (newImages.length > 0) {
+      setUploadedImages(prev => [...prev, ...newImages]);
+      
+      // Auto-upload if Direct method is selected
+      if (uploadMethod === 'direct') {
+        await uploadImages(newImages);
+      }
     }
+    
+    // Clear file input after a delay
+    setTimeout(() => {
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+      isProcessingRef.current = false;
+    }, 100);
+  };
 
-    // Auto-upload if Direct method is selected
-    if (uploadMethod === 'direct') {
-      await uploadImages(newImages);
+  // Handle browse button click - FIXED
+  const handleBrowseClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (apiStatus.status === 'configured' && fileInputRef.current) {
+      // Clear the input first to ensure change event fires
+      fileInputRef.current.value = '';
+      
+      // Use setTimeout to ensure the value is cleared before opening dialog
+      setTimeout(() => {
+        if (fileInputRef.current && !isProcessingRef.current) {
+          fileInputRef.current.click();
+        }
+      }, 0);
     }
   };
 
@@ -293,7 +332,7 @@ Recommended services:
     toast.success('Instructions copied to clipboard!');
   };
 
-  // Drag and drop handlers
+  // Drag and drop handlers - FIXED
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -310,14 +349,29 @@ Recommended services:
     const files = e.dataTransfer.files;
     if (files.length === 0) return;
 
+    // Prevent double processing
+    if (isProcessingRef.current) {
+      return;
+    }
+    
+    isProcessingRef.current = true;
+
     // Convert FileList to array and simulate file input
     const dataTransfer = new DataTransfer();
     Array.from(files).forEach(file => dataTransfer.items.add(file));
     
-    // if (fileInputRef.current) {
-    //   fileInputRef.current.files = dataTransfer.files;
-    //   handleFileSelect({ target: fileInputRef } as ChangeEvent<HTMLInputElement>);
-    // }
+    if (fileInputRef.current) {
+      fileInputRef.current.files = dataTransfer.files;
+      
+      // Create and dispatch a native change event
+      const changeEvent = new Event('change', { bubbles: true });
+      fileInputRef.current.dispatchEvent(changeEvent);
+    }
+    
+    // Reset processing flag after a delay
+    setTimeout(() => {
+      isProcessingRef.current = false;
+    }, 100);
   };
 
   // Get API configuration status
@@ -547,13 +601,14 @@ Recommended services:
                 </div>
               )}
 
-              {/* Direct Upload Section */}
+              {/* Direct Upload Section - FIXED */}
               {uploadMethod === 'direct' && (
                 <div className="mb-8">
                   <input
                     type="file"
                     ref={fileInputRef}
                     onChange={handleFileSelect}
+                    onClick={(e) => e.stopPropagation()} // Prevent event bubbling
                     multiple
                     accept="image/*"
                     className="hidden"
@@ -565,7 +620,7 @@ Recommended services:
                         ? 'border-gray-300 hover:border-bridal-maroon hover:bg-gray-50 cursor-pointer'
                         : 'border-gray-200 bg-gray-50 opacity-50 cursor-not-allowed'
                     }`}
-                    onClick={() => apiStatus.status === 'configured' && fileInputRef.current?.click()}
+                    onClick={handleBrowseClick} // Use the new handler
                     onDragOver={handleDragOver}
                     onDrop={apiStatus.status === 'configured' ? handleDrop : undefined}
                   >
@@ -589,7 +644,7 @@ Recommended services:
                         <>
                           <button
                             type="button"
-                            onClick={() => fileInputRef.current?.click()}
+                            onClick={handleBrowseClick} // Use the new handler
                             className="px-6 py-3 bg-bridal-maroon text-white rounded-lg hover:bg-bridal-maroon/90 font-semibold transition-colors"
                           >
                             Browse Files

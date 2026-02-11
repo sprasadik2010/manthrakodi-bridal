@@ -42,7 +42,7 @@ const Navbar = () => {
                 <span className="text-2xl xs:text-3xl font-playfair font-bold text-bridal-maroon truncate">
                   Manthrakodi
                 </span>
-                <span className="text-xs sm:text-sm text-gray-500">
+                <span className="text-xs sm:text-sm text-gray-900">
                   Bridal
                 </span>
               </div>
