@@ -1,23 +1,18 @@
 // src/pages/admin/ProductManagement.tsx
-import { useState, useEffect } from 'react';
-import { FaEdit, FaTrash, FaUpload, FaPlus, FaSearch, FaExternalLinkAlt, FaEllipsisV/*, FaTimes, FaBars*/ } from 'react-icons/fa';
+import { useState/*, useEffect*/ } from 'react';
+import { FaEdit, FaTrash, FaPlus, FaSearch, /*FaUpload, FaExternalLinkAlt,*/ FaEllipsisV, FaImage } from 'react-icons/fa';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { Product } from '../../types';
 import ProductForm from '../../components/admin/ProductForm';
-import ImageUpload from '../../components/admin/ImageUpload';
-import ExternalImageUpload from '../../components/admin/ExternalImageUpload';
+import SingleImageUpload from '../../components/admin/SingleImageUpload';
 
 const ProductManagement = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [showForm, setShowForm] = useState(false);
-  const [showUpload, setShowUpload] = useState(false);
-  const [showExternalUpload, setShowExternalUpload] = useState(false);
-  const [formDataWithImages, setFormDataWithImages] = useState<{
-    images: string[];
-    [key: string]: any;
-  } | null>(null);
+  const [showImageUpload, setShowImageUpload] = useState(false);
+  const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isActionsOpen, setIsActionsOpen] = useState(false);
 
@@ -28,19 +23,16 @@ const ProductManagement = () => {
     queryFn: async () => {
       try {
         const response = await axios.get(`${API_URL}/products/?skip=0&limit=100`);
-        console.log('API Response:', response.data); // Debug log
         return response.data;
       } catch (error) {
         console.error('Error fetching products:', error);
-        return { products: [] }; // Return a safe default
+        return { products: [] };
       }
     },
   });
 
-  // Safely extract products array from response
   const products = productsData?.products || productsData || [];
   
-  // Ensure products is an array before filtering
   const filteredProducts = Array.isArray(products) 
     ? products.filter(product =>
         product?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -60,18 +52,17 @@ const ProductManagement = () => {
     }
   };
 
-  const handleExternalImagesGenerated = (urls: string[]) => {
-    // Store the image URLs and open the product form
-    setFormDataWithImages({ images: urls });
-    setShowExternalUpload(false);
+  const handleImageUploaded = (url: string) => {
+    setUploadedImageUrl(url);
+    setShowImageUpload(false);
     setShowForm(true);
   };
 
-  useEffect(() => {
-    console.log('Products data structure:', productsData);
-    console.log('Products array:', products);
-    console.log('Is array?', Array.isArray(products));
-  }, [productsData, products]);
+  const handleAddProductClick = () => {
+    setUploadedImageUrl(null);
+    setEditingProduct(null);
+    setShowForm(true);
+  };
 
   return (
     <div className="p-4 md:p-6">
@@ -116,36 +107,29 @@ const ProductManagement = () => {
           </div>
         )}
 
-        {/* Mobile Action Buttons (Collapsible) */}
+        {/* Mobile Action Buttons (Collapsible) - Simplified */}
         {isActionsOpen && (
-          <div className="mb-4 grid grid-cols-2 gap-2">
+          <div className="mb-4 grid grid-cols-1 gap-2">
             <button
               onClick={() => {
-                setShowUpload(true);
-                setIsActionsOpen(false);
-              }}
-              className="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-lg flex items-center justify-center gap-2 text-sm"
-            >
-              <FaUpload /> Upload
-            </button>
-            <button
-              onClick={() => {
-                setShowExternalUpload(true);
+                setUploadedImageUrl(null);
+                setShowImageUpload(true);
                 setIsActionsOpen(false);
               }}
               className="bg-purple-600 hover:bg-purple-700 text-white p-3 rounded-lg flex items-center justify-center gap-2 text-sm"
             >
-              <FaExternalLinkAlt /> External
+              <FaImage /> Upload Image to ImgBB
             </button>
             <button
               onClick={() => {
-                setFormDataWithImages(null);
+                setUploadedImageUrl(null);
+                setEditingProduct(null);
                 setShowForm(true);
                 setIsActionsOpen(false);
               }}
-              className="bg-green-600 hover:bg-green-700 text-white p-3 rounded-lg flex items-center justify-center gap-2 text-sm col-span-2"
+              className="bg-green-600 hover:bg-green-700 text-white p-3 rounded-lg flex items-center justify-center gap-2 text-sm"
             >
-              <FaPlus /> Add Product
+              <FaPlus /> Add Product (Without Image)
             </button>
           </div>
         )}
@@ -172,22 +156,16 @@ const ProductManagement = () => {
           
           <div className="flex flex-wrap gap-2">
             <button
-              onClick={() => setShowUpload(true)}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 text-sm md:text-base"
-            >
-              <FaUpload /> <span className="hidden md:inline">Server</span> Upload
-            </button>
-            <button
-              onClick={() => setShowExternalUpload(true)}
+              onClick={() => {
+                setUploadedImageUrl(null);
+                setShowImageUpload(true);
+              }}
               className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 text-sm md:text-base"
             >
-              <FaExternalLinkAlt /> <span className="hidden md:inline">External</span> Images
+              <FaImage /> Upload to ImgBB
             </button>
             <button
-              onClick={() => {
-                setFormDataWithImages(null);
-                setShowForm(true);
-              }}
+              onClick={handleAddProductClick}
               className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 text-sm md:text-base"
             >
               <FaPlus /> Add Product
@@ -196,45 +174,34 @@ const ProductManagement = () => {
         </div>
       </div>
 
-      {/* Upload Options Info Card */}
-      <div className="mb-6 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-4 md:p-6 border border-blue-100">
+      {/* Simplified Upload Info Card */}
+      <div className="mb-6 bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-4 md:p-6 border border-purple-100">
         <h3 className="font-semibold text-lg mb-3 flex items-center gap-2">
-          <FaExternalLinkAlt className="text-purple-600" />
-          <span className="text-sm md:text-lg">Image Upload Options</span>
+          <FaImage className="text-purple-600" />
+          <span className="text-sm md:text-lg">Simple Image Upload</span>
         </h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
-          <div className="bg-white p-3 md:p-4 rounded-lg shadow-sm">
-            <div className="font-semibold text-blue-600 text-sm md:text-base mb-2">Server Upload</div>
-            <p className="text-xs md:text-sm text-gray-600 mb-2">Upload images directly to your server</p>
-            <button
-              onClick={() => setShowUpload(true)}
-              className="text-xs md:text-sm text-blue-600 hover:text-blue-800"
-            >
-              Choose this option →
-            </button>
-          </div>
-          <div className="bg-white p-3 md:p-4 rounded-lg shadow-sm">
-            <div className="font-semibold text-purple-600 text-sm md:text-base mb-2">External Hosting</div>
-            <p className="text-xs md:text-sm text-gray-600 mb-2">Use free services like ImgBB, PostImage</p>
-            <button
-              onClick={() => setShowExternalUpload(true)}
-              className="text-xs md:text-sm text-purple-600 hover:text-purple-800"
-            >
-              Choose this option →
-            </button>
-          </div>
-          <div className="bg-white p-3 md:p-4 rounded-lg shadow-sm">
-            <div className="font-semibold text-green-600 text-sm md:text-base mb-2">Facebook/URL</div>
-            <p className="text-xs md:text-sm text-gray-600 mb-2">Paste Facebook or direct image URLs</p>
-            <button
-              onClick={() => {
-                setFormDataWithImages(null);
-                setShowForm(true);
-              }}
-              className="text-xs md:text-sm text-green-600 hover:text-green-800"
-            >
-              Choose this option →
-            </button>
+        <div className="bg-white p-4 md:p-6 rounded-lg shadow-sm">
+          <div className="flex items-start gap-4">
+            <div className="flex-1">
+              <div className="font-semibold text-purple-600 text-base md:text-lg mb-2">
+                Upload to ImgBB
+              </div>
+              <p className="text-sm md:text-base text-gray-600 mb-3">
+                Select one image from your computer. It will be automatically uploaded to ImgBB and the link will be saved to your product.
+              </p>
+              <button
+                onClick={() => {
+                  setUploadedImageUrl(null);
+                  setShowImageUpload(true);
+                }}
+                className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 text-sm md:text-base inline-flex"
+              >
+                <FaImage /> Upload Single Image
+              </button>
+            </div>
+            <div className="hidden sm:block w-24 h-24 bg-purple-100 rounded-lg flex items-center justify-center">
+              <FaImage className="text-purple-600 text-4xl" />
+            </div>
           </div>
         </div>
       </div>
@@ -256,19 +223,25 @@ const ProductManagement = () => {
                     <div key={product.id} className="p-4 hover:bg-gray-50">
                       <div className="flex items-start gap-3">
                         <div className="relative flex-shrink-0">
-                          <img
-                            src={product.images[0]}
-                            alt={product.name}
-                            className="h-16 w-16 rounded-lg object-cover"
-                            onError={(e) => {
-                              (e.target as HTMLImageElement).src = 'https://via.placeholder.com/64x64?text=Image+Error';
-                            }}
-                          />
-                          <div className="absolute bottom-0 right-0 bg-black/70 text-white text-xs px-1 rounded-tl">
-                            {product.images[0]?.includes('imgbb.co') ? 'ImgBB' : 
-                             product.images[0]?.includes('postimg.cc') ? 'PostImg' :
-                             product.images[0]?.includes('facebook.com') ? 'FB' : 'URL'}
-                          </div>
+                          {product.images && product.images.length > 0 ? (
+                            <img
+                              src={product.images[0]}
+                              alt={product.name}
+                              className="h-16 w-16 rounded-lg object-cover"
+                              onError={(e) => {
+                                (e.target as HTMLImageElement).src = 'https://via.placeholder.com/64x64?text=No+Image';
+                              }}
+                            />
+                          ) : (
+                            <div className="h-16 w-16 rounded-lg bg-gray-100 flex items-center justify-center">
+                              <FaImage className="text-gray-400 text-2xl" />
+                            </div>
+                          )}
+                          {product.images && product.images[0]?.includes('imgbb') && (
+                            <div className="absolute bottom-0 right-0 bg-purple-600 text-white text-xs px-1 rounded-tl">
+                              ImgBB
+                            </div>
+                          )}
                         </div>
                         
                         <div className="flex-1 min-w-0">
@@ -280,7 +253,7 @@ const ProductManagement = () => {
                               <button
                                 onClick={() => {
                                   setEditingProduct(product);
-                                  setFormDataWithImages(null);
+                                  setUploadedImageUrl(null);
                                   setShowForm(true);
                                 }}
                                 className="text-blue-600 p-1"
@@ -343,10 +316,7 @@ const ProductManagement = () => {
                 <div className="text-center py-12">
                   <p className="text-gray-500">No products found.</p>
                   <button
-                    onClick={() => {
-                      setFormDataWithImages(null);
-                      setShowForm(true);
-                    }}
+                    onClick={handleAddProductClick}
                     className="mt-4 bg-bridal-maroon text-white px-6 py-2 rounded-lg hover:bg-bridal-maroon/90 text-sm"
                   >
                     Add Your First Product
@@ -386,28 +356,30 @@ const ProductManagement = () => {
                       <td className="py-4 px-6">
                         <div className="flex items-center">
                           <div className="relative h-12 w-12 rounded-lg overflow-hidden mr-4">
-                            <img
-                              src={product.images[0]}
-                              alt={product.name}
-                              className="h-12 w-12 object-cover"
-                              onError={(e) => {
-                                (e.target as HTMLImageElement).src = 'https://via.placeholder.com/48x48?text=Image+Error';
-                              }}
-                            />
-                            {/* Image source indicator */}
-                            <div className="absolute bottom-0 right-0 bg-black/70 text-white text-xs px-1 rounded-tl">
-                              {product.images[0]?.includes('imgbb.co') ? 'ImgBB' : 
-                               product.images[0]?.includes('postimg.cc') ? 'PostImg' :
-                               product.images[0]?.includes('facebook.com') ? 'FB' : 'URL'}
-                            </div>
+                            {product.images && product.images.length > 0 ? (
+                              <img
+                                src={product.images[0]}
+                                alt={product.name}
+                                className="h-12 w-12 object-cover"
+                                onError={(e) => {
+                                  (e.target as HTMLImageElement).src = 'https://via.placeholder.com/48x48?text=No+Image';
+                                }}
+                              />
+                            ) : (
+                              <div className="h-12 w-12 bg-gray-100 flex items-center justify-center">
+                                <FaImage className="text-gray-400 text-xl" />
+                              </div>
+                            )}
+                            {product.images && product.images[0]?.includes('imgbb') && (
+                              <div className="absolute bottom-0 right-0 bg-purple-600 text-white text-xs px-1 rounded-tl">
+                                ImgBB
+                              </div>
+                            )}
                           </div>
                           <div>
                             <div className="font-medium text-gray-900">{product.name}</div>
                             <div className="text-gray-500 text-sm">
-                              {product.description.substring(0, 50)}...
-                            </div>
-                            <div className="text-xs text-gray-400 mt-1">
-                              {product.images.length} image{product.images.length !== 1 ? 's' : ''}
+                              {product.description?.substring(0, 50)}...
                             </div>
                           </div>
                         </div>
@@ -461,7 +433,7 @@ const ProductManagement = () => {
                           <button
                             onClick={() => {
                               setEditingProduct(product);
-                              setFormDataWithImages(null);
+                              setUploadedImageUrl(null);
                               setShowForm(true);
                             }}
                             className="text-blue-600 hover:text-blue-900 p-2"
@@ -488,10 +460,7 @@ const ProductManagement = () => {
               <div className="text-center py-12 md:block hidden">
                 <p className="text-gray-500">No products found.</p>
                 <button
-                  onClick={() => {
-                    setFormDataWithImages(null);
-                    setShowForm(true);
-                  }}
+                  onClick={handleAddProductClick}
                   className="mt-4 bg-bridal-maroon text-white px-6 py-2 rounded-lg hover:bg-bridal-maroon/90"
                 >
                   Add Your First Product
@@ -534,35 +503,25 @@ const ProductManagement = () => {
       {showForm && (
         <ProductForm
           product={editingProduct}
-          initialImages={formDataWithImages?.images}
+          initialImage={uploadedImageUrl}
           onClose={() => {
             setShowForm(false);
             setEditingProduct(null);
-            setFormDataWithImages(null);
+            setUploadedImageUrl(null);
           }}
           onSuccess={() => {
             refetch();
             setShowForm(false);
             setEditingProduct(null);
-            setFormDataWithImages(null);
+            setUploadedImageUrl(null);
           }}
         />
       )}
 
-      {showUpload && (
-        <ImageUpload
-          onClose={() => setShowUpload(false)}
-          onSuccess={() => {
-            refetch();
-            setShowUpload(false);
-          }}
-        />
-      )}
-
-      {showExternalUpload && (
-        <ExternalImageUpload
-          onImageUrlsGenerated={handleExternalImagesGenerated}
-          onClose={() => setShowExternalUpload(false)}
+      {showImageUpload && (
+        <SingleImageUpload
+          onImageUploaded={handleImageUploaded}
+          onClose={() => setShowImageUpload(false)}
         />
       )}
     </div>
