@@ -49,7 +49,7 @@ const ProductForm = ({ product, initialImage, onClose, onSuccess }: ProductFormP
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
-    
+
     if (type === 'checkbox') {
       const checkbox = e.target as HTMLInputElement;
       setFormData(prev => ({
@@ -88,7 +88,7 @@ const ProductForm = ({ product, initialImage, onClose, onSuccess }: ProductFormP
         // Create new product
         await axios.post(`${API_URL}/products/`, productData);
       }
-      
+
       onSuccess();
     } catch (err) {
       setError('Failed to save product. Please try again.');
@@ -218,8 +218,10 @@ const ProductForm = ({ product, initialImage, onClose, onSuccess }: ProductFormP
                 required
                 className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-bridal-maroon focus:border-transparent"
               >
-                <option value="saree">Saree</option>
-                <option value="ornaments">Ornaments</option>
+                <option value="saree">Sarees</option>
+                <option value="ornament">Ornaments</option>
+                <option value="bridal-set">Bridal Sets</option>
+                <option value="slider">Slider Images</option>
               </select>
             </div>
 
