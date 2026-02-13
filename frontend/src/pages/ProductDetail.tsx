@@ -35,6 +35,7 @@ const ProductDetail = () => {
 
   // Reset zoom when changing images
   useEffect(() => {
+    console.log(thumbsSwiper);
     resetZoom();
   }, [selectedImage]);
 
