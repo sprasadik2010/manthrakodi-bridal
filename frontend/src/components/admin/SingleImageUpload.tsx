@@ -28,10 +28,10 @@ const SingleImageUpload = ({ onImageUploaded, onClose }: SingleImageUploadProps)
       }
       
       // Check file size (max 5MB)
-      if (file.size > 5 * 1024 * 1024) {
-        setError('Image size should be less than 5MB');
-        return;
-      }
+      // if (file.size > 5 * 1024 * 1024) {
+      //   setError('Image size should be less than 5MB');
+      //   return;
+      // }
 
       setSelectedFile(file);
       const reader = new FileReader();
@@ -95,10 +95,10 @@ const SingleImageUpload = ({ onImageUploaded, onClose }: SingleImageUploadProps)
         setError('Please select an image file');
         return;
       }
-      if (file.size > 5 * 1024 * 1024) {
-        setError('Image size should be less than 5MB');
-        return;
-      }
+      // if (file.size > 5 * 1024 * 1024) {
+      //   setError('Image size should be less than 5MB');
+      //   return;
+      // }
       
       setSelectedFile(file);
       const reader = new FileReader();

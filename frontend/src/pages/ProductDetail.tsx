@@ -1,17 +1,16 @@
 // src/pages/ProductDetail.tsx
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { FaShoppingCart, FaHeart, FaShare, FaArrowLeft } from 'react-icons/fa';
+import { FaShoppingCart, FaHeart, FaShare, FaArrowLeft, FaSearchPlus, FaSearchMinus, FaUndo } from 'react-icons/fa';
 // import { motion } from 'framer-motion';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Thumbs, FreeMode } from 'swiper/modules';
+import { Navigation, FreeMode } from 'swiper/modules';
 import toast from 'react-hot-toast';
 import { useProduct } from '../hooks/useProducts';
 import useCartStore from '../store/cartStore';
 import useWishlistStore from '../store/wishlistStore';
 import 'swiper/css';
 import 'swiper/css/navigation';
-import 'swiper/css/thumbs';
 import 'swiper/css/free-mode';
 
 const ProductDetail = () => {
@@ -20,9 +19,115 @@ const ProductDetail = () => {
   const [quantity, setQuantity] = useState(1);
   const [thumbsSwiper, setThumbsSwiper] = useState<any>(null);
   
+  // Zoom and pan states
+  const [isZoomed, setIsZoomed] = useState(false);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [scale, setScale] = useState(1);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startPos, setStartPos] = useState({ x: 0, y: 0 });
+  
+  const imageRef = useRef<HTMLImageElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  
   const { data: product, isLoading, error } = useProduct(id || '');
   const addToCart = useCartStore((state) => state.addToCart);
   const { addToWishlist, isInWishlist, removeFromWishlist } = useWishlistStore();
+
+  // Reset zoom when changing images
+  useEffect(() => {
+    resetZoom();
+  }, [selectedImage]);
+
+  const resetZoom = () => {
+    setIsZoomed(false);
+    setScale(1);
+    setPosition({ x: 0, y: 0 });
+  };
+
+  const handleZoomToggle = () => {
+    if (isZoomed) {
+      resetZoom();
+    } else {
+      setIsZoomed(true);
+      setScale(2);
+    }
+  };
+
+  const handleZoomIn = () => {
+    setScale(prev => Math.min(prev + 0.5, 3));
+    setIsZoomed(true);
+  };
+
+  const handleZoomOut = () => {
+    setScale(prev => {
+      const newScale = Math.max(prev - 0.5, 1);
+      if (newScale === 1) {
+        setIsZoomed(false);
+        setPosition({ x: 0, y: 0 });
+      }
+      return newScale;
+    });
+  };
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (!isZoomed) return;
+    e.preventDefault();
+    setIsDragging(true);
+    setStartPos({
+      x: e.clientX - position.x,
+      y: e.clientY - position.y
+    });
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging || !isZoomed || !containerRef.current) return;
+    e.preventDefault();
+    
+    const container = containerRef.current;
+    const maxX = (container.offsetWidth * (scale - 1)) / 2;
+    const maxY = (container.offsetHeight * (scale - 1)) / 2;
+    
+    let newX = e.clientX - startPos.x;
+    let newY = e.clientY - startPos.y;
+    
+    // Constrain movement
+    newX = Math.max(Math.min(newX, maxX), -maxX);
+    newY = Math.max(Math.min(newY, maxY), -maxY);
+    
+    setPosition({ x: newX, y: newY });
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseLeave = () => {
+    setIsDragging(false);
+  };
+
+  const handleWheel = (e: React.WheelEvent) => {
+    if (!isZoomed) return;
+    e.preventDefault();
+    
+    if (e.deltaY < 0) {
+      // Zoom in
+      setScale(prev => {
+        const newScale = Math.min(prev + 0.1, 3);
+        setIsZoomed(true);
+        return newScale;
+      });
+    } else {
+      // Zoom out
+      setScale(prev => {
+        const newScale = Math.max(prev - 0.1, 1);
+        if (newScale === 1) {
+          setIsZoomed(false);
+          setPosition({ x: 0, y: 0 });
+        }
+        return newScale;
+      });
+    }
+  };
 
   if (isLoading) {
     return (
@@ -105,27 +210,72 @@ const ProductDetail = () => {
       </Link>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-        {/* Image Gallery */}
+        {/* Image Gallery with Zoom */}
         <div>
-          {/* Main Image */}
+          {/* Main Image with Zoom Controls */}
           <div className="mb-4">
-            <Swiper
-              spaceBetween={10}
-              navigation
-              thumbs={{ swiper: thumbsSwiper }}
-              modules={[Navigation, Thumbs]}
-              className="rounded-2xl overflow-hidden"
+            <div 
+              ref={containerRef}
+              className="relative rounded-2xl overflow-hidden bg-gray-50"
+              style={{ height: '500px' }}
             >
-              {product&&product.images.map((image, index) => (
-                <SwiperSlide key={index}>
-                  <img
-                    src={image}
-                    alt={`${product.name} - View ${index + 1}`}
-                    className="w-full h-[500px] object-cover"
-                  />
-                </SwiperSlide>
-              ))}
-            </Swiper>
+              {/* Zoom Controls */}
+              <div className="absolute top-4 right-4 z-10 flex flex-col gap-2">
+                <button
+                  onClick={handleZoomIn}
+                  className="p-2 bg-white rounded-lg shadow-lg hover:bg-gray-100 transition-colors"
+                  title="Zoom In"
+                >
+                  <FaSearchPlus size={20} />
+                </button>
+                <button
+                  onClick={handleZoomOut}
+                  className="p-2 bg-white rounded-lg shadow-lg hover:bg-gray-100 transition-colors"
+                  title="Zoom Out"
+                >
+                  <FaSearchMinus size={20} />
+                </button>
+                {isZoomed && (
+                  <button
+                    onClick={resetZoom}
+                    className="p-2 bg-white rounded-lg shadow-lg hover:bg-gray-100 transition-colors"
+                    title="Reset Zoom"
+                  >
+                    <FaUndo size={20} />
+                  </button>
+                )}
+              </div>
+              
+              {/* Zoom Status */}
+              {isZoomed && (
+                <div className="absolute bottom-4 left-4 z-10 px-3 py-1 bg-black/50 text-white text-sm rounded-full">
+                  {Math.round(scale * 100)}% • Drag to move
+                </div>
+              )}
+              
+              {/* Image Container */}
+              <div 
+                className={`relative w-full h-full ${isZoomed ? 'cursor-move' : 'cursor-zoom-in'}`}
+                onMouseDown={handleMouseDown}
+                onMouseMove={handleMouseMove}
+                onMouseUp={handleMouseUp}
+                onMouseLeave={handleMouseLeave}
+                onWheel={handleWheel}
+                onClick={!isZoomed ? handleZoomToggle : undefined}
+              >
+                <img
+                  ref={imageRef}
+                  src={product.images[selectedImage]}
+                  alt={`${product.name} - View ${selectedImage + 1}`}
+                  className="absolute top-0 left-0 w-full h-full object-contain transition-transform duration-100"
+                  style={{
+                    transform: `scale(${scale}) translate(${position.x / scale}px, ${position.y / scale}px)`,
+                    transformOrigin: '0 0',
+                  }}
+                  draggable={false}
+                />
+              </div>
+            </div>
           </div>
 
           {/* Thumbnails */}
@@ -135,23 +285,27 @@ const ProductDetail = () => {
             slidesPerView={4}
             freeMode
             watchSlidesProgress
-            modules={[FreeMode, Thumbs]}
+            modules={[FreeMode, Navigation]}
+            navigation
             className="thumbnail-swiper"
           >
-            {product&&product.images.map((image, index) => (
+            {product.images.map((image, index) => (
               <SwiperSlide key={index}>
                 <button
-                  onClick={() => setSelectedImage(index)}
-                  className={`rounded-lg overflow-hidden border-2 transition-all ${
+                  onClick={() => {
+                    setSelectedImage(index);
+                    resetZoom();
+                  }}
+                  className={`w-full rounded-lg overflow-hidden border-2 transition-all ${
                     selectedImage === index
                       ? 'border-bridal-maroon'
-                      : 'border-transparent'
+                      : 'border-transparent hover:border-gray-300'
                   }`}
                 >
                   <img
                     src={image}
                     alt={`Thumbnail ${index + 1}`}
-                    className="w-20 h-20 object-cover"
+                    className="w-full h-20 object-cover"
                   />
                 </button>
               </SwiperSlide>
@@ -159,7 +313,7 @@ const ProductDetail = () => {
           </Swiper>
         </div>
 
-        {/* Product Info */}
+        {/* Product Info - Rest remains exactly the same */}
         <div>
           <div className="mb-6">
             <span className="inline-block px-4 py-1 bg-gray-100 text-gray-600 rounded-full text-sm mb-3">
