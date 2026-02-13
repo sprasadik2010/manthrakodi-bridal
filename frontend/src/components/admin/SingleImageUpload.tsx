@@ -29,10 +29,10 @@ const SingleImageUpload = ({ onImageUploaded, onClose }: SingleImageUploadProps)
       }
       
       // Check file size (max 10MB for original - after WebP it will be smaller)
-      if (file.size > 10 * 1024 * 1024) {
-        setError('Image size should be less than 10MB');
-        return;
-      }
+      // if (file.size > 10 * 1024 * 1024) {
+      //   setError('Image size should be less than 10MB');
+      //   return;
+      // }
 
       setSelectedFile(file);
       const reader = new FileReader();
@@ -177,10 +177,10 @@ const SingleImageUpload = ({ onImageUploaded, onClose }: SingleImageUploadProps)
         setError('Please select an image file');
         return;
       }
-      if (file.size > 10 * 1024 * 1024) {
-        setError('Image size should be less than 10MB');
-        return;
-      }
+      // if (file.size > 10 * 1024 * 1024) {
+      //   setError('Image size should be less than 10MB');
+      //   return;
+      // }
       
       setSelectedFile(file);
       const reader = new FileReader();
