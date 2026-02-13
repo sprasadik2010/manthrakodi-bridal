@@ -1,7 +1,5 @@
-// src/components/ProductCard.tsx
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FaShoppingCart, FaEye, FaHeart } from 'react-icons/fa';
+import { FaShoppingCart, FaHeart } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { Product } from '../types';
@@ -13,16 +11,19 @@ interface ProductCardProps {
 }
 
 const ProductCard = ({ product }: ProductCardProps) => {
-  const [isHovered, setIsHovered] = useState(false);
   const addToCart = useCartStore((state) => state.addToCart);
   const { addToWishlist, isInWishlist, removeFromWishlist } = useWishlistStore();
-  console.log(isHovered);
-  const handleAddToCart = () => {
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     addToCart(product, 1);
     toast.success('Added to cart!');
   };
 
-  const handleWishlistToggle = () => {
+  const handleWishlistToggle = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     if (isInWishlist(product.id)) {
       removeFromWishlist(product.id);
       toast.success('Removed from wishlist');
@@ -40,11 +41,9 @@ const ProductCard = ({ product }: ProductCardProps) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
       className="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Image Container */}
-      <div className="relative overflow-hidden aspect-square">
+      {/* Clickable Image Container - Links to product page */}
+      <Link to={`/product/${product.id}`} className="block relative overflow-hidden aspect-square">
         <img
           src={product.images[0]}
           alt={product.name}
@@ -64,47 +63,17 @@ const ProductCard = ({ product }: ProductCardProps) => {
             </span>
           )}
         </div>
-
-        {/* Quick Actions Overlay - Always visible on mobile */}
-        <div className="absolute inset-0 bg-black/40 flex items-center justify-center gap-4 transition-opacity duration-300 md:opacity-0 md:group-hover:opacity-100 opacity-100 md:opacity-0">
-          <button
-            onClick={handleAddToCart}
-            disabled={product.stock === 0}
-            className="bg-white text-bridal-maroon p-3 rounded-full hover:bg-bridal-maroon hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
-            aria-label="Add to cart"
-          >
-            <FaShoppingCart size={20} />
-          </button>
-          <Link
-            to={`/product/${product.id}`}
-            className="bg-white text-bridal-maroon p-3 rounded-full hover:bg-bridal-maroon hover:text-white transition-colors shadow-lg"
-            aria-label="View details"
-          >
-            <FaEye size={20} />
-          </Link>
-          <button
-            onClick={handleWishlistToggle}
-            className={`p-3 rounded-full transition-colors shadow-lg ${
-              isWishlisted
-                ? 'bg-red-500 text-white'
-                : 'bg-white text-bridal-maroon hover:bg-bridal-maroon hover:text-white'
-            }`}
-            aria-label={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
-          >
-            <FaHeart size={20} />
-          </button>
-        </div>
-      </div>
+      </Link>
 
       {/* Content */}
       <div className="p-6">
         <div className="flex justify-between items-start mb-3">
-          <Link to={`/product/${product.id}`} className="group">
+          <Link to={`/product/${product.id}`} className="group flex-1">
             <h3 className="text-xl font-playfair font-semibold text-gray-800 group-hover:text-bridal-maroon transition-colors line-clamp-1">
               {product.name}
             </h3>
           </Link>
-          <span className="text-sm text-gray-500 capitalize px-3 py-1 bg-gray-100 rounded-full">
+          <span className="text-sm text-gray-500 capitalize px-3 py-1 bg-gray-100 rounded-full ml-2">
             {product.category}
           </span>
         </div>
@@ -136,15 +105,29 @@ const ProductCard = ({ product }: ProductCardProps) => {
           </div>
         </div>
 
-        {/* Quick Add to Cart */}
-        <button
-          onClick={handleAddToCart}
-          disabled={product.stock === 0}
-          className="w-full bg-bridal-maroon hover:bg-bridal-maroon/90 text-white py-3 rounded-xl flex items-center justify-center gap-3 font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          <FaShoppingCart />
-          Add to Cart
-        </button>
+        {/* Action Buttons */}
+        <div className="flex items-center gap-3">
+          <button
+            onClick={handleAddToCart}
+            disabled={product.stock === 0}
+            className="flex-1 bg-bridal-maroon hover:bg-bridal-maroon/90 text-white py-3 rounded-xl flex items-center justify-center gap-3 font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <FaShoppingCart />
+            Add to Cart
+          </button>
+          
+          <button
+            onClick={handleWishlistToggle}
+            className={`p-3 rounded-xl transition-colors border ${
+              isWishlisted
+                ? 'bg-red-500 border-red-500 text-white'
+                : 'bg-white border-gray-300 text-bridal-maroon hover:bg-bridal-maroon hover:text-white hover:border-bridal-maroon'
+            }`}
+            aria-label={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
+          >
+            <FaHeart size={20} />
+          </button>
+        </div>
       </div>
     </motion.div>
   );

@@ -1,6 +1,5 @@
-# backend/app/crud.py
 from sqlalchemy.orm import Session
-from sqlalchemy import or_
+from sqlalchemy import or_, and_, func
 from typing import Optional, List
 from . import models, schemas
 import uuid
@@ -8,7 +7,8 @@ import uuid
 
 # Product CRUD Operations
 def get_product(db: Session, product_id: str) -> Optional[models.Product]:
-    return db.query(models.Product).filter(models.Product.id == uuid.UUID(product_id)).first()
+    # product_id is already a UUID string, no conversion needed
+    return db.query(models.Product).filter(models.Product.id == product_id).first()
 
 
 def get_products(
@@ -28,19 +28,97 @@ def get_products(
         query = query.filter(models.Product.featured == featured)
     
     if search:
-        query = query.filter(
-            or_(
-                models.Product.name.ilike(f"%{search}%"),
-                models.Product.description.ilike(f"%{search}%"),
-                models.Product.sub_category.ilike(f"%{search}%")
-            )
+        search_term = search.strip().lower()
+        conditions = []
+        
+        # 1. Basic ILIKE search for exact term
+        conditions.append(
+            models.Product.name.ilike(f"%{search_term}%")
         )
+        conditions.append(
+            models.Product.description.ilike(f"%{search_term}%")
+        )
+        conditions.append(
+            models.Product.sub_category.ilike(f"%{search_term}%")
+        )
+        
+        # 2. Handle "earring" variations
+        if 'earring' in search_term or 'ear ring' in search_term:
+            for variation in ['earring', 'ear ring', 'ear', 'ring']:
+                conditions.append(
+                    models.Product.name.ilike(f"%{variation}%")
+                )
+                conditions.append(
+                    models.Product.description.ilike(f"%{variation}%")
+                )
+                conditions.append(
+                    models.Product.sub_category.ilike(f"%{variation}%")
+                )
+        
+        # 3. Handle "ear" search
+        elif search_term == 'ear':
+            conditions.append(
+                models.Product.name.ilike(f"%earring%")
+            )
+            conditions.append(
+                models.Product.name.ilike(f"%ear ring%")
+            )
+            conditions.append(
+                models.Product.sub_category.ilike(f"%earring%")
+            )
+        
+        # 4. Handle "ring" search
+        elif search_term == 'ring':
+            conditions.append(
+                models.Product.name.ilike(f"%earring%")
+            )
+            conditions.append(
+                models.Product.name.ilike(f"%ear ring%")
+            )
+            conditions.append(
+                models.Product.sub_category.ilike(f"%earring%")
+            )
+        
+        # 5. Handle multi-word searches
+        elif ' ' in search_term:
+            words = search_term.split()
+            for word in words:
+                conditions.append(
+                    models.Product.name.ilike(f"%{word}%")
+                )
+                conditions.append(
+                    models.Product.description.ilike(f"%{word}%")
+                )
+                conditions.append(
+                    models.Product.sub_category.ilike(f"%{word}%")
+                )
+                
+                if word == 'ear':
+                    conditions.append(
+                        models.Product.name.ilike(f"%earring%")
+                    )
+                    conditions.append(
+                        models.Product.name.ilike(f"%ear ring%")
+                    )
+                elif word == 'ring':
+                    conditions.append(
+                        models.Product.name.ilike(f"%earring%")
+                    )
+                    conditions.append(
+                        models.Product.name.ilike(f"%ear ring%")
+                    )
+        
+        query = query.filter(or_(*conditions))
     
     return query.offset(skip).limit(limit).all()
 
 
 def create_product(db: Session, product: schemas.ProductCreate) -> models.Product:
+    # Generate a proper UUID v4
+    product_id = str(uuid.uuid4())
+    
     db_product = models.Product(
+        id=product_id,
         name=product.name,
         description=product.description,
         price=product.price,
@@ -84,7 +162,7 @@ def delete_product(db: Session, product_id: str) -> bool:
 
 # Order CRUD Operations
 def get_order(db: Session, order_id: str) -> Optional[models.Order]:
-    return db.query(models.Order).filter(models.Order.id == uuid.UUID(order_id)).first()
+    return db.query(models.Order).filter(models.Order.id == order_id).first()
 
 
 def get_orders(
@@ -102,7 +180,11 @@ def get_orders(
 
 
 def create_order(db: Session, order: schemas.OrderCreate) -> models.Order:
+    # Generate a proper UUID v4 for orders too
+    order_id = str(uuid.uuid4())
+    
     db_order = models.Order(
+        id=order_id,  # Make sure your Order model has an id field of UUID type
         customer_name=order.customer_name,
         customer_phone=order.customer_phone,
         customer_email=order.customer_email,
