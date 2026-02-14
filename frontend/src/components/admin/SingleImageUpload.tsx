@@ -15,7 +15,7 @@ const SingleImageUpload = ({ onImageUploaded, onClose }: SingleImageUploadProps)
   const [uploadSuccess, setUploadSuccess] = useState(false);
   const [converting, setConverting] = useState(false);
 
-  const IMGBB_API_KEY = 'YOUR_IMGBB_API_KEY'; // Replace with your actual ImgBB API key
+  const IMGBB_API_KEY = import.meta.env.VITE_IMGBB_API_KEY; // Replace with your actual ImgBB API key
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
