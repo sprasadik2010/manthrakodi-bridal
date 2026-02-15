@@ -335,7 +335,7 @@ const ProductDetail = () => {
                 <span className="text-3xl font-bold text-bridal-maroon">
                   ₹{product.price.toLocaleString()}
                 </span>
-                {product.original_price && (
+                {product.original_price  && (product.original_price > product.price) && (
                   <>
                     <span className="text-lg text-gray-400 line-through">
                       ₹{product.original_price.toLocaleString()}

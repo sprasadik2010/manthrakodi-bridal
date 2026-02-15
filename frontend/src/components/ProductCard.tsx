@@ -57,7 +57,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
               Featured
             </span>
           )}
-          {product.original_price && (
+          {product.original_price && (product.original_price > product.price) && (
             <span className="bg-bridal-gold text-white px-3 py-1 rounded-full text-xs font-bold">
               {Math.round((1 - product.price / product.original_price) * 100)}% OFF
             </span>
@@ -88,7 +88,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
             <span className="text-2xl font-bold text-bridal-maroon">
               ₹{product.price.toLocaleString()}
             </span>
-            {product.original_price && (
+            {product.original_price  && (product.original_price > product.price) && (
               <span className="text-gray-400 line-through">
                 ₹{product.original_price.toLocaleString()}
               </span>

@@ -282,7 +282,7 @@ const ProductManagement = () => {
                             <div className="text-sm font-bold text-bridal-maroon">
                               ₹{product.price.toLocaleString()}
                             </div>
-                            {product.originalPrice && (
+                            {product.originalPrice  && (product.original_price > product.price) && (
                               <div className="text-xs text-gray-500 line-through">
                                 ₹{product.originalPrice.toLocaleString()}
                               </div>
@@ -393,7 +393,7 @@ const ProductManagement = () => {
                         <div className="text-lg font-bold text-bridal-maroon">
                           ₹{product.price.toLocaleString()}
                         </div>
-                        {product.originalPrice && (
+                        {product.originalPrice  && (product.original_price > product.price) && (
                           <div className="text-sm text-gray-500 line-through">
                             ₹{product.originalPrice.toLocaleString()}
                           </div>
