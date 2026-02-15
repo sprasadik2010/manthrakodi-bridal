@@ -15,10 +15,10 @@ const ProductForm = ({ product, initialImage, onClose, onSuccess }: ProductFormP
   const [formData, setFormData] = useState({
     name: '',
     description: '',
-    price: 0,
-    originalPrice: 0,
-    category: 'other',
-    stock: 0,
+    price: '',
+    originalPrice: '',
+    category: 'saree',
+    stock: '',
     featured: false,
     images: [] as string[],
   });
@@ -32,10 +32,10 @@ const ProductForm = ({ product, initialImage, onClose, onSuccess }: ProductFormP
       setFormData({
         name: product.name || '',
         description: product.description || '',
-        price: product.price || 0,
-        originalPrice: product.originalPrice || 0,
+        price: product.price?.toString() || '',
+        originalPrice: product.original_price?.toString() || '', // Note: product.original_price from backend
         category: product.category || 'other',
-        stock: product.stock || 0,
+        stock: product.stock?.toString() || '',
         featured: product.featured || false,
         images: product.images || [],
       });
@@ -57,10 +57,13 @@ const ProductForm = ({ product, initialImage, onClose, onSuccess }: ProductFormP
         [name]: checkbox.checked,
       }));
     } else if (type === 'number') {
-      setFormData(prev => ({
-        ...prev,
-        [name]: parseFloat(value) || 0,
-      }));
+      // Allow empty string or valid numbers
+      if (value === '' || /^\d*\.?\d*$/.test(value)) {
+        setFormData(prev => ({
+          ...prev,
+          [name]: value,
+        }));
+      }
     } else {
       setFormData(prev => ({
         ...prev,
@@ -75,11 +78,19 @@ const ProductForm = ({ product, initialImage, onClose, onSuccess }: ProductFormP
     setError('');
 
     try {
-      // Ensure we always have an images array
+      // Transform form data to match backend expected format (snake_case)
       const productData = {
-        ...formData,
+        name: formData.name,
+        description: formData.description || null,
+        price: formData.price === '' ? 0 : parseFloat(formData.price),
+        original_price: formData.originalPrice === '' ? null : parseFloat(formData.originalPrice),
+        category: formData.category,
+        stock: formData.stock === '' ? 0 : parseInt(formData.stock, 10),
+        featured: formData.featured,
         images: formData.images.length > 0 ? formData.images : [],
       };
+
+      console.log('Sending to backend:', productData); // For debugging
 
       if (product) {
         // Update existing product
@@ -179,14 +190,15 @@ const ProductForm = ({ product, initialImage, onClose, onSuccess }: ProductFormP
                 Price (₹) *
               </label>
               <input
-                type="number"
+                type="text"
                 name="price"
                 value={formData.price}
                 onChange={handleChange}
                 required
-                min="0"
-                step="0.01"
+                inputMode="decimal"
+                pattern="[0-9]*\.?[0-9]*"
                 className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-bridal-maroon focus:border-transparent"
+                placeholder="0.00"
               />
             </div>
 
@@ -196,13 +208,14 @@ const ProductForm = ({ product, initialImage, onClose, onSuccess }: ProductFormP
                 Original Price (₹)
               </label>
               <input
-                type="number"
+                type="text"
                 name="originalPrice"
                 value={formData.originalPrice}
                 onChange={handleChange}
-                min="0"
-                step="0.01"
+                inputMode="decimal"
+                pattern="[0-9]*\.?[0-9]*"
                 className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-bridal-maroon focus:border-transparent"
+                placeholder="0.00"
               />
             </div>
 
@@ -221,7 +234,6 @@ const ProductForm = ({ product, initialImage, onClose, onSuccess }: ProductFormP
                 <option value="saree">Sarees</option>
                 <option value="ornament">Ornaments</option>
                 <option value="bridal-set">Bridal Sets</option>
-                <option value="slider">Slider Images</option>
               </select>
             </div>
 
@@ -231,13 +243,15 @@ const ProductForm = ({ product, initialImage, onClose, onSuccess }: ProductFormP
                 Stock Quantity *
               </label>
               <input
-                type="number"
+                type="text"
                 name="stock"
                 value={formData.stock}
                 onChange={handleChange}
                 required
-                min="0"
+                inputMode="numeric"
+                pattern="[0-9]*"
                 className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-bridal-maroon focus:border-transparent"
+                placeholder="0"
               />
             </div>
 

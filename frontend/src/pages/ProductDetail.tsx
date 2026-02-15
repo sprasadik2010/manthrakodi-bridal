@@ -18,17 +18,17 @@ const ProductDetail = () => {
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [thumbsSwiper, setThumbsSwiper] = useState<any>(null);
-  
+
   // Zoom and pan states
   const [isZoomed, setIsZoomed] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [scale, setScale] = useState(1);
   const [isDragging, setIsDragging] = useState(false);
   const [startPos, setStartPos] = useState({ x: 0, y: 0 });
-  
+
   const imageRef = useRef<HTMLImageElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  
+
   const { data: product, isLoading, error } = useProduct(id || '');
   const addToCart = useCartStore((state) => state.addToCart);
   const { addToWishlist, isInWishlist, removeFromWishlist } = useWishlistStore();
@@ -38,6 +38,13 @@ const ProductDetail = () => {
     console.log(thumbsSwiper);
     resetZoom();
   }, [selectedImage]);
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'instant' // Use 'smooth' for smooth scrolling, 'instant' for immediate
+    });
+  }, []);
 
   const resetZoom = () => {
     setIsZoomed(false);
@@ -83,18 +90,18 @@ const ProductDetail = () => {
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!isDragging || !isZoomed || !containerRef.current) return;
     e.preventDefault();
-    
+
     const container = containerRef.current;
     const maxX = (container.offsetWidth * (scale - 1)) / 2;
     const maxY = (container.offsetHeight * (scale - 1)) / 2;
-    
+
     let newX = e.clientX - startPos.x;
     let newY = e.clientY - startPos.y;
-    
+
     // Constrain movement
     newX = Math.max(Math.min(newX, maxX), -maxX);
     newY = Math.max(Math.min(newY, maxY), -maxY);
-    
+
     setPosition({ x: newX, y: newY });
   };
 
@@ -109,7 +116,7 @@ const ProductDetail = () => {
   const handleWheel = (e: React.WheelEvent) => {
     if (!isZoomed) return;
     e.preventDefault();
-    
+
     if (e.deltaY < 0) {
       // Zoom in
       setScale(prev => {
@@ -215,7 +222,7 @@ const ProductDetail = () => {
         <div>
           {/* Main Image with Zoom Controls */}
           <div className="mb-4">
-            <div 
+            <div
               ref={containerRef}
               className="relative rounded-2xl overflow-hidden bg-gray-50"
               style={{ height: '500px' }}
@@ -246,16 +253,16 @@ const ProductDetail = () => {
                   </button>
                 )}
               </div>
-              
+
               {/* Zoom Status */}
               {isZoomed && (
                 <div className="absolute bottom-4 left-4 z-10 px-3 py-1 bg-black/50 text-white text-sm rounded-full">
                   {Math.round(scale * 100)}% • Drag to move
                 </div>
               )}
-              
+
               {/* Image Container */}
-              <div 
+              <div
                 className={`relative w-full h-full ${isZoomed ? 'cursor-move' : 'cursor-zoom-in'}`}
                 onMouseDown={handleMouseDown}
                 onMouseMove={handleMouseMove}
@@ -297,11 +304,10 @@ const ProductDetail = () => {
                     setSelectedImage(index);
                     resetZoom();
                   }}
-                  className={`w-full rounded-lg overflow-hidden border-2 transition-all ${
-                    selectedImage === index
+                  className={`w-full rounded-lg overflow-hidden border-2 transition-all ${selectedImage === index
                       ? 'border-bridal-maroon'
                       : 'border-transparent hover:border-gray-300'
-                  }`}
+                    }`}
                 >
                   <img
                     src={image}
@@ -323,19 +329,19 @@ const ProductDetail = () => {
             <h1 className="text-4xl font-playfair font-bold text-gray-800 mb-4">
               {product.name}
             </h1>
-            
+
             <div className="flex items-center gap-4 mb-6">
               <div className="flex items-baseline gap-2">
                 <span className="text-3xl font-bold text-bridal-maroon">
                   ₹{product.price.toLocaleString()}
                 </span>
-                {product.originalPrice && (
+                {product.original_price && (
                   <>
                     <span className="text-lg text-gray-400 line-through">
-                      ₹{product.originalPrice.toLocaleString()}
+                      ₹{product.original_price.toLocaleString()}
                     </span>
                     <span className="text-sm font-bold text-green-600">
-                      Save ₹{(product.originalPrice - product.price).toLocaleString()}
+                      Save ₹{(product.original_price - product.price).toLocaleString()}
                     </span>
                   </>
                 )}
@@ -396,16 +402,14 @@ const ProductDetail = () => {
 
             {/* Stock Status */}
             <div className="mb-8">
-              <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg ${
-                product.stock > 10
+              <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg ${product.stock > 10
                   ? 'bg-green-100 text-green-800'
                   : product.stock > 0
-                  ? 'bg-yellow-100 text-yellow-800'
-                  : 'bg-red-100 text-red-800'
-              }`}>
-                <div className={`w-2 h-2 rounded-full ${
-                  product.stock > 10 ? 'bg-green-600' : product.stock > 0 ? 'bg-yellow-600' : 'bg-red-600'
-                }`} />
+                    ? 'bg-yellow-100 text-yellow-800'
+                    : 'bg-red-100 text-red-800'
+                }`}>
+                <div className={`w-2 h-2 rounded-full ${product.stock > 10 ? 'bg-green-600' : product.stock > 0 ? 'bg-yellow-600' : 'bg-red-600'
+                  }`} />
                 {product.stock > 0
                   ? `In Stock (${product.stock} available)`
                   : 'Out of Stock'}
@@ -449,15 +453,14 @@ const ProductDetail = () => {
                   <FaShoppingCart />
                   Add to Cart
                 </button>
-                
+
                 <div className="flex gap-4">
                   <button
                     onClick={handleWishlistToggle}
-                    className={`p-4 rounded-xl border flex items-center justify-center ${
-                      isWishlisted
+                    className={`p-4 rounded-xl border flex items-center justify-center ${isWishlisted
                         ? 'bg-red-50 border-red-200 text-red-600'
                         : 'bg-white border-gray-300 text-gray-600 hover:border-bridal-maroon hover:text-bridal-maroon'
-                    } transition-colors`}
+                      } transition-colors`}
                   >
                     <FaHeart size={20} />
                   </button>
@@ -474,12 +477,12 @@ const ProductDetail = () => {
             {/* Additional Info */}
             <div className="mt-12 pt-8 border-t">
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                <div className="text-center">
+                {/* <div className="text-center">
                   <div className="text-2xl font-bold text-bridal-maroon mb-2">✓</div>
                   <div className="font-medium">Free Shipping</div>
                   <div className="text-sm text-gray-500">All over India</div>
-                </div>
-                <div className="text-center">
+                </div> */}
+                {/* <div className="text-center">
                   <div className="text-2xl font-bold text-bridal-maroon mb-2">✓</div>
                   <div className="font-medium">Easy Returns</div>
                   <div className="text-sm text-gray-500">7 Days Return Policy</div>
@@ -488,7 +491,7 @@ const ProductDetail = () => {
                   <div className="text-2xl font-bold text-bridal-maroon mb-2">✓</div>
                   <div className="font-medium">Secure Payment</div>
                   <div className="text-sm text-gray-500">100% Secure</div>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>

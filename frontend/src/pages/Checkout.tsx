@@ -5,7 +5,7 @@ import {
   FaWhatsapp, 
   FaPhone, 
   FaUser, 
-  FaMapMarkerAlt, 
+  // FaMapMarkerAlt, 
   FaArrowLeft, 
   FaLock, 
   FaCheckCircle, 
@@ -13,7 +13,7 @@ import {
   FaQrcode,
   FaShoppingBag,
   FaRupeeSign,
-  FaShippingFast,
+  // FaShippingFast,
   FaShieldAlt
 } from 'react-icons/fa';
 import { motion } from 'framer-motion';
@@ -124,7 +124,6 @@ ${itemsList}
 💰 *BILLING SUMMARY*
 • *Subtotal:* ₹${subtotal.toLocaleString()}
 • *GST (18%):* ₹${tax.toLocaleString()}
-• *Shipping:* ₹${shipping.toLocaleString()} (FREE 🚚)
 • *────────────────────*
 • *Grand Total:* ₹${grandTotal.toLocaleString()}
 
@@ -169,7 +168,6 @@ Thank you for your order! 🎉 Your bridal selection is being processed.
 • *Items:* ${items.length} bridal items
 • *Total Amount:* ₹${grandTotal.toLocaleString()}
 • *Payment Method:* ${formData.paymentMethod === 'cod' ? 'Cash on Delivery' : 'Online Payment'}
-• *Shipping:* FREE across India 🚚
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -914,8 +912,8 @@ Thank you for your order! 🎉 Your bridal selection is being processed.
                 <ul className="text-sm text-gray-600 space-y-2">
                   <li>✅ Your payment information is secure</li>
                   <li>✅ WhatsApp Business for order tracking</li>
-                  <li>✅ Free shipping across India</li>
-                  <li>✅ Easy returns within 7 days</li>
+                  {/* <li>✅ Free shipping across India</li> */}
+                  {/* <li>✅ Easy returns within 7 days</li> */}
                 </ul>
               </div>
             </motion.div>
@@ -975,12 +973,12 @@ Thank you for your order! 🎉 Your bridal selection is being processed.
                   <span className="text-gray-600">GST (18%)</span>
                   <span className="font-semibold">₹{(total * 0.18).toLocaleString()}</span>
                 </div>
-                <div className="flex justify-between items-center py-2">
+                {/* <div className="flex justify-between items-center py-2">
                   <span className="text-gray-600">Shipping</span>
                   <span className="font-semibold text-green-600 flex items-center gap-1">
                     <FaShippingFast /> FREE
                   </span>
-                </div>
+                </div> */}
                 <div className="border-t border-gray-200 pt-4 flex justify-between items-center text-xl font-bold">
                   <span>Total Amount</span>
                   <span className="text-bridal-maroon text-2xl">
@@ -1023,10 +1021,10 @@ Thank you for your order! 🎉 Your bridal selection is being processed.
                         <div className="bg-green-200 text-green-800 rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold mt-0.5">2</div>
                         <span>We confirm order and share payment details</span>
                       </li>
-                      <li className="flex items-start gap-2">
+                      {/* <li className="flex items-start gap-2">
                         <div className="bg-green-200 text-green-800 rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold mt-0.5">3</div>
                         <span>Free shipping across India in 3-7 days</span>
-                      </li>
+                      </li> */}
                       <li className="flex items-start gap-2">
                         <div className="bg-green-200 text-green-800 rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold mt-0.5">4</div>
                         <span>Track order and updates via WhatsApp</span>
@@ -1051,12 +1049,12 @@ Thank you for your order! 🎉 Your bridal selection is being processed.
                   </div>
                 </div>
                 
-                <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                {/* <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
                   <FaMapMarkerAlt className="text-gray-600" />
                   <div className="text-sm text-gray-600">
                     Free shipping across India • 7-day returns
                   </div>
-                </div>
+                </div> */}
 
                 <div className="text-center text-xs text-gray-500 pt-4 border-t">
                   <p>By placing your order, you agree to our Terms & Conditions</p>

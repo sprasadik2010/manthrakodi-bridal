@@ -109,9 +109,9 @@ const API_URL = import.meta.env.VITE_API_URL || '/api';
                           <span className="font-bold text-bridal-maroon">
                             ₹{product.price.toLocaleString()}
                           </span>
-                          {product.originalPrice && (
+                          {product.original_price && (
                             <span className="ml-2 text-sm text-gray-500 line-through">
-                              ₹{product.originalPrice.toLocaleString()}
+                              ₹{product.original_price.toLocaleString()}
                             </span>
                           )}
                         </div>
