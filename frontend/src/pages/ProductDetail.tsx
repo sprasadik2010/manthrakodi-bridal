@@ -3,8 +3,8 @@ import { useState, useRef, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { FaShoppingCart, FaHeart, FaShare, FaArrowLeft, FaSearchPlus, FaSearchMinus, FaUndo } from 'react-icons/fa';
 // import { motion } from 'framer-motion';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, FreeMode } from 'swiper/modules';
+// import { Swiper, SwiperSlide } from 'swiper/react';
+// import { Navigation, FreeMode } from 'swiper/modules';
 import toast from 'react-hot-toast';
 import { useProduct } from '../hooks/useProducts';
 import useCartStore from '../store/cartStore';
@@ -17,7 +17,7 @@ const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
-  const [thumbsSwiper, setThumbsSwiper] = useState<any>(null);
+  // const [thumbsSwiper, setThumbsSwiper] = useState<any>(null);
 
   // Zoom and pan states
   const [isZoomed, setIsZoomed] = useState(false);
@@ -35,7 +35,7 @@ const ProductDetail = () => {
 
   // Reset zoom when changing images
   useEffect(() => {
-    console.log(thumbsSwiper);
+    setSelectedImage(0);
     resetZoom();
   }, [selectedImage]);
 
@@ -287,7 +287,7 @@ const ProductDetail = () => {
           </div>
 
           {/* Thumbnails */}
-          <Swiper
+          {/* <Swiper
             onSwiper={setThumbsSwiper}
             spaceBetween={10}
             slidesPerView={4}
@@ -317,7 +317,7 @@ const ProductDetail = () => {
                 </button>
               </SwiperSlide>
             ))}
-          </Swiper>
+          </Swiper> */}
         </div>
 
         {/* Product Info - Rest remains exactly the same */}
