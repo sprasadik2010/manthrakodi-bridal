@@ -20,8 +20,11 @@ const ProductForm = ({ product, initialImage, onClose, onSuccess }: ProductFormP
     category: 'saree',
     stock: '',
     featured: false,
-    images: [] as string[],
+    // Don't include images in form data for editing
   });
+  
+  // Separate state for images
+  const [images, setImages] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -29,21 +32,21 @@ const ProductForm = ({ product, initialImage, onClose, onSuccess }: ProductFormP
 
   useEffect(() => {
     if (product) {
+      // For editing: load all product data except images
       setFormData({
         name: product.name || '',
         description: product.description || '',
         price: product.price?.toString() || '',
-        originalPrice: product.original_price?.toString() || '', // Note: product.original_price from backend
+        originalPrice: product.original_price?.toString() || '',
         category: product.category || 'other',
         stock: product.stock?.toString() || '',
         featured: product.featured || false,
-        images: product.images || [],
       });
+      // Store images separately
+      setImages(product.images || []);
     } else if (initialImage) {
-      setFormData(prev => ({
-        ...prev,
-        images: [initialImage],
-      }));
+      // For new product with initial image from upload
+      setImages([initialImage]);
     }
   }, [product, initialImage]);
 
@@ -56,7 +59,7 @@ const ProductForm = ({ product, initialImage, onClose, onSuccess }: ProductFormP
         ...prev,
         [name]: checkbox.checked,
       }));
-    } else if (type === 'number') {
+    } else if (type === 'number' || (e.target as HTMLInputElement).inputMode === 'decimal' || (e.target as HTMLInputElement).inputMode === 'numeric') {
       // Allow empty string or valid numbers
       if (value === '' || /^\d*\.?\d*$/.test(value)) {
         setFormData(prev => ({
@@ -87,16 +90,22 @@ const ProductForm = ({ product, initialImage, onClose, onSuccess }: ProductFormP
         category: formData.category,
         stock: formData.stock === '' ? 0 : parseInt(formData.stock, 10),
         featured: formData.featured,
-        images: formData.images.length > 0 ? formData.images : [],
       };
+
+      // Only include images for new products or if explicitly changed
+      // For existing products, don't send images array to avoid overwriting
+      if (!product) {
+        // New product: include images
+        Object.assign(productData, { images: images.length > 0 ? images : [] });
+      }
 
       console.log('Sending to backend:', productData); // For debugging
 
       if (product) {
-        // Update existing product
+        // Update existing product - don't send images
         await axios.put(`${API_URL}/products/${product.id}`, productData);
       } else {
-        // Create new product
+        // Create new product - include images
         await axios.post(`${API_URL}/products/`, productData);
       }
 
@@ -126,25 +135,48 @@ const ProductForm = ({ product, initialImage, onClose, onSuccess }: ProductFormP
         </div>
 
         <form onSubmit={handleSubmit} className="p-6">
-          {/* Image Preview */}
-          {formData.images.length > 0 && (
+          {/* Image Preview - Read Only for Edit Mode */}
+          {images.length > 0 && (
             <div className="mb-6 p-4 bg-purple-50 rounded-lg">
-              <p className="text-sm font-medium text-purple-800 mb-2 flex items-center gap-1">
-                <FaImage /> Product Image (ImgBB)
-              </p>
+              <div className="flex justify-between items-center mb-2">
+                <p className="text-sm font-medium text-purple-800 flex items-center gap-1">
+                  <FaImage /> Product Image
+                </p>
+                {product && (
+                  <span className="text-xs bg-purple-200 text-purple-800 px-2 py-1 rounded">
+                    Image cannot be edited here
+                  </span>
+                )}
+              </div>
               <div className="relative w-32 h-32">
                 <img
-                  src={formData.images[0]}
+                  src={images[0]}
                   alt="Product"
                   className="w-full h-full object-cover rounded-lg border-2 border-purple-200"
                   onError={(e) => {
                     (e.target as HTMLImageElement).src = 'https://via.placeholder.com/128x128?text=Image+Error';
                   }}
                 />
-                <div className="absolute bottom-1 right-1 bg-purple-600 text-white text-xs px-2 py-1 rounded">
-                  ImgBB
-                </div>
+                {!product && (
+                  <div className="absolute bottom-1 right-1 bg-purple-600 text-white text-xs px-2 py-1 rounded">
+                    ImgBB
+                  </div>
+                )}
               </div>
+              {!product && images.length > 1 && (
+                <p className="text-xs text-gray-500 mt-2">
+                  + {images.length - 1} more image(s)
+                </p>
+              )}
+            </div>
+          )}
+
+          {/* Message for products without images */}
+          {product && images.length === 0 && (
+            <div className="mb-6 p-4 bg-yellow-50 rounded-lg">
+              <p className="text-sm text-yellow-800">
+                This product has no images. Images can only be added during product creation.
+              </p>
             </div>
           )}
 
@@ -269,6 +301,15 @@ const ProductForm = ({ product, initialImage, onClose, onSuccess }: ProductFormP
               </label>
             </div>
           </div>
+
+          {/* Note about image editing */}
+          {product && (
+            <div className="mt-4 p-3 bg-blue-50 rounded-lg">
+              <p className="text-xs text-blue-600">
+                <strong>Note:</strong> To change product images, please delete this product and create a new one with the updated images.
+              </p>
+            </div>
+          )}
 
           <div className="flex gap-3 mt-6 pt-4 border-t">
             <button

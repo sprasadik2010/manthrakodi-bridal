@@ -1,0 +1,46 @@
+﻿name: Keep Hospital Backend Alive
+
+on:
+  schedule:
+    # Run every 5 minutes to keep Render instance awake
+    - cron: '*/5 * * * *'
+  workflow_dispatch:  # Allow manual triggering
+
+jobs:
+  ping-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check backend health
+        run: |
+          echo "🚀 Checking Manthrakodi Bridal Backend at $(date)"
+          
+          # Your BACKEND URL (hmscity, not citynh)
+          BACKEND_URL="https://manthrakodi-bridal-backend.onrender.com/health"
+          
+          echo "📡 Backend URL: $BACKEND_URL"
+          
+          # Use curl with timeout and proper error handling
+          response=$(curl -s -w "\n%{http_code}" --max-time 30 "$BACKEND_URL" || echo "Curl failed")
+          
+          if [[ "$response" == "Curl failed" ]]; then
+            echo "❌ Failed to connect to backend"
+            echo "This is normal if the instance is spinning up"
+            exit 0  # Don't fail the workflow, just log
+          fi
+          
+          # Separate body and status code
+          body=$(echo "$response" | head -n 1)
+          status_code=$(echo "$response" | tail -n 1)
+          
+          echo "✅ Status Code: $status_code"
+          echo "📄 Response: $body"
+          
+          if [ "$status_code" -eq 200 ]; then
+            echo "🎉 Manthrakodi Bridal backend is healthy and awake!"
+          else
+            echo "⚠️ Health check returned status: $status_code"
+            echo "This might be normal during deployment"
+            # Don't exit with error to avoid notifications
+          fi
+          
+          echo "✅ Health check completed at $(date)"
