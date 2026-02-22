@@ -8,6 +8,10 @@ const API_URL = import.meta.env.VITE_API_URL || '/api';
 
 export const useProducts = (params?: {
   category?: string;
+  q?: string;
+  priceRange?: { min?: number; max?: number };
+  material?: string[];
+  sortBy?: string;
   featured?: boolean;
   limit?: number;
 }) => {

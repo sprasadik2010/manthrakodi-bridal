@@ -1,5 +1,5 @@
 // src/components/SearchFilter.tsx
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { FaSearch, FaFilter, FaTimes } from 'react-icons/fa';
 
 interface FilterOptions {
@@ -11,9 +11,10 @@ interface FilterOptions {
 }
 
 const SearchFilter: React.FC<{
-  onFilterChange: (filters: Partial<FilterOptions>) => void;
+  onFilterChange: (filters: Partial<FilterOptions> & { q?: string }) => void;
 }> = ({ onFilterChange }) => {
   const [searchQuery, setSearchQuery] = useState('');
+  const debounceRef = useRef<number | null>(null);
   const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState<Partial<FilterOptions>>({
     sortBy: 'newest'
@@ -28,6 +29,22 @@ const SearchFilter: React.FC<{
     setFilters(updated);
     onFilterChange(updated);
   };
+
+  // Emit search query to parent with debounce
+  useEffect(() => {
+    if (debounceRef.current) {
+      window.clearTimeout(debounceRef.current);
+    }
+    // debounce 300ms
+    debounceRef.current = window.setTimeout(() => {
+      onFilterChange({ ...filters, q: searchQuery.trim() });
+    }, 300);
+
+    return () => {
+      if (debounceRef.current) window.clearTimeout(debounceRef.current);
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchQuery]);
 
   return (
     <div className="sticky top-0 z-40 bg-white shadow-md p-4">
