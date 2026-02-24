@@ -5,7 +5,7 @@ export interface Product {
   description: string;
   price: number;
   original_price?: number;
-  category: 'saree' | 'ornament' | 'bridal-set';
+  category: 'saree' | 'ornament' | 'bridal-collections';
   subCategory?: string;
   images: string[];
   stock: number;

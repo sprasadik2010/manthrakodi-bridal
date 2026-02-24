@@ -66,7 +66,7 @@ def search_products(
 def read_products(
     skip: int = 0,
     limit: int = 100,
-    category: Optional[str] = Query(None, description="Filter by category (saree, ornament, bridal-set)"),
+    category: Optional[str] = Query(None, description="Filter by category (saree, ornament, bridal-collections)"),
     featured: Optional[bool] = None,
     search: Optional[str] = None,
     db: Session = Depends(get_db)

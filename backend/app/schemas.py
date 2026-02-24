@@ -39,7 +39,7 @@ class ProductUpdate(BaseModel):
     description: Optional[str] = None
     price: Optional[float] = Field(None, gt=0)
     original_price: Optional[float] = None
-    category: Optional[str] = Field(None, pattern="^(saree|ornament|bridal-set)$")
+    category: Optional[str] = Field(None, pattern="^(saree|ornament|bridal-collections)$")
     sub_category: Optional[str] = None
     images: Optional[List[str]] = None
     stock: Optional[int] = Field(None, ge=0)

@@ -20,7 +20,7 @@ const SearchFilter: React.FC<{
     sortBy: 'newest'
   });
 
-  const categories = ['saree', 'ornament', 'bridal-set'];
+  const categories = ['saree', 'ornament', 'bridal-collections'];
   const materials = ['Silk', 'Cotton', 'Georgette', 'Chiffon', 'Gold', 'Silver', 'Pearl'];
   // const occasions = ['Wedding', 'Reception', 'Engagement', 'Festival', 'Casual'];
 

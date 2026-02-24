@@ -15,7 +15,7 @@ class Product(Base):
     description = Column(Text)
     price = Column(Float, nullable=False)
     original_price = Column(Float)
-    category = Column(String(50), nullable=False)  # saree, ornament, bridal-set
+    category = Column(String(50), nullable=False)  # saree, ornament, bridal-collections
     sub_category = Column(String(100))
     images = Column(ARRAY(String), nullable=False)
     stock = Column(Integer, default=0)
