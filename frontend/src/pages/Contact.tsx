@@ -1,22 +1,22 @@
 // src/pages/Contact.tsx
-import { useState } from 'react';
-import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaFacebook, FaInstagram, FaWhatsapp, FaYoutube } from 'react-icons/fa';
-import toast from 'react-hot-toast';
+// import { useState } from 'react';
+import { FaPhone, /*FaEnvelope, */FaMapMarkerAlt, FaFacebook, FaInstagram, FaWhatsapp, FaYoutube } from 'react-icons/fa';
+// import toast from 'react-hot-toast';
 
 const Contact = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    message: '',
-  });
+  // const [formData, setFormData] = useState({
+  //   name: '',
+  //   email: '',
+  //   phone: '',
+  //   message: '',
+  // });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle form submission
-    toast.success('Message sent successfully! We will contact you soon.');
-    setFormData({ name: '', email: '', phone: '', message: '' });
-  };
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   // Handle form submission
+  //   toast.success('Message sent successfully! We will contact you soon.');
+  //   setFormData({ name: '', email: '', phone: '', message: '' });
+  // };
 
   return (
     <div className="container mx-auto px-4 py-12">
