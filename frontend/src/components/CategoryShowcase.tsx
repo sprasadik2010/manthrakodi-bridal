@@ -19,7 +19,7 @@ const categories = [
   },
   {
     id: 3,
-    title: 'Bridal Sets',
+    title: 'Bridal Collections',
     image: 'https://i.ibb.co/Fq68YpCF/Whats-App-Image-2026-02-10-at-11-04-25-PM.jpg',
     link: '/products?category=bridal-set',
     count: ''

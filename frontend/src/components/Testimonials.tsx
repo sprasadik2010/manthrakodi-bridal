@@ -6,7 +6,7 @@ const testimonials = [
     id: 1,
     name: 'Priya Sharma',
     role: 'Bride',
-    content: 'The bridal set I purchased was absolutely stunning! The craftsmanship exceeded my expectations.',
+    content: 'The bridal collections I purchased was absolutely stunning! The craftsmanship exceeded my expectations.',
     rating: 5,
     image: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?auto=format&fit=crop&w=150'
   },

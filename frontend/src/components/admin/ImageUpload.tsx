@@ -92,7 +92,7 @@ const ImageUpload = ({ onClose, onSuccess }: ImageUploadProps) => {
             >
               <option value="saree">Sarees</option>
               <option value="ornament">Ornaments</option>
-              <option value="bridal-set">Bridal Sets</option>
+              <option value="bridal-collections">Bridal Collections</option>
               <option value="slider">Slider Images</option>
             </select>
           </div>

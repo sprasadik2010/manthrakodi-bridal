@@ -265,7 +265,7 @@ const ProductForm = ({ product, initialImage, onClose, onSuccess }: ProductFormP
               >
                 <option value="saree">Sarees</option>
                 <option value="ornament">Ornaments</option>
-                <option value="bridal-set">Bridal Sets</option>
+                <option value="bridal-collections">Bridal Collections</option>
               </select>
             </div>
 

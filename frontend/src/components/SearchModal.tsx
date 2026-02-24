@@ -66,7 +66,7 @@ const API_URL = import.meta.env.VITE_API_URL || '/api';
                   type="text"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Search sarees, ornaments, bridal sets..."
+                  placeholder="Search sarees, ornaments, bridal Collections..."
                   className="w-full pl-12 pr-10 py-4 text-lg border-0 focus:ring-0 focus:outline-none"
                 />
                 <button
@@ -136,7 +136,7 @@ const API_URL = import.meta.env.VITE_API_URL || '/api';
               <div className="p-6 border-t">
                 <h4 className="font-semibold text-gray-700 mb-3">Recent Searches</h4>
                 <div className="flex flex-wrap gap-2">
-                  {['Silk Sarees', 'Gold Necklace', 'Bridal Set', 'Wedding Jewelry'].map(
+                  {['Silk Sarees', 'Gold Necklace', 'Bridal Collection', 'Wedding Jewelry'].map(
                     (term) => (
                       <button
                         key={term}

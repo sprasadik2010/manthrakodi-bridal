@@ -28,7 +28,7 @@ const slides = [
   {
     id: 3,
     image: 'https://i.ibb.co/7d2QkrwL/Whats-App-Image-2026-02-11-at-4-15-01-PM.jpg',
-    title: 'Custom Bridal Sets',
+    title: 'Custom Bridal Collections',
     subtitle: 'Tailored to Perfection',
     cta: 'Design Yours',
     link: '/contact'
@@ -36,7 +36,7 @@ const slides = [
   {
     id: 4,
     image: 'https://i.ibb.co/nsYN59Qk/Whats-App-Image-2026-02-11-at-3-56-18-PM.jpg',
-    title: 'Custom Bridal Sets',
+    title: 'Custom Bridal Collections',
     subtitle: 'Tailored to Perfection',
     cta: 'Design Yours',
     link: '/contact'
@@ -44,7 +44,7 @@ const slides = [
   {
     id: 5,
     image: 'https://i.ibb.co/PZ7KWCs2/Whats-App-Image-2026-02-10-at-11-07-52-PM.jpg',
-    title: 'Custom Bridal Sets',
+    title: 'Custom Bridal Collections',
     subtitle: 'Tailored to Perfection',
     cta: 'Design Yours',
     link: '/contact'

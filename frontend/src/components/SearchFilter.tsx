@@ -55,7 +55,7 @@ const SearchFilter: React.FC<{
             <FaSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
             <input
               type="text"
-              placeholder="Search sarees, ornaments, bridal sets..."
+              placeholder="Search sarees, ornaments, bridal Collections..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-12 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-bridal-maroon focus:border-transparent"

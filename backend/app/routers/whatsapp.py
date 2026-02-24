@@ -24,11 +24,11 @@ async def whatsapp_webhook(request: dict):
         
         # Handle different message types
         if 'order' in incoming_msg or 'track' in incoming_msg:
-            response = "To check your order status, please visit our website: https://manthrakodibridals.com/orders"
+            response = "To check your order status, please visit our website: https://mbridal.online/orders"
         elif 'price' in incoming_msg or 'cost' in incoming_msg:
-            response = "You can view all our products with prices at: https://manthrakodibridals.com/products"
+            response = "You can view all our products with prices at: https://mbridal.online/products"
         elif 'contact' in incoming_msg or 'help' in incoming_msg:
-            response = "📞 Call us: +91 98765 43210\n📍 Visit: 123 Bridal Street, Chennai\n🌐 Website: https://manthrakodibridals.com"
+            response = "📞 Call us: +91 88488 36951\n📍 Visit: First floor, Bengacheri Complex, Opposit Vyapar Bhavan, Kanhangad\n🌐 Website: https://mbridal.online"
         else:
             response = "Thanks for contacting Manthrakodi Bridals! How can I help you today? You can:\n1. Place an order on our website\n2. Check order status\n3. View products\n4. Contact support"
         
@@ -60,9 +60,9 @@ Order Total: ₹{order_data['total']}
 Payment: {order_data['payment_method']}
 
 You can track your order at:
-https://manthrakodibridals.com/orders
+https://mbridal.online/orders
 
-Need help? Call +91 98765 43210
+Need help? Call +91 88488 36951
         """.strip()
         
         client.messages.create(

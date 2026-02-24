@@ -131,8 +131,8 @@ const Contact = () => {
                 <div>
                   <h3 className="font-semibold text-lg">Store Address</h3>
                   <p className="text-gray-600">
-                    123 Bridal Street, T Nagar<br />
-                    Chennai, Tamil Nadu 600017<br />
+                    First floor, Bengacheri Complex, Opposit Vyapar Bhavan,<br />
+                    Kanhangad, Kasargod Dt, Kerala<br />
                     India
                   </p>
                 </div>
@@ -144,7 +144,7 @@ const Contact = () => {
               <h3 className="font-semibold text-lg mb-4">Follow Us</h3>
               <div className="flex gap-4">
                 <a
-                  href="https://facebook.com"
+                  href="https://www.facebook.com/61586081377276/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-blue-600 text-white p-3 rounded-full hover:bg-blue-700 transition-colors"
@@ -169,15 +169,11 @@ const Contact = () => {
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span className="text-gray-600">Monday - Friday</span>
-                <span className="font-medium">10:00 AM - 8:00 PM</span>
+                <span className="font-medium">10:00 AM - 6:00 PM</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">Saturday</span>
-                <span className="font-medium">10:00 AM - 9:00 PM</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Sunday</span>
-                <span className="font-medium">11:00 AM - 7:00 PM</span>
+                <span className="font-medium">10:00 AM - 6:00 PM</span>
               </div>
             </div>
             <p className="text-sm text-gray-500 mt-4">

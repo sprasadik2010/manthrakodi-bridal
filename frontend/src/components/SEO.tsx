@@ -12,7 +12,7 @@ interface SEOProps {
 
 const SEO: React.FC<SEOProps> = ({
   title = 'Manthrakodi Bridal - Premium Bridal Wear & Ornaments',
-  description = 'Discover exquisite bridal sarees, ornaments, and bridal sets. Traditional and contemporary designs for your special day.',
+  description = 'Discover exquisite bridal sarees, ornaments, and bridal Collections. Traditional and contemporary designs for your special day.',
   image = '/images/og-image.jpg',
   url = window.location.href,
   type = 'website'
@@ -42,7 +42,7 @@ const SEO: React.FC<SEOProps> = ({
       <meta name="twitter:image" content={image} />
       
       {/* Additional SEO */}
-      <meta name="keywords" content="bridal sarees, wedding ornaments, bridal sets, traditional wear, designer sarees" />
+      <meta name="keywords" content="bridal sarees, wedding ornaments, bridal Collections, traditional wear, designer sarees" />
       <meta name="author" content="Manthrakodi Bridal" />
       <link rel="canonical" href={url} />
       
@@ -58,13 +58,13 @@ const SEO: React.FC<SEOProps> = ({
           "priceRange": "₹₹₹",
           "address": {
             "@type": "PostalAddress",
-            "addressLocality": "Chennai",
-            "addressRegion": "Tamil Nadu",
+            "addressLocality": "Kanhangad",
+            "addressRegion": "Kerala",
             "addressCountry": "IN"
           },
           "contactPoint": {
             "@type": "ContactPoint",
-            "telephone": "+91-9876543210",
+            "telephone": "+91-8848836951",
             "contactType": "customer service"
           }
         })}

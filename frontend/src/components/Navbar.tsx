@@ -17,7 +17,7 @@ const Navbar = () => {
     { path: '/products', label: 'Products' },
     { path: '/products?category=saree', label: 'Sarees' },
     { path: '/products?category=ornament', label: 'Ornaments' },
-    { path: '/products?category=bridal-set', label: 'Bridal Sets' },
+    { path: '/products?category=bridal-set', label: 'Bridal Collections' },
     { path: '/orders', label: 'My Orders' },
     { path: '/contact', label: 'Contact' },
   ];
