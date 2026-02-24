@@ -1,6 +1,6 @@
 // src/pages/Contact.tsx
 import { useState } from 'react';
-import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaFacebook, FaInstagram } from 'react-icons/fa';
+import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaFacebook, FaInstagram, FaWhatsapp, FaYoutube } from 'react-icons/fa';
 import toast from 'react-hot-toast';
 
 const Contact = () => {
@@ -31,7 +31,7 @@ const Contact = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
         {/* Contact Form */}
-        <div className="bg-white rounded-2xl shadow-xl p-8">
+        {/* <div className="bg-white rounded-2xl shadow-xl p-8">
           <h2 className="text-2xl font-bold mb-6">Send us a Message</h2>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
@@ -41,7 +41,7 @@ const Contact = () => {
               <input
                 type="text"
                 value={formData.name}
-                onChange={(e) => setFormData({...formData, name: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-bridal-maroon focus:border-transparent"
                 required
               />
@@ -55,7 +55,7 @@ const Contact = () => {
                 <input
                   type="email"
                   value={formData.email}
-                  onChange={(e) => setFormData({...formData, email: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-bridal-maroon focus:border-transparent"
                   required
                 />
@@ -67,7 +67,7 @@ const Contact = () => {
                 <input
                   type="tel"
                   value={formData.phone}
-                  onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                   className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-bridal-maroon focus:border-transparent"
                   required
                 />
@@ -80,7 +80,7 @@ const Contact = () => {
               </label>
               <textarea
                 value={formData.message}
-                onChange={(e) => setFormData({...formData, message: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                 rows={5}
                 className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-bridal-maroon focus:border-transparent"
                 required
@@ -94,13 +94,13 @@ const Contact = () => {
               Send Message
             </button>
           </form>
-        </div>
+        </div> */}
 
         {/* Contact Info & Map */}
         <div>
           <div className="bg-white rounded-2xl shadow-xl p-8 mb-8">
             <h2 className="text-2xl font-bold mb-6">Get in Touch</h2>
-            
+
             <div className="space-y-6">
               <div className="flex items-start gap-4">
                 <div className="bg-bridal-maroon/10 p-3 rounded-lg">
@@ -108,12 +108,20 @@ const Contact = () => {
                 </div>
                 <div>
                   <h3 className="font-semibold text-lg">Phone</h3>
-                  <p className="text-gray-600">+91 98765 43210</p>
-                  <p className="text-gray-600">+91 87654 32109</p>
+                  <p className="text-gray-600">+91 88488 36951</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-4">
+                <div className="bg-bridal-maroon/10 p-3 rounded-lg">
+                  <FaWhatsapp className="text-bridal-maroon text-xl" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-lg">Whatsapp</h3>
+                  <p className="text-gray-600">+91 79940 36951</p>
                 </div>
               </div>
 
-              <div className="flex items-start gap-4">
+              {/* <div className="flex items-start gap-4">
                 <div className="bg-bridal-maroon/10 p-3 rounded-lg">
                   <FaEnvelope className="text-bridal-maroon text-xl" />
                 </div>
@@ -122,7 +130,7 @@ const Contact = () => {
                   <p className="text-gray-600">info@manthrakodibridal.com</p>
                   <p className="text-gray-600">orders@manthrakodibridal.com</p>
                 </div>
-              </div>
+              </div> */}
 
               <div className="flex items-start gap-4">
                 <div className="bg-bridal-maroon/10 p-3 rounded-lg">
@@ -142,7 +150,7 @@ const Contact = () => {
             {/* Social Media */}
             <div className="mt-8 pt-8 border-t">
               <h3 className="font-semibold text-lg mb-4">Follow Us</h3>
-              <div className="flex gap-4">
+              <div className="flex gap-4 justify-center">
                 <a
                   href="https://www.facebook.com/61586081377276/"
                   target="_blank"
@@ -152,12 +160,20 @@ const Contact = () => {
                   <FaFacebook size={20} />
                 </a>
                 <a
-                  href="https://instagram.com"
+                  href="https://www.instagram.com/sag_collections/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-pink-600 text-white p-3 rounded-full hover:bg-pink-700 transition-colors"
                 >
                   <FaInstagram size={20} />
+                </a>
+                <a
+                  href="https://www.youtube.com/@Sarees-Kurthis-Ornaments"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-pink-600 text-white p-3 rounded-full hover:bg-pink-700 transition-colors"
+                >
+                  <FaYoutube size={20} />
                 </a>
               </div>
             </div>
