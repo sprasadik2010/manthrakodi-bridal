@@ -191,10 +191,10 @@ const Orders = () => {
                       <span className="text-gray-600">Subtotal</span>
                       <span>₹{order.subtotal.toLocaleString()}</span>
                     </div>
-                    <div className="flex justify-between">
+                    {/* <div className="flex justify-between">
                       <span className="text-gray-600">Tax (18%)</span>
                       <span>₹{order.tax.toLocaleString()}</span>
-                    </div>
+                    </div> */}
                     {/* <div className="flex justify-between">
                       <span className="text-gray-600">Shipping</span>
                       <span className="text-green-600">FREE</span>

@@ -115,10 +115,10 @@ const Cart = () => {
                 <span className="text-gray-600">Shipping</span>
                 <span className="text-green-600 font-medium">Free</span>
               </div> */}
-              <div className="flex justify-between">
+              {/* <div className="flex justify-between">
                 <span className="text-gray-600">Tax</span>
                 <span className="font-medium">₹{(total * 0.18).toLocaleString()}</span>
-              </div>
+              </div> */}
               <div className="border-t pt-4 flex justify-between text-xl font-bold">
                 <span>Total</span>
                 <span className="text-bridal-maroon">

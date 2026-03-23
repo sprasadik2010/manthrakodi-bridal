@@ -91,9 +91,9 @@ const Checkout = () => {
     ).join('\n\n');
 
     const subtotal = total;
-    const tax = total * 0.18;
-    const shipping = 0;
-    const grandTotal = subtotal + tax + shipping;
+    // const tax = total * 0.18;
+    // const shipping = 0;
+    const grandTotal = subtotal;// + tax + shipping;
 
     return `🛍️ *${BUSINESS_NAME} - NEW ORDER*
 
@@ -123,7 +123,6 @@ ${itemsList}
 
 💰 *BILLING SUMMARY*
 • *Subtotal:* ₹${subtotal.toLocaleString()}
-• *GST (18%):* ₹${tax.toLocaleString()}
 • *────────────────────*
 • *Grand Total:* ₹${grandTotal.toLocaleString()}
 
@@ -151,8 +150,7 @@ ${formData.notes || 'No additional notes'}
 
   const formatCustomerConfirmation = (orderId: string) => {
     const subtotal = total;
-    const tax = total * 0.18;
-    const grandTotal = subtotal + tax;
+    const grandTotal = subtotal;// + tax;
 
     return `✅ *ORDER CONFIRMED - ${BUSINESS_NAME}*
 
@@ -276,7 +274,7 @@ Thank you for your order! 🎉 Your bridal selection is being processed.
           description: item.product.description,
         })),
         subtotal: total,
-        tax: total * 0.18,
+        tax: 0,
         shipping: 0,
         total: total * 1.18,
         paymentMethod: formData.paymentMethod,
