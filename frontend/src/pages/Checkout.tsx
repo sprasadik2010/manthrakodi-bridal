@@ -276,7 +276,7 @@ Thank you for your order! 🎉 Your bridal selection is being processed.
         subtotal: total,
         tax: 0,
         shipping: 0,
-        total: total * 1.18,
+        total: total,
         paymentMethod: formData.paymentMethod,
         notes: formData.notes,
         status: 'pending',
@@ -414,7 +414,7 @@ Thank you for your order! 🎉 Your bridal selection is being processed.
                   </h3>
                   <p className="text-gray-800">{items.length} bridal items</p>
                   <p className="text-3xl font-bold text-bridal-maroon">
-                    ₹{(total * 1.18).toLocaleString()}
+                    ₹{(total).toLocaleString()}
                   </p>
                   <p className="text-gray-600">{formData.paymentMethod === 'cod' ? 'Cash on Delivery' : 'Online Payment'}</p>
                 </motion.div>
@@ -967,10 +967,10 @@ Thank you for your order! 🎉 Your bridal selection is being processed.
                   <span className="text-gray-600">Subtotal</span>
                   <span className="font-semibold">₹{total.toLocaleString()}</span>
                 </div>
-                <div className="flex justify-between items-center py-2">
+                {/* <div className="flex justify-between items-center py-2">
                   <span className="text-gray-600">GST (18%)</span>
                   <span className="font-semibold">₹{(total * 0.18).toLocaleString()}</span>
-                </div>
+                </div> */}
                 {/* <div className="flex justify-between items-center py-2">
                   <span className="text-gray-600">Shipping</span>
                   <span className="font-semibold text-green-600 flex items-center gap-1">
@@ -980,7 +980,7 @@ Thank you for your order! 🎉 Your bridal selection is being processed.
                 <div className="border-t border-gray-200 pt-4 flex justify-between items-center text-xl font-bold">
                   <span>Total Amount</span>
                   <span className="text-bridal-maroon text-2xl">
-                    ₹{(total * 1.18).toLocaleString()}
+                    ₹{(total).toLocaleString()}
                   </span>
                 </div>
               </div>
