@@ -23,7 +23,7 @@ import toast from 'react-hot-toast';
 // Your WhatsApp Business number - UPDATE THIS!
 const YOUR_WHATSAPP_NUMBER = '917994036951'; // Replace with your WhatsApp Business number
 const BUSINESS_NAME = 'Manthrakodi Bridals';
-const BUSINESS_ADDRESS = '1st Floor, Bengacheri Complex, Kanhangad';
+const BUSINESS_ADDRESS = '1st Floor, Bengacheri Complex, Kanhangad, Kerala';
 const BUSINESS_PHONE = '7994036951';
 
 const Checkout = () => {
@@ -41,9 +41,9 @@ const Checkout = () => {
     phone: '',
     address: '',
     city: '',
-    state: 'Tamil Nadu',
+    state: '',
     pincode: '',
-    paymentMethod: 'cod',
+    paymentMethod: '',
     notes: '',
     preferredContact: 'whatsapp',
   });

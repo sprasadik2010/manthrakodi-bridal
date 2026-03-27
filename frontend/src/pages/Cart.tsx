@@ -65,7 +65,12 @@ const Cart = () => {
                       </button>
                       <span className="text-lg font-medium">{item.quantity}</span>
                       <button
-                        onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
+                        onClick={() => {
+                          const maxStock = item.product.stock || item.product.quantity || Infinity;
+                          if (item.quantity + 1 <= maxStock) {
+                            updateQuantity(item.product.id, item.quantity + 1);
+                          }
+                        }}
                         className="w-8 h-8 rounded-full border flex items-center justify-center"
                       >
                         +
@@ -122,7 +127,7 @@ const Cart = () => {
               <div className="border-t pt-4 flex justify-between text-xl font-bold">
                 <span>Total</span>
                 <span className="text-bridal-maroon">
-                  ₹{(total * 1.18).toLocaleString()}
+                  ₹{(total).toLocaleString()}
                 </span>
               </div>
             </div>
