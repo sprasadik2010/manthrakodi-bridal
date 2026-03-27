@@ -66,7 +66,7 @@ const Cart = () => {
                       <span className="text-lg font-medium">{item.quantity}</span>
                       <button
                         onClick={() => {
-                          const maxStock = item.product.stock || item.product.quantity || Infinity;
+                          const maxStock = item.product.stock || Infinity;
                           if (item.quantity + 1 <= maxStock) {
                             updateQuantity(item.product.id, item.quantity + 1);
                           }
