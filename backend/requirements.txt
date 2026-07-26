@@ -1,33 +1,3 @@
-<<<<<<< HEAD
-# Core
-fastapi
-uvicorn[standard]
-
-# Database
-sqlalchemy
-psycopg2-binary
-alembic
-
-# Validation
-pydantic
-email-validator
-
-# Security
-python-jose[cryptography]
-passlib[bcrypt]
-python-multipart
-
-# Environment
-python-dotenv
-
-# File upload
-python-magic
-pillow
-
-# Utilities
-requests
-python-dateutil
-=======
 # Core
 fastapi==0.104.1
 uvicorn[standard]==0.24.0
@@ -46,18 +16,13 @@ python-jose[cryptography]==3.3.0
 passlib[bcrypt]==1.7.4
 python-multipart==0.0.6
 
-# CORS
-# fastapi-cors==0.1.0
-
 # Environment
 python-dotenv==1.0.0
 
 # File upload
-# python-magic-bin==0.4.14
 python-magic==0.4.27
 pillow==10.1.0
 
 # Utilities
 requests==2.31.0
 python-dateutil==2.8.2
->>>>>>> 0208261eee44a97280e1d98d8ef143e66a50934e

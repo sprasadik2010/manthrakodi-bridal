@@ -244,21 +244,12 @@ const ProductManagement = () => {
                           )}
                         </div>
                         
-<<<<<<< HEAD
                         <div className="flex-grow min-w-0">
                           <div className="flex justify-between items-start gap-2">
                             <h3 className="font-medium text-gray-900 truncate min-w-0 pr-2" title={product.name}>
                               {product.name}
                             </h3>
                             <div className="flex gap-1 flex-shrink-0">
-=======
-                        <div className="flex-1 min-w-0">
-                          <div className="flex justify-between items-start">
-                            <h3 className="font-medium text-gray-900 truncate pr-2">
-                              {product.name}
-                            </h3>
-                            <div className="flex gap-1">
->>>>>>> 0208261eee44a97280e1d98d8ef143e66a50934e
                               <button
                                 onClick={() => {
                                   setEditingProduct(product);

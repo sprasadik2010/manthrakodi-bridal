@@ -22,7 +22,6 @@ const Navbar = () => {
     { path: '/contact', label: 'Contact' },
   ];
 
-<<<<<<< HEAD
   const isLinkActive = (linkPath: string) => {
     const [pathName, queryString] = linkPath.split('?');
     
@@ -49,8 +48,6 @@ const Navbar = () => {
     return true;
   };
 
-=======
->>>>>>> 0208261eee44a97280e1d98d8ef143e66a50934e
   return (
     <>
       <nav className="sticky top-0 z-50 bg-white shadow-lg w-full overflow-x-hidden">
@@ -82,11 +79,7 @@ const Navbar = () => {
                 <Link
                   key={link.path}
                   to={link.path}
-<<<<<<< HEAD
                   className={`whitespace-nowrap font-medium transition-colors ${isLinkActive(link.path)
-=======
-                  className={`whitespace-nowrap font-medium transition-colors ${location.pathname === link.path.split('?')[0]
->>>>>>> 0208261eee44a97280e1d98d8ef143e66a50934e
                     ? 'text-bridal-maroon border-b-2 border-bridal-maroon'
                     : 'text-gray-700 hover:text-bridal-maroon'
                     }`}
@@ -153,11 +146,7 @@ const Navbar = () => {
                     key={link.path}
                     to={link.path}
                     onClick={() => setIsMenuOpen(false)}
-<<<<<<< HEAD
                     className={`block w-full px-3 py-2 rounded-lg font-medium whitespace-nowrap ${isLinkActive(link.path)
-=======
-                    className={`block w-full px-3 py-2 rounded-lg font-medium whitespace-nowrap ${location.pathname === link.path.split('?')[0]
->>>>>>> 0208261eee44a97280e1d98d8ef143e66a50934e
                       ? 'bg-bridal-maroon text-white'
                       : 'text-gray-700 hover:bg-gray-100'
                       }`}
