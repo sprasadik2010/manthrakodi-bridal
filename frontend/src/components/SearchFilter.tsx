@@ -124,26 +124,26 @@ const SearchFilter: React.FC<{
                     <input
                       type="range"
                       min="0"
-                      max="100000"
+                      max="20000"
                       step="1000"
                       value={filters.priceRange?.min || 0}
                       onChange={(e) => handleFilterChange({
                         priceRange: {
                           min: parseInt(e.target.value),
-                          max: filters.priceRange?.max || 100000
+                          max: filters.priceRange?.max || 20000
                         }
                       })}
                       className="w-full"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm mb-2">Max: ₹{filters.priceRange?.max || 100000}</label>
+                    <label className="block text-sm mb-2">Max: ₹{filters.priceRange?.max || 20000}</label>
                     <input
                       type="range"
                       min="0"
-                      max="100000"
+                      max="20000"
                       step="1000"
-                      value={filters.priceRange?.max || 100000}
+                      value={filters.priceRange?.max || 20000}
                       onChange={(e) => handleFilterChange({
                         priceRange: {
                           min: filters.priceRange?.min || 0,
