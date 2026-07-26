@@ -12,13 +12,22 @@ interface FilterOptions {
 
 const SearchFilter: React.FC<{
   onFilterChange: (filters: Partial<FilterOptions> & { q?: string }) => void;
-}> = ({ onFilterChange }) => {
+  initialCategory?: string;
+}> = ({ onFilterChange, initialCategory }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const debounceRef = useRef<number | null>(null);
   const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState<Partial<FilterOptions>>({
     sortBy: 'newest'
   });
+
+  useEffect(() => {
+    if (initialCategory) {
+      setFilters(prev => ({ ...prev, category: [initialCategory] }));
+    } else {
+      setFilters(prev => ({ ...prev, category: [] }));
+    }
+  }, [initialCategory]);
 
   const categories = ['saree', 'ornament', 'bridal-collections'];
   const materials = ['Silk', 'Cotton', 'Georgette', 'Chiffon', 'Gold', 'Silver', 'Pearl'];

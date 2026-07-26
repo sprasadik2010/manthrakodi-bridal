@@ -9,30 +9,88 @@ import { Product } from '../types';
 const Products = () => {
   const [searchParams] = useSearchParams();
   const [filters, setFilters] = useState<{
-    category?: string;
+    category?: string[];
     priceRange?: { min: number; max: number };
     material?: string[];
     sortBy?: string;
+    q?: string;
   }>({});
 
   // Get category from URL
-  const category = searchParams.get('category') || undefined;
+  const urlCategory = searchParams.get('category') || undefined;
 
-  const { data: products, isLoading, error } = useProducts({
-    category,
-    ...filters,
-  });
+  // Fetch all products to allow full client-side filtering and sorting
+  const { data: rawProducts, isLoading, error } = useProducts();
 
-  // Initialize filters from URL
+  // Initialize filters from URL category
   useEffect(() => {
-    if (category) {
-      setFilters(prev => ({ ...prev, category }));
+    if (urlCategory) {
+      setFilters(prev => ({ ...prev, category: [urlCategory] }));
+    } else {
+      setFilters(prev => ({ ...prev, category: [] }));
     }
-  }, [category]);
+  }, [urlCategory]);
 
   const handleFilterChange = (newFilters: any) => {
     setFilters(prev => ({ ...prev, ...newFilters }));
   };
+
+  // Derive filtered and sorted products
+  const filteredAndSortedProducts = (() => {
+    if (!rawProducts) return [];
+
+    let result = [...rawProducts];
+
+    // 1. Search Query Filter
+    if (filters.q) {
+      const query = filters.q.toLowerCase().trim();
+      result = result.filter(product => 
+        product.name?.toLowerCase().includes(query) ||
+        product.description?.toLowerCase().includes(query) ||
+        product.category?.toLowerCase().includes(query) ||
+        product.subCategory?.toLowerCase().includes(query) ||
+        product.price?.toString().includes(query)
+      );
+    }
+
+    // 2. Category Checkbox Filter
+    if (filters.category && filters.category.length > 0) {
+      result = result.filter(product => 
+        filters.category!.includes(product.category)
+      );
+    }
+
+    // 3. Price Range Filter
+    if (filters.priceRange) {
+      const { min, max } = filters.priceRange;
+      result = result.filter(product => 
+        product.price >= min && product.price <= max
+      );
+    }
+
+    // 4. Material Filter
+    if (filters.material && filters.material.length > 0) {
+      result = result.filter(product => {
+        const productText = `${product.name} ${product.description || ''} ${product.attributes?.material || ''}`.toLowerCase();
+        return filters.material!.some(mat => productText.includes(mat.toLowerCase()));
+      });
+    }
+
+    // 5. Sorting
+    const sortBy = filters.sortBy || 'newest';
+    if (sortBy === 'price-low') {
+      result.sort((a, b) => a.price - b.price);
+    } else if (sortBy === 'price-high') {
+      result.sort((a, b) => b.price - a.price);
+    } else if (sortBy === 'name') {
+      result.sort((a, b) => a.name.localeCompare(b.name));
+    } else if (sortBy === 'newest') {
+      // Sort newest first: fallback since created_at might be missing from JSON, we use ID comparison (or created_at if exists)
+      result.sort((a, b) => b.id.localeCompare(a.id));
+    }
+
+    return result;
+  })();
 
   if (error) {
     return (
@@ -45,12 +103,12 @@ const Products = () => {
 
   return (
     <div className="min-h-screen">
-      <SearchFilter onFilterChange={handleFilterChange} />
+      <SearchFilter onFilterChange={handleFilterChange} initialCategory={urlCategory} />
 
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
           <h1 className="text-4xl font-playfair font-bold text-gray-800">
-            {category ? `${category.charAt(0).toUpperCase() + category.slice(1)} Collection` : 'All Products'}
+            {urlCategory ? `${urlCategory.charAt(0).toUpperCase() + urlCategory.slice(1)} Collection` : 'All Products'}
           </h1>
           <p className="text-gray-600 mt-2">
             Discover our exquisite collection of bridal wear and ornaments
@@ -70,16 +128,16 @@ const Products = () => {
           </div>
         ) : (
           <>
-            {products && products.length > 0 ? (
+            {filteredAndSortedProducts.length > 0 ? (
               <>
                 <div className="flex justify-between items-center mb-6">
                   <p className="text-gray-600">
-                    Showing {products.length} products
+                    Showing {filteredAndSortedProducts.length} products
                   </p>
                   <select
                     value={filters.sortBy || 'newest'}
                     onChange={(e) => handleFilterChange({ sortBy: e.target.value })}
-                    className="border rounded-lg px-4 py-2"
+                    className="border rounded-lg px-4 py-2 bg-white"
                   >
                     <option value="newest">Newest First</option>
                     <option value="price-low">Price: Low to High</option>
@@ -89,7 +147,7 @@ const Products = () => {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                  {products && products.map((product: Product) => (
+                  {filteredAndSortedProducts.map((product: Product) => (
                     <ProductCard key={product.id} product={product} />
                   ))}
                 </div>
