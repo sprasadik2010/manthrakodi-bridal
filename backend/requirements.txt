@@ -1,0 +1,28 @@
+# Core
+fastapi
+uvicorn[standard]
+
+# Database
+sqlalchemy
+psycopg2-binary
+alembic
+
+# Validation
+pydantic
+email-validator
+
+# Security
+python-jose[cryptography]
+passlib[bcrypt]
+python-multipart
+
+# Environment
+python-dotenv
+
+# File upload
+python-magic
+pillow
+
+# Utilities
+requests
+python-dateutil
