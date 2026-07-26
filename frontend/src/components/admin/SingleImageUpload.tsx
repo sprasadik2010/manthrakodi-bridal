@@ -199,8 +199,8 @@ const SingleImageUpload = ({ onImageUploaded, onClose }: SingleImageUploadProps)
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl w-full max-w-lg">
-        <div className="flex justify-between items-center p-6 border-b">
+      <div className="bg-white rounded-xl w-full max-w-lg max-h-[calc(100vh-2rem)] flex flex-col my-auto shadow-2xl overflow-hidden">
+        <div className="flex justify-between items-center p-6 border-b shrink-0 bg-white rounded-t-xl">
           <div className="flex items-center gap-2">
             <FaImage className="text-purple-600 text-xl" />
             <h2 className="text-xl font-semibold">Upload to ImgBB</h2>
@@ -214,7 +214,7 @@ const SingleImageUpload = ({ onImageUploaded, onClose }: SingleImageUploadProps)
           </button>
         </div>
 
-        <div className="p-6">
+        <div className="p-6 overflow-y-auto flex-grow">
           {uploadSuccess ? (
             <div className="text-center py-8">
               <div className="text-green-500 text-5xl mb-4">

@@ -122,15 +122,23 @@ const OrderManagement = () => {
         </div>
       </div>
 
+<<<<<<< HEAD
       {/* Orders Table/Cards */}
       <div className="bg-transparent md:bg-white rounded-xl md:shadow overflow-hidden">
         {isLoading ? (
           <div className="p-8 text-center bg-white rounded-xl shadow">
+=======
+      {/* Orders Table */}
+      <div className="bg-white rounded-xl shadow overflow-hidden">
+        {isLoading ? (
+          <div className="p-8 text-center">
+>>>>>>> 0208261eee44a97280e1d98d8ef143e66a50934e
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-bridal-maroon mx-auto mb-4"></div>
             <p>Loading orders...</p>
           </div>
         ) : (
           <>
+<<<<<<< HEAD
             {/* Mobile View - Card List */}
             <div className="md:hidden space-y-4">
               {filteredOrders.length > 0 ? (
@@ -211,6 +219,9 @@ const OrderManagement = () => {
 
             {/* Desktop View - Table */}
             <div className="hidden md:block overflow-x-auto">
+=======
+            <div className="overflow-x-auto">
+>>>>>>> 0208261eee44a97280e1d98d8ef143e66a50934e
               <table className="min-w-full">
                 <thead className="bg-gray-50">
                   <tr>
@@ -301,7 +312,11 @@ const OrderManagement = () => {
             </div>
 
             {filteredOrders.length === 0 && (
+<<<<<<< HEAD
               <div className="text-center py-12 hidden md:block">
+=======
+              <div className="text-center py-12">
+>>>>>>> 0208261eee44a97280e1d98d8ef143e66a50934e
                 <p className="text-gray-500">No orders found.</p>
               </div>
             )}

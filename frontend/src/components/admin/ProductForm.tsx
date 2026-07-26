@@ -119,9 +119,9 @@ const ProductForm = ({ product, initialImage, onClose, onSuccess }: ProductFormP
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-y-auto">
-      <div className="bg-white rounded-xl w-full max-w-2xl my-8">
-        <div className="flex justify-between items-center p-6 border-b sticky top-0 bg-white z-10">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-xl w-full max-w-2xl max-h-[calc(100vh-2rem)] flex flex-col my-auto shadow-2xl overflow-hidden">
+        <div className="flex justify-between items-center p-6 border-b bg-white rounded-t-xl shrink-0">
           <h2 className="text-xl font-semibold">
             {product ? 'Edit Product' : 'Add New Product'}
           </h2>
@@ -134,184 +134,186 @@ const ProductForm = ({ product, initialImage, onClose, onSuccess }: ProductFormP
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6">
-          {/* Image Preview - Read Only for Edit Mode */}
-          {images.length > 0 && (
-            <div className="mb-6 p-4 bg-purple-50 rounded-lg">
-              <div className="flex justify-between items-center mb-2">
-                <p className="text-sm font-medium text-purple-800 flex items-center gap-1">
-                  <FaImage /> Product Image
-                </p>
-                {product && (
-                  <span className="text-xs bg-purple-200 text-purple-800 px-2 py-1 rounded">
-                    Image cannot be edited here
-                  </span>
+        <form onSubmit={handleSubmit} className="flex flex-col flex-grow overflow-hidden">
+          <div className="p-6 overflow-y-auto flex-grow">
+            {/* Image Preview - Read Only for Edit Mode */}
+            {images.length > 0 && (
+              <div className="mb-6 p-4 bg-purple-50 rounded-lg">
+                <div className="flex justify-between items-center mb-2">
+                  <p className="text-sm font-medium text-purple-800 flex items-center gap-1">
+                    <FaImage /> Product Image
+                  </p>
+                  {product && (
+                    <span className="text-xs bg-purple-200 text-purple-800 px-2 py-1 rounded">
+                      Image cannot be edited here
+                    </span>
+                  )}
+                </div>
+                <div className="relative w-32 h-32">
+                  <img
+                    src={images[0]}
+                    alt="Product"
+                    className="w-full h-full object-cover rounded-lg border-2 border-purple-200"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = 'https://via.placeholder.com/128x128?text=Image+Error';
+                    }}
+                  />
+                  {!product && (
+                    <div className="absolute bottom-1 right-1 bg-purple-600 text-white text-xs px-2 py-1 rounded">
+                      ImgBB
+                    </div>
+                  )}
+                </div>
+                {!product && images.length > 1 && (
+                  <p className="text-xs text-gray-500 mt-2">
+                    + {images.length - 1} more image(s)
+                  </p>
                 )}
               </div>
-              <div className="relative w-32 h-32">
-                <img
-                  src={images[0]}
-                  alt="Product"
-                  className="w-full h-full object-cover rounded-lg border-2 border-purple-200"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src = 'https://via.placeholder.com/128x128?text=Image+Error';
-                  }}
-                />
-                {!product && (
-                  <div className="absolute bottom-1 right-1 bg-purple-600 text-white text-xs px-2 py-1 rounded">
-                    ImgBB
-                  </div>
-                )}
-              </div>
-              {!product && images.length > 1 && (
-                <p className="text-xs text-gray-500 mt-2">
-                  + {images.length - 1} more image(s)
+            )}
+
+            {/* Message for products without images */}
+            {product && images.length === 0 && (
+              <div className="mb-6 p-4 bg-yellow-50 rounded-lg">
+                <p className="text-sm text-yellow-800">
+                  This product has no images. Images can only be added during product creation.
                 </p>
-              )}
-            </div>
-          )}
+              </div>
+            )}
 
-          {/* Message for products without images */}
-          {product && images.length === 0 && (
-            <div className="mb-6 p-4 bg-yellow-50 rounded-lg">
-              <p className="text-sm text-yellow-800">
-                This product has no images. Images can only be added during product creation.
-              </p>
-            </div>
-          )}
+            {error && (
+              <div className="mb-4 p-3 bg-red-50 text-red-600 rounded-lg text-sm">
+                {error}
+              </div>
+            )}
 
-          {error && (
-            <div className="mb-4 p-3 bg-red-50 text-red-600 rounded-lg text-sm">
-              {error}
-            </div>
-          )}
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Name */}
-            <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Product Name *
-              </label>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-                className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-bridal-maroon focus:border-transparent"
-              />
-            </div>
-
-            {/* Description */}
-            <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Description
-              </label>
-              <textarea
-                name="description"
-                value={formData.description}
-                onChange={handleChange}
-                rows={4}
-                className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-bridal-maroon focus:border-transparent"
-              />
-            </div>
-
-            {/* Price */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Price (₹) *
-              </label>
-              <input
-                type="text"
-                name="price"
-                value={formData.price}
-                onChange={handleChange}
-                required
-                inputMode="decimal"
-                pattern="[0-9]*\.?[0-9]*"
-                className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-bridal-maroon focus:border-transparent"
-                placeholder="0.00"
-              />
-            </div>
-
-            {/* Original Price */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Original Price (₹)
-              </label>
-              <input
-                type="text"
-                name="originalPrice"
-                value={formData.originalPrice}
-                onChange={handleChange}
-                inputMode="decimal"
-                pattern="[0-9]*\.?[0-9]*"
-                className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-bridal-maroon focus:border-transparent"
-                placeholder="0.00"
-              />
-            </div>
-
-            {/* Category */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Category *
-              </label>
-              <select
-                name="category"
-                value={formData.category}
-                onChange={handleChange}
-                required
-                className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-bridal-maroon focus:border-transparent"
-              >
-                <option value="saree">Sarees</option>
-                <option value="ornament">Ornaments</option>
-                <option value="bridal-collections">Bridal Collections</option>
-              </select>
-            </div>
-
-            {/* Stock */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Stock Quantity *
-              </label>
-              <input
-                type="text"
-                name="stock"
-                value={formData.stock}
-                onChange={handleChange}
-                required
-                inputMode="numeric"
-                pattern="[0-9]*"
-                className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-bridal-maroon focus:border-transparent"
-                placeholder="0"
-              />
-            </div>
-
-            {/* Featured Checkbox */}
-            <div className="md:col-span-2">
-              <label className="flex items-center gap-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Name */}
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Product Name *
+                </label>
                 <input
-                  type="checkbox"
-                  name="featured"
-                  checked={formData.featured}
+                  type="text"
+                  name="name"
+                  value={formData.name}
                   onChange={handleChange}
-                  className="w-4 h-4 text-bridal-maroon focus:ring-bridal-maroon border-gray-300 rounded"
+                  required
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-bridal-maroon focus:border-transparent"
                 />
-                <span className="text-sm text-gray-700">Featured Product</span>
-              </label>
+              </div>
+
+              {/* Description */}
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Description
+                </label>
+                <textarea
+                  name="description"
+                  value={formData.description}
+                  onChange={handleChange}
+                  rows={4}
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-bridal-maroon focus:border-transparent"
+                />
+              </div>
+
+              {/* Price */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Price (₹) *
+                </label>
+                <input
+                  type="text"
+                  name="price"
+                  value={formData.price}
+                  onChange={handleChange}
+                  required
+                  inputMode="decimal"
+                  pattern="[0-9]*\.?[0-9]*"
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-bridal-maroon focus:border-transparent"
+                  placeholder="0.00"
+                />
+              </div>
+
+              {/* Original Price */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Original Price (₹)
+                </label>
+                <input
+                  type="text"
+                  name="originalPrice"
+                  value={formData.originalPrice}
+                  onChange={handleChange}
+                  inputMode="decimal"
+                  pattern="[0-9]*\.?[0-9]*"
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-bridal-maroon focus:border-transparent"
+                  placeholder="0.00"
+                />
+              </div>
+
+              {/* Category */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Category *
+                </label>
+                <select
+                  name="category"
+                  value={formData.category}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-bridal-maroon focus:border-transparent"
+                >
+                  <option value="saree">Sarees</option>
+                  <option value="ornament">Ornaments</option>
+                  <option value="bridal-collections">Bridal Collections</option>
+                </select>
+              </div>
+
+              {/* Stock */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Stock Quantity *
+                </label>
+                <input
+                  type="text"
+                  name="stock"
+                  value={formData.stock}
+                  onChange={handleChange}
+                  required
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-bridal-maroon focus:border-transparent"
+                  placeholder="0"
+                />
+              </div>
+
+              {/* Featured Checkbox */}
+              <div className="md:col-span-2">
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    name="featured"
+                    checked={formData.featured}
+                    onChange={handleChange}
+                    className="w-4 h-4 text-bridal-maroon focus:ring-bridal-maroon border-gray-300 rounded"
+                  />
+                  <span className="text-sm text-gray-700">Featured Product</span>
+                </label>
+              </div>
             </div>
+
+            {/* Note about image editing */}
+            {product && (
+              <div className="mt-4 p-3 bg-blue-50 rounded-lg">
+                <p className="text-xs text-blue-600">
+                  <strong>Note:</strong> To change product images, please delete this product and create a new one with the updated images.
+                </p>
+              </div>
+            )}
           </div>
 
-          {/* Note about image editing */}
-          {product && (
-            <div className="mt-4 p-3 bg-blue-50 rounded-lg">
-              <p className="text-xs text-blue-600">
-                <strong>Note:</strong> To change product images, please delete this product and create a new one with the updated images.
-              </p>
-            </div>
-          )}
-
-          <div className="flex gap-3 mt-6 pt-4 border-t">
+          <div className="flex gap-3 p-6 border-t bg-gray-50 rounded-b-xl shrink-0">
             <button
               type="submit"
               disabled={loading}

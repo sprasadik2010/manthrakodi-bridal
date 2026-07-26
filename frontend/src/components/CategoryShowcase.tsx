@@ -49,6 +49,7 @@ const CategoryShowcase = () => {
               whileHover={{ y: -10 }}
             >
               <Link to={category.link} className="group block">
+<<<<<<< HEAD
                 <div className="relative overflow-hidden rounded-2xl border border-gray-100 shadow-md group-hover:border-bridal-gold/50 group-hover:shadow-bridal transition-all duration-300">
                   <img
                     src={category.image}
@@ -62,6 +63,19 @@ const CategoryShowcase = () => {
                     <p className="text-gray-200 text-sm hover:underline flex items-center gap-1">
                       Shop Now <span className="text-xs">→</span>
                     </p>
+=======
+                <div className="relative overflow-hidden rounded-2xl">
+                  <img
+                    src={category.image}
+                    alt={category.title}
+                    // className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-700"
+                    className="w-full h-64 object-scale-down group-hover:scale-110 transition-transform duration-700 bg-white"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+                  <div className="absolute bottom-6 left-6 right-6 text-white">
+                    <h3 className="text-2xl font-bold mb-2">{category.title}</h3>
+                    <p className="text-gray-200">{category.count}</p>
+>>>>>>> 0208261eee44a97280e1d98d8ef143e66a50934e
                   </div>
                 </div>
               </Link>

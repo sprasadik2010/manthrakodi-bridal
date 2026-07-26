@@ -11,7 +11,11 @@ class Settings:
     
     # Database configuration
     POSTGRES_USER: str = os.getenv("POSTGRES_USER", "mkb-db-user")
+<<<<<<< HEAD
     POSTGRES_PASSWORD: str = os.getenv("POSTGRES_PASSWORD", "1q2w3e4r")
+=======
+    POSTGRES_PASSWORD: str = os.getenv("POSTGRES_PASSWORD", "xxxxxxxx")
+>>>>>>> 0208261eee44a97280e1d98d8ef143e66a50934e
     POSTGRES_SERVER: str = os.getenv("POSTGRES_SERVER", "localhost")
     POSTGRES_PORT: str = os.getenv("POSTGRES_PORT", "5432")
     POSTGRES_DB: str = os.getenv("POSTGRES_DB", "mkb-db")

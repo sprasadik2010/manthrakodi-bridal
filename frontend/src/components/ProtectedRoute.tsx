@@ -10,6 +10,7 @@ interface ProtectedRouteProps {
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
+<<<<<<< HEAD
   const checkAuth = () => {
     const token = localStorage.getItem('admin_token');
     setIsAuthenticated(!!token);
@@ -17,6 +18,11 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
 
   useEffect(() => {
     checkAuth();
+=======
+  useEffect(() => {
+    const token = localStorage.getItem('admin_token');
+    setIsAuthenticated(!!token);
+>>>>>>> 0208261eee44a97280e1d98d8ef143e66a50934e
   }, []);
 
   if (isAuthenticated === null) {
@@ -27,7 +33,11 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
     );
   }
 
+<<<<<<< HEAD
   return isAuthenticated ? <>{children}</> : <AdminLogin onLoginSuccess={checkAuth} />;
+=======
+  return isAuthenticated ? <>{children}</> : <AdminLogin />;
+>>>>>>> 0208261eee44a97280e1d98d8ef143e66a50934e
 };
 
 export default ProtectedRoute;
