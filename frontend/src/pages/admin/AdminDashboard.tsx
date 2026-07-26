@@ -4,13 +4,10 @@ import {
   FaTachometerAlt,
   FaBox,
   FaShoppingCart,
-  FaChartBar,
-  FaUsers,
-  FaImage,
-  FaCog,
   FaSignOutAlt,
   FaBars,
-  FaTimes
+  FaTimes,
+  FaHome
 } from 'react-icons/fa';
 import DashboardHome from './DashboardHome';
 import ProductManagement from './ProductManagement';
@@ -44,10 +41,7 @@ const AdminDashboard = () => {
     { path: '/admin', icon: <FaTachometerAlt />, label: 'Dashboard' },
     { path: '/admin/products', icon: <FaBox />, label: 'Products' },
     { path: '/admin/orders', icon: <FaShoppingCart />, label: 'Orders' },
-    { path: '/admin/analytics', icon: <FaChartBar />, label: 'Analytics' },
-    { path: '/admin/customers', icon: <FaUsers />, label: 'Customers' },
-    { path: '/admin/media', icon: <FaImage />, label: 'Media' },
-    { path: '/admin/settings', icon: <FaCog />, label: 'Settings' },
+    { path: '/', icon: <FaHome />, label: 'Back to Shop' },
   ];
 
   const handleLogout = () => {
@@ -97,8 +91,8 @@ const AdminDashboard = () => {
         {/* Navigation Items */}
         <nav className="flex-1 px-3 py-6 overflow-y-auto space-y-1">
           {menuItems.map((item) => {
-            const isActive = location.pathname === item.path || 
-              (item.path !== '/admin' && location.pathname.startsWith(item.path));
+            const isActive = item.path !== '/' && (location.pathname === item.path || 
+              (item.path !== '/admin' && location.pathname.startsWith(item.path)));
             return (
               <Link
                 key={item.path}
@@ -169,10 +163,6 @@ const AdminDashboard = () => {
             <Route index element={<DashboardHome />} />
             <Route path="products/*" element={<ProductManagement />} />
             <Route path="orders/*" element={<OrderManagement />} />
-            <Route path="analytics" element={<div className="bg-white p-8 rounded-xl shadow text-center">Analytics Page (Coming Soon)</div>} />
-            <Route path="customers" element={<div className="bg-white p-8 rounded-xl shadow text-center">Customers Page (Coming Soon)</div>} />
-            <Route path="media" element={<div className="bg-white p-8 rounded-xl shadow text-center">Media Page (Coming Soon)</div>} />
-            <Route path="settings" element={<div className="bg-white p-8 rounded-xl shadow text-center">Settings Page (Coming Soon)</div>} />
           </Routes>
         </div>
       </div>

@@ -1,7 +1,7 @@
 // src/pages/AdminLogin.tsx
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaLock, FaUser } from 'react-icons/fa';
+import { FaLock, FaUser, FaTimes, FaEye, FaEyeSlash } from 'react-icons/fa';
 import toast from 'react-hot-toast';
 
 interface AdminLoginProps {
@@ -14,6 +14,7 @@ const AdminLogin = ({ onLoginSuccess }: AdminLoginProps) => {
     password: '',
   });
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -43,7 +44,16 @@ const AdminLogin = ({ onLoginSuccess }: AdminLoginProps) => {
       <div className="absolute inset-0 bg-black/60 backdrop-blur-xs z-0" />
 
       {/* Login Card */}
-      <div className="max-w-md w-full bg-white/95 backdrop-blur-md rounded-3xl shadow-bridal-lg border border-white/20 p-8 md:p-10 z-10 animate-fade-in">
+      <div className="max-w-md w-full bg-white/95 backdrop-blur-md rounded-3xl shadow-bridal-lg border border-white/20 p-8 md:p-10 z-10 animate-fade-in relative">
+        {/* Close Button */}
+        <button
+          onClick={() => navigate('/')}
+          className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors focus:outline-none"
+          aria-label="Close and return to home"
+        >
+          <FaTimes size={18} />
+        </button>
+
         <div className="text-center mb-8">
           <span className="text-bridal-gold font-bold uppercase tracking-widest text-xs block mb-1">
             Secure Access
@@ -90,13 +100,20 @@ const AdminLogin = ({ onLoginSuccess }: AdminLoginProps) => {
                 <input
                   id="password"
                   name="password"
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   required
                   value={credentials.password}
                   onChange={(e) => setCredentials({...credentials, password: e.target.value})}
-                  className="block w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-2 focus:ring-bridal-maroon focus:border-transparent text-sm transition-all duration-200 bg-gray-50/50"
+                  className="block w-full pl-10 pr-10 py-3 border border-gray-200 rounded-xl placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-2 focus:ring-bridal-maroon focus:border-transparent text-sm transition-all duration-200 bg-gray-50/50"
                   placeholder="Enter your password"
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none"
+                >
+                  {showPassword ? <FaEyeSlash size={16} /> : <FaEye size={16} />}
+                </button>
               </div>
             </div>
           </div>
@@ -116,15 +133,6 @@ const AdminLogin = ({ onLoginSuccess }: AdminLoginProps) => {
                 'Sign In to Dashboard'
               )}
             </button>
-          </div>
-
-          <div className="bg-bridal-cream/45 border border-bridal-gold/20 p-3.5 rounded-xl text-center">
-            <p className="text-xs text-bridal-maroon font-medium">
-              Demo Credentials:
-            </p>
-            <p className="text-xs text-gray-600 mt-0.5">
-              Username: <strong className="font-mono text-gray-900">admin</strong> &nbsp;|&nbsp; Password: <strong className="font-mono text-gray-900">admin123</strong>
-            </p>
           </div>
         </form>
       </div>

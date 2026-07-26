@@ -34,11 +34,17 @@ const ProductManagement = () => {
   const products = productsData?.products || productsData || [];
   
   const filteredProducts = Array.isArray(products) 
-    ? products.filter(product =>
-        product?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        product?.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        product?.category?.toLowerCase().includes(searchTerm.toLowerCase())
-      )
+    ? products.filter(product => {
+        const search = searchTerm.toLowerCase();
+        return (
+          product?.name?.toLowerCase().includes(search) ||
+          product?.description?.toLowerCase().includes(search) ||
+          product?.category?.toLowerCase().includes(search) ||
+          product?.price?.toString().includes(search) ||
+          product?.original_price?.toString().includes(search) ||
+          product?.originalPrice?.toString().includes(search)
+        );
+      })
     : [];
 
   const handleDelete = async (id: string) => {

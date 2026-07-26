@@ -47,7 +47,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
         <img
           src={product.images[0]}
           alt={product.name}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+          className="w-full h-full object-contain bg-white group-hover:scale-105 transition-transform duration-700"
           onError={(e) => {
             (e.target as HTMLImageElement).src = 'https://via.placeholder.com/300x375?text=No+Image';
           }}
