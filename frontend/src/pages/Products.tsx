@@ -16,20 +16,21 @@ const Products = () => {
     q?: string;
   }>({});
 
-  // Get category from URL
+  // Get category and search query from URL
   const urlCategory = searchParams.get('category') || undefined;
+  const urlQuery = searchParams.get('q') || undefined;
 
   // Fetch all products to allow full client-side filtering and sorting
   const { data: rawProducts, isLoading, error } = useProducts();
 
-  // Initialize filters from URL category
+  // Initialize filters from URL parameters
   useEffect(() => {
-    if (urlCategory) {
-      setFilters(prev => ({ ...prev, category: [urlCategory] }));
-    } else {
-      setFilters(prev => ({ ...prev, category: [] }));
-    }
-  }, [urlCategory]);
+    setFilters(prev => ({
+      ...prev,
+      category: urlCategory ? [urlCategory] : [],
+      q: urlQuery || undefined
+    }));
+  }, [urlCategory, urlQuery]);
 
   const handleFilterChange = (newFilters: any) => {
     setFilters(prev => ({ ...prev, ...newFilters }));
@@ -103,7 +104,7 @@ const Products = () => {
 
   return (
     <div className="min-h-screen">
-      <SearchFilter onFilterChange={handleFilterChange} initialCategory={urlCategory} />
+      <SearchFilter onFilterChange={handleFilterChange} initialCategory={urlCategory} initialQuery={urlQuery} />
 
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">

@@ -34,7 +34,7 @@ router = APIRouter()
 #     )
 #     return products
 
-@router.get("/search/", response_model=List[schemas.Product])
+@router.get("/search", response_model=List[schemas.Product])
 def search_products(
     q: str = Query(..., min_length=1, description="Search by product name, description, or sub-category"),
     skip: int = 0,

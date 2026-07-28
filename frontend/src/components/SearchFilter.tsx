@@ -13,13 +13,20 @@ interface FilterOptions {
 const SearchFilter: React.FC<{
   onFilterChange: (filters: Partial<FilterOptions> & { q?: string }) => void;
   initialCategory?: string;
-}> = ({ onFilterChange, initialCategory }) => {
-  const [searchQuery, setSearchQuery] = useState('');
+  initialQuery?: string;
+}> = ({ onFilterChange, initialCategory, initialQuery }) => {
+  const [searchQuery, setSearchQuery] = useState(initialQuery || '');
   const debounceRef = useRef<number | null>(null);
   const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState<Partial<FilterOptions>>({
     sortBy: 'newest'
   });
+
+  useEffect(() => {
+    if (initialQuery !== undefined) {
+      setSearchQuery(initialQuery);
+    }
+  }, [initialQuery]);
 
   useEffect(() => {
     if (initialCategory) {

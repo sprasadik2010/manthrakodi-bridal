@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { Product } from '../types';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 interface SearchModalProps {
   isOpen: boolean;
@@ -15,7 +15,16 @@ interface SearchModalProps {
 const SearchModal = ({ isOpen, onClose }: SearchModalProps) => {
   const [query, setQuery] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
-const API_URL = import.meta.env.VITE_API_URL || '/api';
+  const navigate = useNavigate();
+  const API_URL = import.meta.env.VITE_API_URL || '/api';
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (query.trim()) {
+      onClose();
+      navigate(`/products?q=${encodeURIComponent(query.trim())}`);
+    }
+  };
   const { data: products, isLoading } = useQuery({
     queryKey: ['search', query],
     queryFn: async () => {
@@ -59,7 +68,7 @@ const API_URL = import.meta.env.VITE_API_URL || '/api';
           >
             {/* Search Input */}
             <div className="p-6 border-b">
-              <div className="relative">
+              <form onSubmit={handleSubmit} className="relative">
                 <FaSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
                 <input
                   ref={inputRef}
@@ -70,12 +79,13 @@ const API_URL = import.meta.env.VITE_API_URL || '/api';
                   className="w-full pl-12 pr-10 py-4 text-lg border-0 focus:ring-0 focus:outline-none"
                 />
                 <button
+                  type="button"
                   onClick={onClose}
                   className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
                 >
                   <FaTimes size={20} />
                 </button>
-              </div>
+              </form>
             </div>
 
             {/* Results */}
@@ -119,6 +129,17 @@ const API_URL = import.meta.env.VITE_API_URL || '/api';
                       <FaArrowRight className="text-gray-400 group-hover:text-bridal-maroon ml-4" />
                     </Link>
                   ))}
+                  <div className="p-4 bg-gray-50 text-center border-t sticky bottom-0">
+                    <button
+                      onClick={() => {
+                        onClose();
+                        navigate(`/products?q=${encodeURIComponent(query.trim())}`);
+                      }}
+                      className="text-bridal-maroon hover:text-bridal-maroon/80 font-medium inline-flex items-center gap-2 cursor-pointer"
+                    >
+                      See all results for "{query}" <FaArrowRight size={12} />
+                    </button>
+                  </div>
                 </div>
               ) : query.length > 1 ? (
                 <div className="p-8 text-center text-gray-500">
