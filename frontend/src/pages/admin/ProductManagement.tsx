@@ -1,13 +1,14 @@
 // src/pages/admin/ProductManagement.tsx
 import { useState/*, useEffect*/ } from 'react';
 import { FaEdit, FaTrash, FaPlus, FaSearch, /*FaUpload, FaExternalLinkAlt,*/ FaEllipsisV, FaImage } from 'react-icons/fa';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { Product } from '../../types';
 import ProductForm from '../../components/admin/ProductForm';
 import SingleImageUpload from '../../components/admin/SingleImageUpload';
 
 const ProductManagement = () => {
+  const queryClient = useQueryClient();
   const [searchTerm, setSearchTerm] = useState('');
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [showForm, setShowForm] = useState(false);
@@ -18,7 +19,7 @@ const ProductManagement = () => {
 
   const API_URL = import.meta.env.VITE_API_URL || '/api';
 
-  const { data: productsData, isLoading, refetch } = useQuery({
+  const { data: productsData, isLoading } = useQuery({
     queryKey: ['admin-products'],
     queryFn: async () => {
       try {
@@ -32,26 +33,26 @@ const ProductManagement = () => {
   });
 
   const products = productsData?.products || productsData || [];
-  
-  const filteredProducts = Array.isArray(products) 
+
+  const filteredProducts = Array.isArray(products)
     ? products.filter(product => {
-        const search = searchTerm.toLowerCase();
-        return (
-          product?.name?.toLowerCase().includes(search) ||
-          product?.description?.toLowerCase().includes(search) ||
-          product?.category?.toLowerCase().includes(search) ||
-          product?.price?.toString().includes(search) ||
-          product?.original_price?.toString().includes(search) ||
-          product?.originalPrice?.toString().includes(search)
-        );
-      })
+      const search = searchTerm.toLowerCase();
+      return (
+        product?.name?.toLowerCase().includes(search) ||
+        product?.description?.toLowerCase().includes(search) ||
+        product?.category?.toLowerCase().includes(search) ||
+        product?.price?.toString().includes(search) ||
+        product?.original_price?.toString().includes(search) ||
+        product?.originalPrice?.toString().includes(search)
+      );
+    })
     : [];
 
   const handleDelete = async (id: string) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
       try {
         await axios.delete(`${API_URL}/products/${id}`);
-        refetch();
+        queryClient.invalidateQueries();
       } catch (error) {
         console.error('Error deleting product:', error);
       }
@@ -147,7 +148,7 @@ const ProductManagement = () => {
           <h2 className="text-3xl font-bold">Product Management</h2>
           <p className="text-gray-600">Manage your product inventory and listings</p>
         </div>
-        
+
         <div className="flex flex-col md:flex-row gap-4 w-full md:w-auto">
           <div className="relative w-full md:w-64">
             <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
@@ -159,8 +160,8 @@ const ProductManagement = () => {
               className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-bridal-maroon focus:border-transparent"
             />
           </div>
-          
-          <div className="flex flex-wrap gap-2">
+
+          {/* <div className="flex flex-wrap gap-2">
             <button
               onClick={() => {
                 setUploadedImageUrl(null);
@@ -176,7 +177,7 @@ const ProductManagement = () => {
             >
               <FaPlus /> Add Product
             </button>
-          </div>
+          </div> */}
         </div>
       </div>
 
@@ -184,13 +185,13 @@ const ProductManagement = () => {
       <div className="mb-6 bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-4 md:p-6 border border-purple-100">
         <h3 className="font-semibold text-lg mb-3 flex items-center gap-2">
           <FaImage className="text-purple-600" />
-          <span className="text-sm md:text-lg">Simple Image Upload</span>
+          <span className="text-sm md:text-lg">Add Product</span>
         </h3>
         <div className="bg-white p-4 md:p-6 rounded-lg shadow-sm">
           <div className="flex items-start gap-4">
             <div className="flex-1">
               <div className="font-semibold text-purple-600 text-base md:text-lg mb-2">
-                Upload to ImgBB
+                Upload to ImgBB & Add Product
               </div>
               <p className="text-sm md:text-base text-gray-600 mb-3">
                 Select one image from your computer. It will be automatically uploaded to ImgBB and the link will be saved to your product.
@@ -249,7 +250,7 @@ const ProductManagement = () => {
                             </div>
                           )}
                         </div>
-                        
+
                         <div className="flex-grow min-w-0">
                           <div className="flex justify-between items-start gap-2">
                             <h3 className="font-medium text-gray-900 truncate min-w-0 pr-2" title={product.name}>
@@ -276,11 +277,11 @@ const ProductManagement = () => {
                               </button>
                             </div>
                           </div>
-                          
+
                           <p className="text-gray-500 text-xs mt-1 line-clamp-2">
                             {product.description}
                           </p>
-                          
+
                           <div className="flex flex-wrap items-center gap-2 mt-2">
                             <span className="px-2 py-1 text-xs rounded-full bg-purple-100 text-purple-800 capitalize">
                               {product.category}
@@ -288,28 +289,26 @@ const ProductManagement = () => {
                             <div className="text-sm font-bold text-bridal-maroon">
                               ₹{product.price.toLocaleString()}
                             </div>
-                            {product.originalPrice  && (product.original_price > product.price) && (
+                            {product.originalPrice && (product.original_price > product.price) && (
                               <div className="text-xs text-gray-500 line-through">
                                 ₹{product.originalPrice.toLocaleString()}
                               </div>
                             )}
                           </div>
-                          
+
                           <div className="flex flex-wrap items-center gap-2 mt-2">
-                            <div className={`px-2 py-1 rounded-full text-xs font-medium ${
-                              product.stock > 10 
-                                ? 'bg-green-100 text-green-800' 
-                                : product.stock > 0 
-                                ? 'bg-yellow-100 text-yellow-800' 
+                            <div className={`px-2 py-1 rounded-full text-xs font-medium ${product.stock > 10
+                              ? 'bg-green-100 text-green-800'
+                              : product.stock > 0
+                                ? 'bg-yellow-100 text-yellow-800'
                                 : 'bg-red-100 text-red-800'
-                            }`}>
+                              }`}>
                               {product.stock} units
                             </div>
-                            <span className={`px-2 py-1 rounded-full text-xs ${
-                              product.featured 
-                                ? 'bg-blue-100 text-blue-800' 
-                                : 'bg-gray-100 text-gray-800'
-                            }`}>
+                            <span className={`px-2 py-1 rounded-full text-xs ${product.featured
+                              ? 'bg-blue-100 text-blue-800'
+                              : 'bg-gray-100 text-gray-800'
+                              }`}>
                               {product.featured ? 'Featured' : 'Regular'}
                             </span>
                           </div>
@@ -399,37 +398,34 @@ const ProductManagement = () => {
                         <div className="text-lg font-bold text-bridal-maroon">
                           ₹{product.price.toLocaleString()}
                         </div>
-                        {product.originalPrice  && (product.original_price > product.price) && (
+                        {product.originalPrice && (product.original_price > product.price) && (
                           <div className="text-sm text-gray-500 line-through">
                             ₹{product.originalPrice.toLocaleString()}
                           </div>
                         )}
                       </td>
                       <td className="py-4 px-6">
-                        <div className={`px-3 py-1 rounded-full text-sm font-medium ${
-                          product.stock > 10 
-                            ? 'bg-green-100 text-green-800' 
-                            : product.stock > 0 
-                            ? 'bg-yellow-100 text-yellow-800' 
+                        <div className={`px-3 py-1 rounded-full text-sm font-medium ${product.stock > 10
+                          ? 'bg-green-100 text-green-800'
+                          : product.stock > 0
+                            ? 'bg-yellow-100 text-yellow-800'
                             : 'bg-red-100 text-red-800'
-                        }`}>
+                          }`}>
                           {product.stock} units
                         </div>
                       </td>
                       <td className="py-4 px-6">
                         <div className="flex flex-col gap-1">
-                          <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                            product.featured 
-                              ? 'bg-blue-100 text-blue-800' 
-                              : 'bg-gray-100 text-gray-800'
-                          }`}>
+                          <span className={`px-3 py-1 rounded-full text-xs font-medium ${product.featured
+                            ? 'bg-blue-100 text-blue-800'
+                            : 'bg-gray-100 text-gray-800'
+                            }`}>
                             {product.featured ? 'Featured' : 'Regular'}
                           </span>
-                          <span className={`px-2 py-0.5 rounded-full text-xs ${
-                            product.stock > 0 
-                              ? 'bg-green-50 text-green-700' 
-                              : 'bg-red-50 text-red-700'
-                          }`}>
+                          <span className={`px-2 py-0.5 rounded-full text-xs ${product.stock > 0
+                            ? 'bg-green-50 text-green-700'
+                            : 'bg-red-50 text-red-700'
+                            }`}>
                             {product.stock > 0 ? 'In Stock' : 'Out of Stock'}
                           </span>
                         </div>
@@ -516,7 +512,7 @@ const ProductManagement = () => {
             setUploadedImageUrl(null);
           }}
           onSuccess={() => {
-            refetch();
+            queryClient.invalidateQueries();
             setShowForm(false);
             setEditingProduct(null);
             setUploadedImageUrl(null);

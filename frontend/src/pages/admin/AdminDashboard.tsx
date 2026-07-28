@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Routes, Route, Link, useLocation } from 'react-router-dom';
+import { Routes, Route, Link, useLocation, Navigate } from 'react-router-dom';
 import {
-  FaTachometerAlt,
   FaBox,
   FaShoppingCart,
   FaSignOutAlt,
@@ -9,7 +8,6 @@ import {
   FaTimes,
   FaHome
 } from 'react-icons/fa';
-import DashboardHome from './DashboardHome';
 import ProductManagement from './ProductManagement';
 import OrderManagement from './OrderManagement';
 
@@ -38,7 +36,6 @@ const AdminDashboard = () => {
   }, []);
 
   const menuItems = [
-    { path: '/admin', icon: <FaTachometerAlt />, label: 'Dashboard' },
     { path: '/admin/products', icon: <FaBox />, label: 'Products' },
     { path: '/admin/orders', icon: <FaShoppingCart />, label: 'Orders' },
     { path: '/', icon: <FaHome />, label: 'Back to Shop' },
@@ -160,7 +157,7 @@ const AdminDashboard = () => {
         {/* Main Content Container */}
         <div className="flex-grow p-4 md:p-8 bg-gray-50 max-w-full">
           <Routes>
-            <Route index element={<DashboardHome />} />
+            <Route index element={<Navigate to="/admin/products" replace />} />
             <Route path="products/*" element={<ProductManagement />} />
             <Route path="orders/*" element={<OrderManagement />} />
           </Routes>

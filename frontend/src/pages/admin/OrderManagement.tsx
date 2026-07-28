@@ -1,7 +1,7 @@
 // src/pages/admin/OrderManagement.tsx
 import { useState } from 'react';
 import { FaEye, FaPrint, FaCheck, FaTruck, FaBoxOpen } from 'react-icons/fa';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 
 const API_URL = import.meta.env.VITE_API_URL || '/api';
@@ -17,6 +17,7 @@ interface Order {
 }
 
 const OrderManagement = () => {
+  const queryClient = useQueryClient();
   const [filter, setFilter] = useState<'all' | 'pending' | 'confirmed' | 'processing' | 'shipped' | 'delivered' | 'cancelled'>('all');
   
   const { data: orders, isLoading } = useQuery<Order[]>({
@@ -43,8 +44,7 @@ const OrderManagement = () => {
   const updateOrderStatus = async (orderId: string, status: string) => {
     try {
       await axios.put(`${API_URL}/orders/${orderId}/status`, { status });
-      // Refetch orders - you might want to invalidate queries here
-      // queryClient.invalidateQueries({ queryKey: ['admin-orders'] });
+      queryClient.invalidateQueries();
     } catch (error) {
       console.error('Error updating order status:', error);
     }
