@@ -38,7 +38,7 @@ router = APIRouter()
 def search_products(
     q: str = Query(..., min_length=1, description="Search by product name, description, or sub-category"),
     skip: int = 0,
-    limit: int = 100,
+    limit: int = 1000,
     category: Optional[str] = None,
     featured: Optional[bool] = None,
     db: Session = Depends(get_db)
@@ -65,7 +65,7 @@ def search_products(
 @router.get("/", response_model=List[schemas.Product])
 def read_products(
     skip: int = 0,
-    limit: int = 100,
+    limit: int = 1000,
     category: Optional[str] = Query(None, description="Filter by category (saree, ornament, bridal-collections)"),
     featured: Optional[bool] = None,
     search: Optional[str] = None,

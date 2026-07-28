@@ -18,7 +18,12 @@ export const useProducts = (params?: {
   return useQuery({
     queryKey: ['products', params],
     queryFn: async () => {
-      const response = await axios.get(`${API_URL}/products`, { params });
+      const response = await axios.get(`${API_URL}/products`, {
+        params: {
+          limit: 1000,
+          ...params
+        }
+      });
       return response.data as Product[];
     },
   });

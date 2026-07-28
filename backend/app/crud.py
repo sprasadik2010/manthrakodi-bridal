@@ -14,7 +14,7 @@ def get_product(db: Session, product_id: str) -> Optional[models.Product]:
 def get_products(
     db: Session, 
     skip: int = 0, 
-    limit: int = 100,
+    limit: int = 1000,
     category: Optional[str] = None,
     featured: Optional[bool] = None,
     search: Optional[str] = None
