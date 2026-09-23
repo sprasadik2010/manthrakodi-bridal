@@ -6,6 +6,7 @@ import axios from 'axios';
 import { Product } from '../../types';
 import ProductForm from '../../components/admin/ProductForm';
 import SingleImageUpload from '../../components/admin/SingleImageUpload';
+import { getOptimizedImageUrl } from '../../utils/imageOptimizer';
 
 const ProductManagement = () => {
   const queryClient = useQueryClient();
@@ -275,11 +276,18 @@ const ProductManagement = () => {
                       <div className="relative flex-shrink-0">
                         {product.images && product.images.length > 0 ? (
                           <img
-                            src={product.images[0]}
+                            src={getOptimizedImageUrl(product.images[0], 96)}
                             alt={product.name}
+                            loading="lazy"
+                            decoding="async"
                             className="h-16 w-16 rounded-lg object-cover"
                             onError={(e) => {
-                              (e.target as HTMLImageElement).src = 'https://via.placeholder.com/64x64?text=No+Image';
+                              const target = e.target as HTMLImageElement;
+                              if (product.images?.[0] && target.src !== product.images[0]) {
+                                target.src = product.images[0];
+                              } else {
+                                target.src = 'https://via.placeholder.com/64x64?text=No+Image';
+                              }
                             }}
                           />
                         ) : (
@@ -395,11 +403,18 @@ const ProductManagement = () => {
                           <div className="relative h-12 w-12 rounded-lg overflow-hidden mr-4">
                             {product.images && product.images.length > 0 ? (
                               <img
-                                src={product.images[0]}
+                                src={getOptimizedImageUrl(product.images[0], 96)}
                                 alt={product.name}
+                                loading="lazy"
+                                decoding="async"
                                 className="h-12 w-12 object-cover"
                                 onError={(e) => {
-                                  (e.target as HTMLImageElement).src = 'https://via.placeholder.com/48x48?text=No+Image';
+                                  const target = e.target as HTMLImageElement;
+                                  if (product.images?.[0] && target.src !== product.images[0]) {
+                                    target.src = product.images[0];
+                                  } else {
+                                    target.src = 'https://via.placeholder.com/48x48?text=No+Image';
+                                  }
                                 }}
                               />
                             ) : (

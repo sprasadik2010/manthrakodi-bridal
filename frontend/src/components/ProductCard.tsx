@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 import { Product } from '../types';
 import useCartStore from '../store/cartStore';
 import useWishlistStore from '../store/wishlistStore';
+import { getOptimizedImageUrl } from '../utils/imageOptimizer';
 
 interface ProductCardProps {
   product: Product;
@@ -45,11 +46,19 @@ const ProductCard = ({ product }: ProductCardProps) => {
       {/* Clickable Image Container - Links to product page */}
       <Link to={`/product/${product.id}`} className="block relative overflow-hidden aspect-[4/5] bg-gray-50">
         <img
-          src={product.images[0]}
+          src={getOptimizedImageUrl(product.images?.[0], 400)}
           alt={product.name}
+          loading="lazy"
+          decoding="async"
           className="w-full h-full object-contain bg-white group-hover:scale-105 transition-transform duration-700"
           onError={(e) => {
-            (e.target as HTMLImageElement).src = 'https://via.placeholder.com/300x375?text=No+Image';
+            const target = e.target as HTMLImageElement;
+            if (product.images?.[0] && target.src !== product.images[0]) {
+              // Fallback to original image if CDN proxy has an issue
+              target.src = product.images[0];
+            } else {
+              target.src = 'https://via.placeholder.com/300x375?text=No+Image';
+            }
           }}
         />
         

@@ -53,10 +53,10 @@ const SingleImageUpload = ({ onImageUploaded, onClose }: SingleImageUploadProps)
         img.src = event.target?.result as string;
         
         img.onload = () => {
-          // Calculate new dimensions (maintain aspect ratio, max 1200px width)
+          // Calculate new dimensions (maintain aspect ratio, max 1080px width)
           let width = img.width;
           let height = img.height;
-          const maxWidth = 1200;
+          const maxWidth = 1080;
           
           if (width > maxWidth) {
             height = Math.round((height * maxWidth) / width);
@@ -79,7 +79,7 @@ const SingleImageUpload = ({ onImageUploaded, onClose }: SingleImageUploadProps)
           ctx.fillRect(0, 0, width, height);
           ctx.drawImage(img, 0, 0, width, height);
           
-          // Convert to WebP with quality setting
+          // Convert to WebP with optimized quality setting (0.80 = 80%)
           canvas.toBlob(
             (blob) => {
               if (blob) {
@@ -95,7 +95,7 @@ const SingleImageUpload = ({ onImageUploaded, onClose }: SingleImageUploadProps)
               }
             },
             'image/webp',
-            0.85 // Quality setting (0.85 = 85%)
+            0.80 // Quality setting (0.80 = 80% for ideal balance of size and clarity)
           );
         };
         
