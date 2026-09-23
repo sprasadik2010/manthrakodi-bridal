@@ -64,10 +64,10 @@ const Navbar = () => {
 
               {/* Brand Text */}
               <div className="flex flex-col leading-tight">
-                <span className="text-2xl xs:text-3xl font-playfair font-bold text-bridal-maroon truncate">
+                <span className="text-2xl xs:text-3xl font-playfair font-bold text-shine-gold truncate">
                   Manthrakodi
                 </span>
-                <span className="text-xl sm:text-xl text-violet-900">
+                <span className="text-xl sm:text-xl font-bold text-shine-gold">
                   Bridal
                 </span>
               </div>

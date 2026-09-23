@@ -119,23 +119,23 @@ const ProductForm = ({ product, initialImage, onClose, onSuccess }: ProductFormP
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl w-full max-w-2xl max-h-[calc(100vh-2rem)] flex flex-col my-auto shadow-2xl overflow-hidden">
-        <div className="flex justify-between items-center p-6 border-b bg-white rounded-t-xl shrink-0">
-          <h2 className="text-xl font-semibold">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center z-50 p-3 sm:p-4 pb-16 sm:pb-4 pb-[max(4rem,calc(env(safe-area-inset-bottom,0px)+1.5rem))]">
+      <div className="bg-white rounded-2xl w-full max-w-2xl max-h-[min(88dvh,calc(100dvh-5rem))] sm:max-h-[calc(100dvh-3rem)] flex flex-col my-auto shadow-2xl overflow-hidden border border-gray-100">
+        <div className="flex justify-between items-center p-4 sm:p-5 border-b bg-white rounded-t-2xl shrink-0">
+          <h2 className="text-xl font-semibold text-gray-900">
             {product ? 'Edit Product' : 'Add New Product'}
           </h2>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-full"
+            className="p-2 hover:bg-gray-100 rounded-full text-gray-500 hover:text-gray-700 transition-colors touch-manipulation"
             disabled={loading}
           >
-            <FaTimes />
+            <FaTimes size={18} />
           </button>
         </div>
 
         <form onSubmit={handleSubmit} className="flex flex-col flex-grow overflow-hidden">
-          <div className="p-6 overflow-y-auto flex-grow">
+          <div className="p-4 sm:p-6 overflow-y-auto flex-grow overscroll-contain">
             {/* Image Preview - Read Only for Edit Mode */}
             {images.length > 0 && (
               <div className="mb-6 p-4 bg-purple-50 rounded-lg">
@@ -313,16 +313,18 @@ const ProductForm = ({ product, initialImage, onClose, onSuccess }: ProductFormP
             )}
           </div>
 
-          <div className="flex gap-3 p-6 border-t bg-gray-50 rounded-b-xl shrink-0">
+          <div className="flex gap-3 p-4 sm:p-5 border-t bg-gray-50/90 backdrop-blur-xs rounded-b-2xl shrink-0 pb-[max(1rem,env(safe-area-inset-bottom,0px))]">
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center justify-center gap-2 disabled:opacity-50"
+              className="flex-1 bg-green-600 hover:bg-green-700 active:bg-green-800 text-white px-4 py-3 sm:py-2.5 rounded-xl font-semibold flex items-center justify-center gap-2 shadow-sm transition-all disabled:opacity-50 touch-manipulation cursor-pointer text-sm sm:text-base"
             >
-              {loading ? 'Saving...' : (
+              {loading ? (
+                <span>Saving...</span>
+              ) : (
                 <>
-                  <FaSave />
-                  {product ? 'Update Product' : 'Create Product'}
+                  <FaSave className="text-base" />
+                  <span>{product ? 'Update Product' : 'Create Product'}</span>
                 </>
               )}
             </button>
@@ -330,7 +332,7 @@ const ProductForm = ({ product, initialImage, onClose, onSuccess }: ProductFormP
               type="button"
               onClick={onClose}
               disabled={loading}
-              className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50"
+              className="px-5 py-3 sm:py-2.5 border border-gray-300 rounded-xl font-medium hover:bg-gray-100 text-gray-700 active:bg-gray-200 transition-all disabled:opacity-50 touch-manipulation cursor-pointer text-sm sm:text-base"
             >
               Cancel
             </button>

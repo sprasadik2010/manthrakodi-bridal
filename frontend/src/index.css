@@ -162,3 +162,29 @@
 :focus:not(:focus-visible) {
   outline: none;
 }
+
+/* Shimmering and Text Shine animations */
+@keyframes gold-shine-sweep {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.text-shine-gold {
+  background: linear-gradient(
+    120deg,
+    #B8901C 20%,
+    #FFDF00 40%,
+    #FFFDF0 50%,
+    #FFDF00 60%,
+    #B8901C 80%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gold-shine-sweep 4s linear infinite;
+  display: inline-block;
+}

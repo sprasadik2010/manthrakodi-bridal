@@ -14,7 +14,9 @@ const Products = () => {
     material?: string[];
     sortBy?: string;
     q?: string;
-  }>({});
+  }>({
+    sortBy: 'newest'
+  });
 
   // Get category and search query from URL
   const urlCategory = searchParams.get('category') || undefined;
@@ -84,10 +86,16 @@ const Products = () => {
     } else if (sortBy === 'price-high') {
       result.sort((a, b) => b.price - a.price);
     } else if (sortBy === 'name') {
-      result.sort((a, b) => a.name.localeCompare(b.name));
+      result.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
     } else if (sortBy === 'newest') {
-      // Sort newest first: fallback since created_at might be missing from JSON, we use ID comparison (or created_at if exists)
-      result.sort((a, b) => b.id.localeCompare(a.id));
+      result.sort((a, b) => {
+        const timeA = a.created_at ? new Date(a.created_at).getTime() : 0;
+        const timeB = b.created_at ? new Date(b.created_at).getTime() : 0;
+        const validA = !isNaN(timeA) ? timeA : 0;
+        const validB = !isNaN(timeB) ? timeB : 0;
+        if (validA !== validB) return validB - validA;
+        return (b.id || '').localeCompare(a.id || '');
+      });
     }
 
     return result;

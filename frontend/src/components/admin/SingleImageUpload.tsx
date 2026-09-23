@@ -198,23 +198,23 @@ const SingleImageUpload = ({ onImageUploaded, onClose }: SingleImageUploadProps)
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl w-full max-w-lg max-h-[calc(100vh-2rem)] flex flex-col my-auto shadow-2xl overflow-hidden">
-        <div className="flex justify-between items-center p-6 border-b shrink-0 bg-white rounded-t-xl">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center z-50 p-3 sm:p-4 pb-16 sm:pb-4 pb-[max(4rem,calc(env(safe-area-inset-bottom,0px)+1.5rem))]">
+      <div className="bg-white rounded-2xl w-full max-w-lg max-h-[min(88dvh,calc(100dvh-5rem))] sm:max-h-[calc(100dvh-3rem)] flex flex-col my-auto shadow-2xl border border-gray-100 overflow-hidden">
+        <div className="flex justify-between items-center p-4 sm:p-5 border-b shrink-0 bg-white rounded-t-2xl">
           <div className="flex items-center gap-2">
             <FaImage className="text-purple-600 text-xl" />
-            <h2 className="text-xl font-semibold">Upload to ImgBB</h2>
+            <h2 className="text-xl font-semibold text-gray-900">Upload to ImgBB</h2>
           </div>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-full"
+            className="p-2 hover:bg-gray-100 rounded-full text-gray-500 hover:text-gray-700 transition-colors touch-manipulation"
             disabled={uploading || converting}
           >
-            <FaTimes />
+            <FaTimes size={18} />
           </button>
         </div>
 
-        <div className="p-6 overflow-y-auto flex-grow">
+        <div className="p-4 sm:p-6 overflow-y-auto flex-grow overscroll-contain pb-[max(1rem,env(safe-area-inset-bottom,0px))]">
           {uploadSuccess ? (
             <div className="text-center py-8">
               <div className="text-green-500 text-5xl mb-4">
@@ -315,33 +315,33 @@ const SingleImageUpload = ({ onImageUploaded, onClose }: SingleImageUploadProps)
               </div>
 
               {/* Actions */}
-              <div className="flex gap-3">
+              <div className="flex gap-3 pt-2">
                 <button
                   onClick={uploadToImgBB}
                   disabled={!selectedFile || uploading || converting}
-                  className="flex-1 bg-purple-600 hover:bg-purple-700 text-white px-4 py-3 rounded-lg flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 bg-purple-600 hover:bg-purple-700 active:bg-purple-800 text-white px-4 py-3 sm:py-2.5 rounded-xl font-semibold flex items-center justify-center gap-2 shadow-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation cursor-pointer text-sm sm:text-base"
                 >
                   {converting ? (
                     <>
                       <FaSpinner className="animate-spin" />
-                      Converting...
+                      <span>Converting...</span>
                     </>
                   ) : uploading ? (
                     <>
                       <FaSpinner className="animate-spin" />
-                      Uploading...
+                      <span>Uploading...</span>
                     </>
                   ) : (
                     <>
                       <FaUpload />
-                      Convert & Upload to ImgBB
+                      <span>Convert & Upload</span>
                     </>
                   )}
                 </button>
                 <button
                   onClick={onClose}
                   disabled={uploading || converting}
-                  className="px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50"
+                  className="px-5 py-3 sm:py-2.5 border border-gray-300 rounded-xl font-medium hover:bg-gray-100 text-gray-700 active:bg-gray-200 transition-all disabled:opacity-50 touch-manipulation cursor-pointer text-sm sm:text-base"
                 >
                   Cancel
                 </button>

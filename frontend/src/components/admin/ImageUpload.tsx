@@ -65,16 +65,16 @@ const ImageUpload = ({ onClose, onSuccess }: ImageUploadProps) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-        <div className="sticky top-0 bg-white border-b p-6">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center z-50 p-3 sm:p-4 pb-16 sm:pb-4 pb-[max(4rem,calc(env(safe-area-inset-bottom,0px)+1.5rem))]">
+      <div className="bg-white rounded-2xl w-full max-w-2xl max-h-[min(88dvh,calc(100dvh-5rem))] sm:max-h-[calc(100dvh-3rem)] overflow-y-auto overscroll-contain shadow-2xl border border-gray-100">
+        <div className="sticky top-0 bg-white/95 backdrop-blur-xs border-b p-4 sm:p-6 z-10">
           <div className="flex justify-between items-center">
-            <h3 className="text-2xl font-bold">Upload Images</h3>
+            <h3 className="text-xl sm:text-2xl font-bold">Upload Images</h3>
             <button
               onClick={onClose}
-              className="text-gray-500 hover:text-gray-700"
+              className="p-2 text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-100 transition-colors touch-manipulation"
             >
-              <FaTimes size={24} />
+              <FaTimes size={20} />
             </button>
           </div>
         </div>

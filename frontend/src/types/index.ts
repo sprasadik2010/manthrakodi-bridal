@@ -17,6 +17,8 @@ export interface Product {
     weight?: string;
     occasion?: string[];
   };
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface CartItem {

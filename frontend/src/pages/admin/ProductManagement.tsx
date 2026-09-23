@@ -19,33 +19,39 @@ const ProductManagement = () => {
 
   const API_URL = import.meta.env.VITE_API_URL || '/api';
 
-  const { data: productsData, isLoading } = useQuery({
+  const { data: productsData, isLoading, isError, refetch } = useQuery({
     queryKey: ['admin-products'],
     queryFn: async () => {
-      try {
-        const response = await axios.get(`${API_URL}/products/?skip=0&limit=1000`);
-        return response.data;
-      } catch (error) {
-        console.error('Error fetching products:', error);
-        return { products: [] };
-      }
+      const response = await axios.get(`${API_URL}/products/?skip=0&limit=1000`);
+      return response.data;
     },
+    retry: 2,
+    staleTime: 30000,
   });
 
   const products = productsData?.products || productsData || [];
 
   const filteredProducts = Array.isArray(products)
-    ? products.filter(product => {
-      const search = searchTerm.toLowerCase();
-      return (
-        product?.name?.toLowerCase().includes(search) ||
-        product?.description?.toLowerCase().includes(search) ||
-        product?.category?.toLowerCase().includes(search) ||
-        product?.price?.toString().includes(search) ||
-        product?.original_price?.toString().includes(search) ||
-        product?.originalPrice?.toString().includes(search)
-      );
-    })
+    ? [...products]
+        .filter(product => {
+          const search = searchTerm.toLowerCase();
+          return (
+            product?.name?.toLowerCase().includes(search) ||
+            product?.description?.toLowerCase().includes(search) ||
+            product?.category?.toLowerCase().includes(search) ||
+            product?.price?.toString().includes(search) ||
+            product?.original_price?.toString().includes(search) ||
+            product?.originalPrice?.toString().includes(search)
+          );
+        })
+        .sort((a, b) => {
+          const timeA = a.created_at ? new Date(a.created_at).getTime() : 0;
+          const timeB = b.created_at ? new Date(b.created_at).getTime() : 0;
+          const validA = !isNaN(timeA) ? timeA : 0;
+          const validB = !isNaN(timeB) ? timeB : 0;
+          if (validA !== validB) return validB - validA;
+          return (b.id || '').localeCompare(a.id || '');
+        })
     : [];
 
   const handleDelete = async (id: string) => {
@@ -216,40 +222,77 @@ const ProductManagement = () => {
       {/* Products Table/List */}
       <div className="bg-white rounded-xl shadow overflow-hidden">
         {isLoading ? (
-          <div className="p-8 text-center">
+          <div className="p-12 text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-bridal-maroon mx-auto mb-4"></div>
-            <p>Loading products...</p>
+            <p className="text-gray-700 font-medium">Loading products...</p>
+            <p className="text-gray-400 text-xs mt-1">Please wait while fetching your inventory</p>
+          </div>
+        ) : isError ? (
+          <div className="p-8 text-center bg-red-50/50">
+            <div className="text-red-500 text-3xl mb-2">⚠️</div>
+            <h3 className="text-lg font-semibold text-red-800 mb-1">Slow or Interrupted Network</h3>
+            <p className="text-gray-600 text-sm mb-4">Could not load products. Please check your connection and try again.</p>
+            <button
+              onClick={() => refetch()}
+              className="bg-bridal-maroon text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-bridal-maroon/90 shadow-sm transition-all"
+            >
+              Retry
+            </button>
+          </div>
+        ) : filteredProducts.length === 0 ? (
+          <div className="text-center py-16 px-4">
+            {searchTerm ? (
+              <>
+                <p className="text-gray-700 font-medium mb-1">No products matching "{searchTerm}"</p>
+                <p className="text-gray-400 text-sm mb-4">Try searching with different keywords</p>
+                <button
+                  onClick={() => setSearchTerm('')}
+                  className="text-bridal-maroon hover:underline text-sm font-medium"
+                >
+                  Clear Search
+                </button>
+              </>
+            ) : (
+              <>
+                <p className="text-gray-500 mb-4">No products in your catalog yet.</p>
+                <button
+                  onClick={handleAddProductClick}
+                  className="bg-bridal-maroon text-white px-6 py-2.5 rounded-lg hover:bg-bridal-maroon/90 font-medium shadow-sm transition-all"
+                >
+                  Add Your First Product
+                </button>
+              </>
+            )}
           </div>
         ) : (
           <>
             {/* Mobile View - Card List */}
             <div className="md:hidden">
-              {filteredProducts.length > 0 ? (
-                <div className="divide-y divide-gray-200">
-                  {filteredProducts.map((product) => (
-                    <div key={product.id} className="p-4 hover:bg-gray-50">
-                      <div className="flex items-start gap-3">
-                        <div className="relative flex-shrink-0">
-                          {product.images && product.images.length > 0 ? (
-                            <img
-                              src={product.images[0]}
-                              alt={product.name}
-                              className="h-16 w-16 rounded-lg object-cover"
-                              onError={(e) => {
-                                (e.target as HTMLImageElement).src = 'https://via.placeholder.com/64x64?text=No+Image';
-                              }}
-                            />
-                          ) : (
-                            <div className="h-16 w-16 rounded-lg bg-gray-100 flex items-center justify-center">
-                              <FaImage className="text-gray-400 text-2xl" />
-                            </div>
-                          )}
-                          {product.images && product.images[0]?.includes('imgbb') && (
-                            <div className="absolute bottom-0 right-0 bg-purple-600 text-white text-xs px-1 rounded-tl">
-                              ImgBB
-                            </div>
-                          )}
-                        </div>
+              <div className="divide-y divide-gray-200">
+                {filteredProducts.map((product) => (
+                  <div key={product.id} className="p-4 hover:bg-gray-50">
+                    <div className="flex items-start gap-3">
+                      <div className="relative flex-shrink-0">
+                        {product.images && product.images.length > 0 ? (
+                          <img
+                            src={product.images[0]}
+                            alt={product.name}
+                            className="h-16 w-16 rounded-lg object-cover"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).src = 'https://via.placeholder.com/64x64?text=No+Image';
+                            }}
+                          />
+                        ) : (
+                          <div className="h-16 w-16 rounded-lg bg-gray-100 flex items-center justify-center">
+                            <FaImage className="text-gray-400 text-2xl" />
+                          </div>
+                        )}
+                        {product.images && product.images[0]?.includes('imgbb') && (
+                          <div className="absolute bottom-0 right-0 bg-purple-600 text-white text-xs px-1 rounded-tl">
+                            ImgBB
+                          </div>
+                        )}
+                      </div>
 
                         <div className="flex-grow min-w-0">
                           <div className="flex justify-between items-start gap-2">
@@ -316,18 +359,7 @@ const ProductManagement = () => {
                       </div>
                     </div>
                   ))}
-                </div>
-              ) : (
-                <div className="text-center py-12">
-                  <p className="text-gray-500">No products found.</p>
-                  <button
-                    onClick={handleAddProductClick}
-                    className="mt-4 bg-bridal-maroon text-white px-6 py-2 rounded-lg hover:bg-bridal-maroon/90 text-sm"
-                  >
-                    Add Your First Product
-                  </button>
-                </div>
-              )}
+              </div>
             </div>
 
             {/* Desktop View - Table */}
@@ -457,18 +489,6 @@ const ProductManagement = () => {
                 </tbody>
               </table>
             </div>
-
-            {filteredProducts.length === 0 && (
-              <div className="text-center py-12 md:block hidden">
-                <p className="text-gray-500">No products found.</p>
-                <button
-                  onClick={handleAddProductClick}
-                  className="mt-4 bg-bridal-maroon text-white px-6 py-2 rounded-lg hover:bg-bridal-maroon/90"
-                >
-                  Add Your First Product
-                </button>
-              </div>
-            )}
           </>
         )}
       </div>

@@ -110,7 +110,7 @@ def get_products(
         
         query = query.filter(or_(*conditions))
     
-    return query.offset(skip).limit(limit).all()
+    return query.order_by(models.Product.created_at.desc(), models.Product.id.desc()).offset(skip).limit(limit).all()
 
 
 def create_product(db: Session, product: schemas.ProductCreate) -> models.Product:

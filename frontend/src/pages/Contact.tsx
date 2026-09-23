@@ -139,8 +139,8 @@ const Contact = () => {
                 <div>
                   <h3 className="font-semibold text-lg">Store Address</h3>
                   <p className="text-gray-600">
-                    First floor, Bengacheri Complex, Opposit Vyapar Bhavan,<br />
-                    Kanhangad, Kasargod Dt, Kerala<br />
+                    First floor, Bengachery Complex, Opposite Vyapar Bhavan,<br />
+                    Kanhangad, Kasaragod Dt, Kerala<br />
                     India
                   </p>
                 </div>
